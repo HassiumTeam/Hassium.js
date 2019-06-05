@@ -1,4 +1,4 @@
-class ExpectedToken {
+class ExpectedTokenError {
     constructor(type, val, got) {
         this.type = type;
         this.val = val;
@@ -7,6 +7,6 @@ class ExpectedToken {
             return "Expected token of type " + type + " and value \"" + val + "\" but got " + got;
         }
     }
-}
+};
 
-module.exports.ExpectedToken = ExpectedToken;
+module.exports = ExpectedTokenError;
