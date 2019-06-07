@@ -1,5 +1,5 @@
 const { ExpectedTokenError, UnexpectedTokenError } = require('./errors/parserErrors')
-const { Node, NodeType } = require('./node')
+const { BinOpType, UnaryOpType, Node, NodeType } = require('./node')
 const { TokType } = require('./token');
 
 class Parser {
@@ -13,72 +13,160 @@ class Parser {
         master.children.nodes = [];
 
         while (!this.eof()) {
-            master.children.nodes.push(this.parseStmt());
+            master.children.nodes.push(this.parse_stmt());
         }
 
         return master;
     }
 
-    parseStmt() {
-        if (this.matchTok(TokType.OBRACE)) { return this.parseBlock(); }
-        else if (this.matchTok(TokType.ID, "if")) { return this.parseIf(); }
-        else if (this.matchTok(TokType.ID, "while")) { return this.parseWhile(); }
+    parse_stmt() {
+        if (this.match_tok(TokType.OBRACE)) { return this.parse_block(); }
+        else if (this.match_tok(TokType.ID, "if")) { return this.parse_if(); }
+        else if (this.match_tok(TokType.ID, "while")) { return this.parse_while(); }
         else {
-            return this.parseExp();
+            return this.parse_expr();
         }
     }
 
-    parseBlock() {
-        let block = new Node(NodeType.BLOCK, {}, this.currentSrc());
+    parse_block() {
+        let block = new Node(NodeType.BLOCK, {}, this.current_src());
         block.children.nodes = [];
 
-        this.expectTok(TokType.OBRACE);
-        while (!this.acceptTok(TokType.CBRACE)) {
-            block.children.nodes.push(this.parseStmt());
+        this.expect_tok(TokType.OBRACE);
+        while (!this.accept_tok(TokType.CBRACE)) {
+            block.children.nodes.push(this.parse_stmt());
         }
 
         return block;
     }
 
-    parseIf() {
-        let src = this.currentSrc();
+    parse_if() {
+        let src = this.current_src();
 
-        this.expectTok(TokType.ID, "if");
-        this.expectTok(TokType.OPAREN);
-        let expr = this.parseExp();
-        let stmt = this.parseStmt();
+        this.expect_tok(TokType.ID, "if");
+        this.expect_tok(TokType.OPAREN);
+        let expr = this.parse_expr();
+        let body = this.parse_stmt();
 
-        if (this.acceptTok(TokType.ID, "else")) {
+        if (this.accept_tok(TokType.ID, "else")) {
             return new Node(NodeType.IF, {
                 expr,
-                stmt,
-                elsestmt: this.parseStmt()
+                body,
+                else_body: this.parse_stmt()
             });
         }
 
-        return new Node(NodeType.IF, { expr, stmt }, src);
+        return new Node(NodeType.IF, { expr, body }, src);
     }
 
-    parseWhile() {
-        let src = this.currentSrc();
+    parse_for() {
+        let src = this.current_src();
 
-        this.expectTok(TokType.ID, "while");
-        this.expectTok(TokType.OPAREN);
-        let expr = this.parsexp();
-        let stmt = this.parseStmt();
+        this.expect_tok(TokType.ID, "for");
+        this.expect_tok(TokType.OPAREN);
+        let init_stmt = this.parse_stmt();
+        let expr = this.parse_expr();
+        let rep_stmt = this.parse_stmt();
+        let body = this.parse_stmt();
 
-        return new Node(NodeType.WHILE, { expr, stmt }, src);
+        return new Node(NodeType.FOR, {
+            init_stmt, expr, rep_stmt, body
+        }, src);
     }
 
-    parseExp() {
-        return this.parseId();
+    parse_while() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "while");
+        this.expect_tok(TokType.OPAREN);
+        let expr = this.parse_expr();
+        let body = this.parse_stmt();
+
+        return new Node(NodeType.WHILE, { expr, body }, src);
     }
 
-    parseId() {
-        let src = this.currentSrc();
-        if (this.matchTok(TokType.INT)) {
+    parse_expr() {
+        return this.parse_assign();
+    }
+
+    parse_mult() {
+        let src = this.current_src();
+        let left = this.parse_unary();
+
+        while (this.match_tok(TokType.OP)) {
+
+        }
+    }
+
+    parse_unary() {
+        let src = this.current_src();
+
+        if (this.match_tok(TokType.OP)) {
+            switch (this.toks[this.pos].val) {
+                case '!':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.UNARY_OP, {
+                        target: parse_unary(),
+                        type: UnaryOpType.LOGICAL_NOT
+                    }, src);
+                    break;
+                case '++':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.UNARY_OP, {
+                        target: parse_unary(),
+                        type: UnaryOpType.PRE_INC
+                    }, src);
+                    break;
+                case '--':
+                    this.expect_tok(TokType.OP);
+                    return new Node(Nodetype.UNARY_OP, {
+                        target: parse_unary(),
+                        type: UnaryOpType.PRE_DEC
+                    }, src);
+                    break;
+            }
+        }
+
+        return this.parse_access();
+    }
+
+    parse_access({ left }) {
+        let src = this.current_src();
+
+        if (!left) {
+            return parse_access({ left: this.parse_term() });
+        }
+
+        if (this.match_tok(TokType.OPAREN)) {
+            return parse_access(new Node(NodeType.FUNC_CALL, {
+                target: left,
+                args: this.parse_arg_list()
+            }, src));
+        }
+        else if (this.accept_tok(TokType.DOT)) {
+            return parse_access(new Node(NodeType.ATTRIB_ACCESS, {
+                target: left,
+                attrib: this.expect_tok(TokType.ID).val
+            }));
+        }
+    }
+
+    parse_term() {
+        let src = this.current_src();
+        if (this.match_tok(TokType.INT)) {
             return new Node(NodeType.INT, {
-                val: this.expectTok(TokType.INT).val
+                val: this.expect_tok(TokType.INT).val
+            }, src);
+        }
+        else if (this.match_tok(TokType.OPAREN)) { return this.parse_expr(); }
+        else if (this.match_tok(TokType.ID)) {
+            return new Node(NodeType.ID, {
+                id: expect_tok(TokType.ID).val;
+            }, src);
+        }
+        else if (this.match_tok(TokType.STRING)) {
+            return new Node(NodeType.STRING, {
+                str: this.expect_tok(TokType.STRING).val;
             }, src);
         }
         else {
@@ -86,25 +174,25 @@ class Parser {
         }
     }
 
-    currentSrc() {
+    current_src() {
         return this.toks[this.pos].src;
     }
 
-    matchTok(type, val = null) {
+    match_tok(type, val = null) {
         if (this.eof()) { return false; }
         if (this.toks[this.pos].type != type) { return false; }
         if (val != null && this.toks[this.pos].val != val) { return false; }
 
         return true;
     }
-    acceptTok(type, val = null) {
-        if (!this.matchTok(type, val)) { return false; }
+    accept_tok(type, val = null) {
+        if (!this.match_tok(type, val)) { return false; }
 
         this.pos++;
         return true;
     }
-    expectTok(type, val = null) {
-        if (!this.matchTok(type, val)) {
+    expect_tok(type, val = null) {
+        if (!this.match_tok(type, val)) {
             throw new ExpectedTokenError(type, val, this.toks[this.pos]);
             return null;
         }

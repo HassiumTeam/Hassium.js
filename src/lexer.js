@@ -12,25 +12,25 @@ class Lexer {
     }
 
     run() {
-        this.whiteSpace();
-        while(this.peekChar() != -1) {
-            this.whiteSpace();
-            this.readtok();
+        this.whitespace();
+        while(this.peek_char() != -1) {
+            this.whitespace();
+            this.read_tok();
         }
 
         return this.res;
     }
 
-    readtok() {
-        let cur = this.peekChar();
-        let next = this.nextChar();
+    read_tok() {
+        let cur = this.peek_char();
+        let next = this.next_char();
 
         if (/^[a-zA-Z]+$/.test(cur)) {
-            this.readID();
+            this.read_id();
             return;
         }
         else if (/^[0-9]+$/.test(cur)) {
-            this.readInt();
+            this.read_int();
             return;
         }
 
@@ -40,118 +40,118 @@ class Lexer {
             case '/':
             case '*':
                 if (next == cur) {
-                    this.pushToken(TokType.OP, this.readChar() + '' + this.readChar());
+                    this.push_tok(TokType.OP, this.read_char() + '' + this.read_char());
                 }
                 else {
-                    this.pushToken(TokType.OP, this.readChar());
+                    this.push_tok(TokType.OP, this.read_char());
                 }
                 break;
             case '!':
                 if (next == '!') {
-                    this.pushToken(TokType.COMP, this.readChar() + '' + this.readChar());
+                    this.push_tok(TokType.COMP, this.read_char() + '' + this.read_char());
                 }
                 else {
-                    this.pushToken(TokType.OP, this.readChar());
+                    this.push_tok(TokType.OP, this.read_char());
                 }
                 break;
             case '=':
                 if (next == '=') {
-                    this.pushToken(TokType.COMP, this.readChar() + '' + this.readChar());
+                    this.push_tok(TokType.COMP, this.read_char() + '' + this.read_char());
                 }
                 else {
-                    this.pushToken(TokType.ASSIGN, this.readChar());
+                    this.push_tok(TokType.ASSIGN, this.read_char());
                 }
                 break;
             case '<':
             case '>':
                 if (next == '=') {
-                    this.pushToken(TokType.COMP, this.readChar() + '' + this.readChar());
+                    this.push_tok(TokType.COMP, this.read_char() + '' + this.read_char());
                 }
                 else {
-                    this.pushToken(TokType.COMP, this.readChar());
+                    this.push_tok(TokType.COMP, this.read_char());
                 }
                 break;
             case '(':
-                this.pushToken(TokType.OPAREN, this.readChar());
+                this.push_tok(TokType.OPAREN, this.read_char());
                 break;
             case ')':
-                this.pushToken(TokType.CPAREN, this.readChar());
+                this.push_tok(TokType.CPAREN, this.read_char());
                 break;
             case '{':
-                this.pushToken(TokType.OBRACE, this.readChar());
+                this.push_tok(TokType.OBRACE, this.read_char());
                 break;
             case '}':
-                this.pushToken(TokType.CBRACE, this.readChar());
+                this.push_tok(TokType.CBRACE, this.read_char());
                 break;
             case '[':
-                this.pushToken(TokType.OSQUARE, this.readChar());
+                this.push_tok(TokType.OSQUARE, this.read_char());
                 break;
             case ']':
-                this.pushToken(TokType.CSQUARE, this.readChar());
+                this.push_tok(TokType.CSQUARE, this.read_char());
                 break;
             case '.':
-                this.pushToken(TokType.DOT, this.readChar());
+                this.push_tok(TokType.DOT, this.read_char());
                 break;
             case '"':
-                this.readStr();
+                this.read_str();
                 break;
             default:
-                console.log('Error unknown char ' + this.readChar());
+                console.log('Error unknown char ' + this.read_char());
         }
     }
 
-    pushToken(type, val) {
+    push_tok(type, val) {
         this.res.push(new Token(type, val, { row: this.row, col: this.col }));
     }
 
-    readStr() {
-        this.readChar(); // "
+    read_str() {
+        this.read_char(); // "
         let str = "";
-        while (this.peekChar() != -1 && this.peekChar() != '"') {
-            str += this.readChar();
+        while (this.peek_char() != -1 && this.peek_char() != '"') {
+            str += this.read_char();
         }
-        this.readChar(); // "
+        this.read_char(); // "
 
-        this.pushToken(TokType.STRING, str);
+        this.push_tok(TokType.STRING, str);
     }
 
-     readID() {
+     read_id() {
         let str = "";
-        while (this.peekChar() != -1 && /^[0-9a-zA-Z]+$/.test(this.peekChar())) {
-            str += this.readChar();
+        while (this.peek_char() != -1 && /^[0-9a-zA-Z]+$/.test(this.peek_char())) {
+            str += this.read_char();
         }
 
-        this.pushToken(TokType.ID, str);
+        this.push_tok(TokType.ID, str);
     }
 
-    readInt() {
+    read_int() {
         let str = "";
-        while (this.peekChar() != -1 && /^[0-9]+$/.test(this.peekChar())) {
-            str += this.readChar();
+        while (this.peek_char() != -1 && /^[0-9]+$/.test(this.peek_char())) {
+            str += this.read_char();
         }
-        this.pushToken(TokType.INT, str);
+        this.push_tok(TokType.INT, str);
     }
 
-    whiteSpace() {
-        while(this.peekChar() != -1 && /\s/.test(this.peekChar())) {
-            this.readChar();
+    whitespace() {
+        while(this.peek_char() != -1 && /\s/.test(this.peek_char())) {
+            this.read_char();
         }
     }
 
-    peekChar() {
+    peek_char() {
         return this.pos < this.len ? this.code[this.pos] : -1;
     }
 
-    nextChar() {
+    next_char() {
         return (this.pos + 1) < this.len ? this.code[this.pos + 1] : -1;
     }
 
-    readChar() {
+    read_char() {
         if (this.pos < this.len) {
-            if (!/\s/.test(this.peekChar())) {
+            if (!/\s/.test(this.peek_char())) {
                 this.col++;
             }
-            if (this.peekChar() == '\n') {
+            if (this.peek_char() == '\n') {
                 this.row++;
                 this.col = 1;
             }
