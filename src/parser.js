@@ -21,6 +21,9 @@ class Parser {
 
     parse_stmt() {
         if (this.match_tok(TokType.OBRACE)) { return this.parse_block(); }
+        else if (this.match_tok(TokType.ID, "class")) { return this.parse_class(); }
+        else if (this.match_tok(TokType.ID, "for")) { return this.parse_for(); }
+        else if (this.match_tok(TokType.ID, "func")) { return this.parse_func(); }
         else if (this.match_tok(TokType.ID, "if")) { return this.parse_if(); }
         else if (this.match_tok(TokType.ID, "while")) { return this.parse_while(); }
         else {
@@ -40,6 +43,31 @@ class Parser {
         return block;
     }
 
+    parse_class() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "class");
+        let name = this.expect_tok(TokType.ID).val;
+        this.expect_tok(TokType.OBRACE);
+        let contents = [];
+        while (!this.accept_tok(TokType.CBRACE)) {
+            contents.push(this.parse_func());
+        }
+
+        return new Node(NodeType.CLASS, { name, contents }, src);
+    }
+
+    parse_func() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "func");
+        let name = this.expect_tok(TokType.ID).val;
+        let args = this.parse_arg_list();
+        let body = this.parse_stmt();
+
+        return new Node(NodeType.FUNC_DEC, { name, args, body }, src);
+    }
+
     parse_if() {
         let src = this.current_src();
 
@@ -54,7 +82,7 @@ class Parser {
                 expr,
                 body,
                 else_body: this.parse_stmt()
-            });
+            }, src);
         }
 
         return new Node(NodeType.IF, { expr, body }, src);
