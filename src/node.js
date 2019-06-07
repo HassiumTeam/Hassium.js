@@ -26,7 +26,7 @@ const UnaryOpType = {
     POST_DEC: "post_dec",
     POST_INC: "post_inc",
     PRE_DEC: "pre_dec",
-    PRE_INC, "pre_inc",
+    PRE_INC: "pre_inc",
 };
 
 class Node {

@@ -86,7 +86,7 @@ class Parser {
     }
 
     parse_expr() {
-        return this.parse_assign();
+        return this.parse_mult();
     }
 
     parse_mult() {
@@ -106,45 +106,45 @@ class Parser {
                 case '!':
                     this.expect_tok(TokType.OP);
                     return new Node(NodeType.UNARY_OP, {
-                        target: parse_unary(),
+                        target: this.parse_unary(),
                         type: UnaryOpType.LOGICAL_NOT
                     }, src);
                     break;
                 case '++':
                     this.expect_tok(TokType.OP);
                     return new Node(NodeType.UNARY_OP, {
-                        target: parse_unary(),
+                        target: this.parse_unary(),
                         type: UnaryOpType.PRE_INC
                     }, src);
                     break;
                 case '--':
                     this.expect_tok(TokType.OP);
                     return new Node(Nodetype.UNARY_OP, {
-                        target: parse_unary(),
+                        target: this.parse_unary(),
                         type: UnaryOpType.PRE_DEC
                     }, src);
                     break;
             }
         }
 
-        return this.parse_access();
+        return this.parse_access(null);
     }
 
-    parse_access({ left }) {
+    parse_access(left) {
         let src = this.current_src();
 
         if (!left) {
-            return parse_access({ left: this.parse_term() });
+            return this.parse_access(this.parse_term());
         }
 
         if (this.match_tok(TokType.OPAREN)) {
-            return parse_access(new Node(NodeType.FUNC_CALL, {
+            return this.parse_access(new Node(NodeType.FUNC_CALL, {
                 target: left,
                 args: this.parse_arg_list()
             }, src));
         }
         else if (this.accept_tok(TokType.DOT)) {
-            return parse_access(new Node(NodeType.ATTRIB_ACCESS, {
+            return this.parse_access(new Node(NodeType.ATTRIB_ACCESS, {
                 target: left,
                 attrib: this.expect_tok(TokType.ID).val
             }));
@@ -161,12 +161,12 @@ class Parser {
         else if (this.match_tok(TokType.OPAREN)) { return this.parse_expr(); }
         else if (this.match_tok(TokType.ID)) {
             return new Node(NodeType.ID, {
-                id: expect_tok(TokType.ID).val;
+                id: expect_tok(TokType.ID).val
             }, src);
         }
         else if (this.match_tok(TokType.STRING)) {
             return new Node(NodeType.STRING, {
-                str: this.expect_tok(TokType.STRING).val;
+                str: this.expect_tok(TokType.STRING).val
             }, src);
         }
         else {
