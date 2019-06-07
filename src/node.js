@@ -18,7 +18,17 @@ const NodeType = {
 };
 
 const BinOpType = {
-
+    DIV: "div",
+    EQUAL: "equal",
+    GREATER: "greater",
+    GREATER_OR_EQUAL: "greater_or_equal",
+    LESSER: "lesser",
+    LESSER_OR_EQUAL: "lesser_or_equal",
+    LOGICAL_AND: "logical_and",
+    LOGICAL_OR: "logical_or",
+    MOD: "mod",
+    MUL: "mul",
+    NOT_EQUAL: "not_equal",
 };
 
 const UnaryOpType = {

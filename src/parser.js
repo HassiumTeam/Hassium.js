@@ -46,6 +46,7 @@ class Parser {
         this.expect_tok(TokType.ID, "if");
         this.expect_tok(TokType.OPAREN);
         let expr = this.parse_expr();
+        this.expect_tok(TokType.CPAREN);
         let body = this.parse_stmt();
 
         if (this.accept_tok(TokType.ID, "else")) {
@@ -86,16 +87,180 @@ class Parser {
     }
 
     parse_expr() {
-        return this.parse_mult();
+        return this.parse_assign();
+    }
+
+    parse_assign() {
+        let src = this.current_src();
+        let left = this.parse_or();
+
+        if (this.match_tok(TokType.ASSIGN)) {
+            switch (this.toks[this.pos].val) {
+                case '=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: this.parse_assign()
+                    }, src);
+            }
+        }
+
+        return left;
+    }
+
+    parse_or() {
+        let src = this.current_src();
+        let left = this.parse_and();
+
+        while (this.accept_tok(TokType.OP, '||')) {
+            left = new Node(NodeType.BIN_OP, {
+                type: BinOpType.LOGICAL_OR,
+                left,
+                right: this.parse_or()
+            }, src);
+        }
+
+        return left;
+    }
+
+    parse_and() {
+        let src = this.current_src();
+        let left = this.parse_eq();
+
+        while (this.accept_tok(TokType.OP, '&&')) {
+            left = new Node(NodeType.BIN_OP, {
+                type: BinOpType.LOGICAL_AND,
+                left,
+                right: this.parse_and()
+            }, src);
+        }
+
+        return left;
+    }
+
+    parse_eq() {
+        let src = this.current_src();
+        let left = this.parse_comp();
+
+        if (this.match_tok(TokType.COMP)) {
+            switch (this.toks[this.pos].val) {
+                case '==':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.EQUAL,
+                        left,
+                        right: this.parse_eq()
+                    }, src);
+                case '!=':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.NOT_EQUAL,
+                        left,
+                        right: this.parse_eq()
+                    }, src);
+            }
+        }
+
+        return left;
+    }
+
+    parse_comp() {
+        let src = this.current_src();
+        let left = this.parse_add();
+
+        if (this.match_tok(TokType.COMP)) {
+            switch (this.toks[this.pos].val) {
+                case '>':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.GREATER,
+                        left,
+                        right: this.parse_comp()
+                    }, src);
+                case '>=':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.GREATER_OR_EQUAL,
+                        left,
+                        right: this.parse_comp()
+                    }, src);
+                case '<':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.LESSER,
+                        left,
+                        right: this.parse_comp()
+                    }, src);
+                case '<=':
+                    this.expect_tok(TokType.COMP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.LESSER_OR_EQUAL,
+                        left,
+                        right: this.parse_comp()
+                    }, src);
+            }
+        }
+
+        return left;
+    }
+
+    parse_add() {
+        let src = this.current_src();
+        let left = this.parse_mult();
+
+        if (this.match_tok(TokType.OP)) {
+            switch (this.toks[this.pos].val) {
+                case '+':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.ADD,
+                        left,
+                        right: this.parse_add()
+                    }, src);
+                case '-':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.SUB,
+                        left,
+                        right: this.parse_add()
+                    }, src);
+            }
+        }
+
+        return left;
     }
 
     parse_mult() {
         let src = this.current_src();
         let left = this.parse_unary();
 
-        while (this.match_tok(TokType.OP)) {
-
+        if (this.match_tok(TokType.OP)) {
+            switch (this.toks[this.pos].val) {
+                case '%':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.MOD,
+                        left,
+                        right: this.parse_mult()
+                    }, src);
+                case '*':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.MUL,
+                        left,
+                        right: this.parse_mult()
+                    }, src);
+                case '/':
+                    this.expect_tok(TokType.OP);
+                    return new Node(NodeType.BIN_OP, {
+                        type: BinOpType.DIV,
+                        left,
+                        right: this.parse_mult()
+                    });
+            }
         }
+
+        return left;
     }
 
     parse_unary() {
@@ -109,21 +274,18 @@ class Parser {
                         target: this.parse_unary(),
                         type: UnaryOpType.LOGICAL_NOT
                     }, src);
-                    break;
                 case '++':
                     this.expect_tok(TokType.OP);
                     return new Node(NodeType.UNARY_OP, {
                         target: this.parse_unary(),
                         type: UnaryOpType.PRE_INC
                     }, src);
-                    break;
                 case '--':
                     this.expect_tok(TokType.OP);
                     return new Node(Nodetype.UNARY_OP, {
                         target: this.parse_unary(),
                         type: UnaryOpType.PRE_DEC
                     }, src);
-                    break;
             }
         }
 
@@ -149,6 +311,8 @@ class Parser {
                 attrib: this.expect_tok(TokType.ID).val
             }));
         }
+
+        return left;
     }
 
     parse_term() {
@@ -161,7 +325,7 @@ class Parser {
         else if (this.match_tok(TokType.OPAREN)) { return this.parse_expr(); }
         else if (this.match_tok(TokType.ID)) {
             return new Node(NodeType.ID, {
-                id: expect_tok(TokType.ID).val
+                id: this.expect_tok(TokType.ID).val
             }, src);
         }
         else if (this.match_tok(TokType.STRING)) {
@@ -172,6 +336,17 @@ class Parser {
         else {
             throw new UnexpectedTokenError(this.toks[this.pos++]);
         }
+    }
+
+    parse_arg_list() {
+        let args = [];
+
+        this.expect_tok(TokType.OPAREN);
+        while (!this.accept_tok(TokType.CPAREN)) {
+            args.push(this.parse_expr());
+        }
+
+        return args;
     }
 
     current_src() {
