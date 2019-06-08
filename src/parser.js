@@ -2,7 +2,7 @@ const { ExpectedTokenError, UnexpectedTokenError } = require('./errors/parserErr
 const { BinOpType, UnaryOpType, Node, NodeType } = require('./node')
 const { TokType } = require('./token');
 
-class Parser {
+module.exports = class Parser {
     constructor(toks) {
         this.toks = toks;
         this.pos = 0;
@@ -27,7 +27,7 @@ class Parser {
         else if (this.match_tok(TokType.ID, "if")) { return this.parse_if(); }
         else if (this.match_tok(TokType.ID, "while")) { return this.parse_while(); }
         else {
-            return this.parse_expr();
+            return this.parse_expr_stmt();
         }
     }
 
@@ -65,7 +65,7 @@ class Parser {
         let args = this.parse_arg_list();
         let body = this.parse_stmt();
 
-        return new Node(NodeType.FUNC_DEC, { name, args, body }, src);
+        return new Node(NodeType.FUNC_DECL, { name, args, body }, src);
     }
 
     parse_if() {
@@ -112,6 +112,11 @@ class Parser {
         let body = this.parse_stmt();
 
         return new Node(NodeType.WHILE, { expr, body }, src);
+    }
+
+    parse_expr_stmt() {
+        let src = this.current_src();
+        return new Node(NodeType.EXPR_STMT, { expr: this.parse_expr() }, src);
     }
 
     parse_expr() {
@@ -284,7 +289,7 @@ class Parser {
                         type: BinOpType.DIV,
                         left,
                         right: this.parse_mult()
-                    });
+                    }, src);
             }
         }
 
@@ -327,17 +332,25 @@ class Parser {
             return this.parse_access(this.parse_term());
         }
 
-        if (this.match_tok(TokType.OPAREN)) {
+        if (this.accept_tok(TokType.DOT)) {
+            return this.parse_access(new Node(NodeType.ATTRIB_ACCESS, {
+                target: left,
+                attrib: this.expect_tok(TokType.ID).val
+            }, src));
+        }
+        else if (this.match_tok(TokType.OPAREN)) {
             return this.parse_access(new Node(NodeType.FUNC_CALL, {
                 target: left,
                 args: this.parse_arg_list()
             }, src));
         }
-        else if (this.accept_tok(TokType.DOT)) {
-            return this.parse_access(new Node(NodeType.ATTRIB_ACCESS, {
+        else if (this.accept_tok(TokType.OSQUARE)) {
+            let val = this.parse_expr();
+            this.expect_tok(TokType.CSQUARE);
+            return new Node(NodeType.SUBSCRIPT, {
                 target: left,
-                attrib: this.expect_tok(TokType.ID).val
-            }));
+                val
+            }, src);
         }
 
         return left;
@@ -355,6 +368,13 @@ class Parser {
             return new Node(NodeType.ID, {
                 id: this.expect_tok(TokType.ID).val
             }, src);
+        }
+        else if (this.accept_tok(TokType.OSQUARE)) {
+            let elements = [];
+            while (!this.accept_tok(TokType.CSQUARE)) {
+                elements.push(this.parse_expr());
+            }
+            return new Node(NodeType.ARRAY_DECL, { elements }, src);
         }
         else if (this.match_tok(TokType.STRING)) {
             return new Node(NodeType.STRING, {
@@ -406,6 +426,4 @@ class Parser {
     eof() {
         return this.pos >= this.toks.length;
     }
-}
-
-module.exports = Parser;
+};

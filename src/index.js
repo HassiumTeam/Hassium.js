@@ -1,6 +1,7 @@
-const { Token, TokType } = require('./token');
+const Emit = require('./emit');
 const Lexer = require('./lexer');
 const Parser = require('./parser');
+const { Token, TokType } = require('./token');
 const util = require('util');
 
 let code = "if (2 < 3) { printf() } else { scanf() }";
