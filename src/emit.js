@@ -125,8 +125,9 @@ module.exports = class Emit {
     }
 
     emit() {
-        ast.children.nodes.forEach(function(node) {
-            this.accept(node);
+        let self = this;
+        this.ast.children.nodes.forEach(function(node) {
+            self.accept(node);
         });
     }
 };

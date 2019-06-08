@@ -5,10 +5,14 @@ const { Token, TokType } = require('./token');
 const util = require('util');
 
 let code = "if (2 < 3) { printf() } else { scanf() }";
+
 let lexer = new Lexer(code);
 let toks = lexer.run();
+//console.log(toks);
 
 let parser = new Parser(toks);
-console.log(util.inspect(parser.parse(), { showHidden: false, depth: null }));
+let ast = parser.parse();
+//console.log(util.inspect(ast, { showHidden: false, depth: null }));
 
-//console.log(toks);
+let emit = new Emit(ast);
+emit.emit();
