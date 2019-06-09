@@ -1,4 +1,5 @@
-const { NodeType } = require('./node');
+const { NodeType } = require('./../node');
+const { SymbolTable } = require('./symbolTable');
 
 module.exports = class Emit {
     constructor(ast) {
@@ -65,7 +66,10 @@ module.exports = class Emit {
     }
 
     accept_block(node) {
-
+        let self = this;
+        node.children.nodes.forEach(function(node) {
+            self.accept(node);
+        });
     }
 
     accept_char(node) {

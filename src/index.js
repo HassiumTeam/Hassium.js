@@ -1,4 +1,4 @@
-const Emit = require('./emit');
+const Emit = require('./emit/emit');
 const Lexer = require('./lexer');
 const Parser = require('./parser');
 const { Token, TokType } = require('./token');
