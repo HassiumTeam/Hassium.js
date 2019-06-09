@@ -1,6 +1,6 @@
 const { HassiumObject, InstType } = require('../runtime/hassiumObject');
 const { NodeType } = require('./../node');
-const { SymbolTable } = require('./symbolTable');
+const SymbolTable = require('./symbolTable');
 
 module.exports = class Emit {
     constructor(ast) {
