@@ -15,4 +15,4 @@ let ast = parser.parse();
 //console.log(util.inspect(ast, { showHidden: false, depth: null }));
 
 let emit = new Emit(ast);
-emit.emit();
+emit.compile();

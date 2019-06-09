@@ -11,7 +11,7 @@ class HassiumObject {
     emit_label(id) {
         this.labels.push({
             id,
-            pos: this.labels.length
+            pos: this.labels.length - 1
         });
     }
 

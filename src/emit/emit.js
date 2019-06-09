@@ -5,9 +5,10 @@ const SymbolTable = require('./symbolTable');
 module.exports = class Emit {
     constructor(ast) {
         this.ast = ast;
-        this.table = new SymbolTable();
-        this.module = new HassiumObject();
         this.emit_stack = [ this.module ];
+        this.label_id = 0;
+        this.module = new HassiumObject();
+        this.table = new SymbolTable();
     }
 
     accept(node) {
@@ -129,25 +130,33 @@ module.exports = class Emit {
     }
 
     accept_while(node) {
+        let body_label = this.next_label();
+        let end_label = this.next_label();
 
+        this.emit_label(body_label);
+        this.accept(node.children.expr);
+        this.emit(InstType.JUMP_IF_FALSE, { label: end_label }, src);
+        this.accept(node.children.body);
+        this.emit(InstType.JUMP, { label: body_label }, src);
+        this.emit_label(end_label);
     }
 
-    emit() {
+    compile() {
         let self = this;
         this.ast.children.nodes.forEach(function(node) {
             self.accept(node);
         });
     }
 
-    emit_peek() {
-        return this.emit_stack.peek();
+    emit(type, args, src) {
+        this.emit_stack.peek().emit(type, args, src);
     }
 
-    emit_push(obj) {
-        this.emit_stack.push(obj);
+    emit_label(id) {
+        this.emit_stack.peek().emit_label(id);
     }
 
-    emit_pop() {
-        return this.emit_stack.pop();
+    next_label() {
+        return this.label_id++;
     }
 };

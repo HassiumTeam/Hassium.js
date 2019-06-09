@@ -96,6 +96,7 @@ module.exports = class Parser {
         let init_stmt = this.parse_stmt();
         let expr = this.parse_expr();
         let rep_stmt = this.parse_stmt();
+        this.expect_tok(TokType.CPAREN);
         let body = this.parse_stmt();
 
         return new Node(NodeType.FOR, {
@@ -109,6 +110,7 @@ module.exports = class Parser {
         this.expect_tok(TokType.ID, "while");
         this.expect_tok(TokType.OPAREN);
         let expr = this.parse_expr();
+        this.expect_tok(TokType.CPAREN);
         let body = this.parse_stmt();
 
         return new Node(NodeType.WHILE, { expr, body }, src);
