@@ -7,6 +7,7 @@ module.exports = class SymbolTable {
 
     add_symbol(name) {
         this.scopes.peek()[name] = this.index;
+        
         return this.index++;
     }
 
@@ -15,6 +16,14 @@ module.exports = class SymbolTable {
     }
 
     get_symbol(name) {
+        if (this.get_symbol_strict(name) == -1) {
+            this.add_symbol(name);
+        }
+
+        return this.get_symbol_strict(name);
+    }
+
+    get_symbol_strict(name) {
         for (var scope in this.scopes) {
             if (name in scope) {
                 return scope[name];

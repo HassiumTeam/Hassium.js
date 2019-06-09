@@ -1,9 +1,13 @@
+const { HassiumObject, InstType } = require('../runtime/hassiumObject');
 const { NodeType } = require('./../node');
 const { SymbolTable } = require('./symbolTable');
 
 module.exports = class Emit {
     constructor(ast) {
         this.ast = ast;
+        this.table = new SymbolTable();
+        this.module = new HassiumObject();
+        this.emit_stack = [ this.module ];
     }
 
     accept(node) {
@@ -133,5 +137,17 @@ module.exports = class Emit {
         this.ast.children.nodes.forEach(function(node) {
             self.accept(node);
         });
+    }
+
+    emit_peek() {
+        return this.emit_stack.peek();
+    }
+
+    emit_push(obj) {
+        this.emit_stack.push(obj);
+    }
+
+    emit_pop() {
+        return this.emit_stack.pop();
     }
 };
