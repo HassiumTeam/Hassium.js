@@ -56,7 +56,11 @@ module.exports = class Emit {
     }
 
     accept_array_decl(node) {
+        let count = node.children.elements.count;
 
+        let self = this;
+        node.children.elements.reverse.forEach(x => self.accept(x));
+        this.emit(InstType.ARRAY_DECL, { count }, node.src);
     }
 
     accept_assign(node) {
@@ -92,7 +96,12 @@ module.exports = class Emit {
     }
 
     accept_class(node) {
+        let clazz = new lib.HassiumClass();
+        this.emit_peek().store_attrib(node.children.name, clazz);
 
+        this.emit_stack.push(clazz);
+        node.children.contents.forEach(x => this.accept(x));
+        this.emit_stack.pop();
     }
 
     accept_continue(node) {

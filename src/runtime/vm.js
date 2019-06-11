@@ -1,6 +1,6 @@
 const { BinOpType, UnaryOpType } = require('../node');
-const { HassiumObject, InstType } = require('./hassiumObject');
-const lib = require('./lib');
+const { HassiumObject, InstType } = require('./lib/hassiumObject');
+const lib = require('./lib/lib');
 
 module.exports = class VM {
     constructor() {
