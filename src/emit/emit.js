@@ -135,9 +135,9 @@ module.exports = class Emit {
 
         this.emit_label(body_label);
         this.accept(node.children.expr);
-        this.emit(InstType.JUMP_IF_FALSE, { label: end_label }, src);
+        this.emit(InstType.JUMP_IF_FALSE, { label: end_label }, node.src);
         this.accept(node.children.body);
-        this.emit(InstType.JUMP, { label: body_label }, src);
+        this.emit(InstType.JUMP, { label: body_label }, node.src);
         this.emit_label(end_label);
     }
 
