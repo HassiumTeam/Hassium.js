@@ -210,6 +210,7 @@ module.exports = class Emit {
         this.ast.children.nodes.forEach(function(node) {
             self.accept(node);
         });
+        return this.module;
     }
 
     emit(type, args, src) {

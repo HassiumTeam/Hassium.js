@@ -10,7 +10,7 @@ class HassiumObject {
     }
 
     emit_label(id) {
-        this.labels[id] = this.labels.length - 1;
+        this.labels[id] = this.instructions.length - 1;
     }
 
     get_attrib(key) {
