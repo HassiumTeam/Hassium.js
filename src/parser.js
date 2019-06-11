@@ -20,11 +20,20 @@ module.exports = class Parser {
     }
 
     parse_stmt() {
+        let src = this.current_src();
+
         if (this.match_tok(TokType.OBRACE)) { return this.parse_block(); }
+        else if (this.accept_tok(TokType.ID, "break")) {
+            return new Node(NodeType.BREAK, {}, src);
+        }
         else if (this.match_tok(TokType.ID, "class")) { return this.parse_class(); }
+        else if (this.accept_tok(TokType.ID, "continue")) {
+            return new Node(NodeType.CONTINUE, {}, src);
+        }
         else if (this.match_tok(TokType.ID, "for")) { return this.parse_for(); }
         else if (this.match_tok(TokType.ID, "func")) { return this.parse_func(); }
         else if (this.match_tok(TokType.ID, "if")) { return this.parse_if(); }
+        else if (this.match_tok(TokType.ID, "return")) { return this.parse_return(); }
         else if (this.match_tok(TokType.ID, "while")) { return this.parse_while(); }
         else {
             return this.parse_expr_stmt();
@@ -102,6 +111,15 @@ module.exports = class Parser {
         return new Node(NodeType.FOR, {
             init_stmt, expr, rep_stmt, body
         }, src);
+    }
+
+    parse_return() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "return");
+        let expr = this.parse_expr();
+
+        return new Node(NodeType.RETURN, { expr }, src);
     }
 
     parse_while() {
@@ -360,7 +378,12 @@ module.exports = class Parser {
 
     parse_term() {
         let src = this.current_src();
-        if (this.match_tok(TokType.INT)) {
+        if (this.match_tok(TokType.CHAR)) {
+            return new Node(NodeType.CHAR, {
+                val: this.expect_tok(TokType.CHAR).val
+            });
+        }
+        else if (this.match_tok(TokType.INT)) {
             return new Node(NodeType.INT, {
                 val: this.expect_tok(TokType.INT).val
             }, src);
@@ -380,7 +403,7 @@ module.exports = class Parser {
         }
         else if (this.match_tok(TokType.STRING)) {
             return new Node(NodeType.STRING, {
-                str: this.expect_tok(TokType.STRING).val
+                val: this.expect_tok(TokType.STRING).val
             }, src);
         }
         else {

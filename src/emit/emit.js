@@ -1,13 +1,14 @@
-const { HassiumObject, InstType } = require('../runtime/hassiumObject');
+const { InstType } = require('../runtime/lib/hassiumObject');
+const lib = require('../runtime/lib/lib');
 const { NodeType } = require('./../node');
 const SymbolTable = require('./symbolTable');
 
 module.exports = class Emit {
     constructor(ast) {
         this.ast = ast;
-        this.emit_stack = [ this.module ];
         this.label_id = 0;
-        this.module = new HassiumObject();
+        this.module = new lib.HassiumObject();
+        this.emit_stack = [ this.module ];
         this.table = new SymbolTable();
     }
 
@@ -55,7 +56,11 @@ module.exports = class Emit {
     }
 
     accept_array_decl(node) {
+        let count = node.children.elements.count;
 
+        let self = this;
+        node.children.elements.reverse.forEach(x => self.accept(x));
+        this.emit(InstType.ARRAY_DECL, { count }, node.src);
     }
 
     accept_assign(node) {
@@ -63,11 +68,14 @@ module.exports = class Emit {
     }
 
     accept_attrib_access(node) {
-
+        this.accept(node.children.target);
+        this.emit(InstType.LOAD_ATTRIB, { attrib: node.children.attrib }, node.src);
     }
 
     accept_bin_op(node) {
-
+        this.accept(node.children.right);
+        this.accept(node.children.left);
+        this.emit(InstType.BIN_OP, { type: node.children.type }, node.src);
     }
 
     accept_block(node) {
@@ -77,28 +85,67 @@ module.exports = class Emit {
         });
     }
 
-    accept_char(node) {
+    accept_break(node) {
 
     }
 
+    accept_char(node) {
+        this.emit(InstType.LOAD_CONST, {
+            val: new lib.types.HassiumChar(node.children.val)
+        }, node.src);
+    }
+
     accept_class(node) {
+        let clazz = new lib.HassiumClass();
+        this.emit_peek().store_attrib(node.children.name, clazz);
+
+        this.emit_stack.push(clazz);
+        node.children.contents.forEach(x => this.accept(x));
+        this.emit_stack.pop();
+    }
+
+    accept_continue(node) {
 
     }
 
     accept_expr_stmt(node) {
-
+        this.accept(node.children.expr);
+        this.emit(InstType.POP, {}, node.src);
     }
 
     accept_for(node) {
+        let body_label = this.next_label();
+        let end_label = this.next_label();
 
+        this.accept(node.children.init_stmt);
+        this.emit_label(body_label);
+        this.accept(node.children.expr);
+        this.emit(InstType.JUMP_IF_FALSE, { label: end_label }, node.src);
+        this.accept(node.children.body);
+        this.accept(node.children.rep_stmt);
+        this.emit(InstType.JUMP, { label: body_label }, node.src);
+        this.emit_label(end_label);
     }
 
     accept_func_call(node) {
-
+        let self = this;
+        node.children.args.forEach(function(arg) {
+            self.accept(arg);
+        });
+        this.accept(node.children.target);
+        this.emit(InstType.CALL, { arg_count: node.children.args.length }, node.src);
     }
 
     accept_func_decl(node) {
+        let func = new lib.HassiumFunc(
+            node.children.name,
+            node.children.args.map(x => x.id)
+        );
+        this.emit_peek().store_attrib(node.children.name, func);
 
+        this.emit_stack.push(func);
+        this.accept(node.children.body);
+        this.emit_stack.pop();
     }
 
     accept_id(node) {
@@ -106,19 +153,35 @@ module.exports = class Emit {
     }
 
     accept_if(node) {
+        let else_label = this.next_label();
+        let end_label = this.next_label();
 
+        this.accept(node.children.expr);
+        this.emit(InstType.JUMP_IF_FALSE, { label: else_label }, node.src);
+        this.accept(node.children.body);
+        this.emit(InstType.JUMP, { label: end_label }, node.src);
+        this.emit_label(else_label);
+        if (node.children.else_body) {
+            this.accept(node.children.else_body);
+        }
+        this.emit_label(end_label);
     }
 
     accept_int(node) {
-
+        this.emit(InstType.LOAD_CONST, {
+            val: new lib.types.HassiumInt(node.children.val)
+        }, node.src);
     }
 
     accept_return(node) {
-
+        this.accept(node.children.expr);
+        this.emit(InstType.RETURN, {}, node.src);
     }
 
     accept_string(node) {
-
+        this.emit(InstType.LOAD_CONST, {
+            val: new lib.types.HassiumString(node.children.val)
+        }, node.src);
     }
 
     accept_subscript(node) {
@@ -126,7 +189,8 @@ module.exports = class Emit {
     }
 
     accept_unary_op(node) {
-
+        this.accept(node.children.target);
+        this.emit(InstType.UNARY_OP, {}, node.src);
     }
 
     accept_while(node) {
@@ -146,14 +210,19 @@ module.exports = class Emit {
         this.ast.children.nodes.forEach(function(node) {
             self.accept(node);
         });
+        return this.module;
     }
 
     emit(type, args, src) {
-        this.emit_stack.peek().emit(type, args, src);
+        this.emit_peek().emit(type, args, src);
     }
 
     emit_label(id) {
-        this.emit_stack.peek().emit_label(id);
+        this.emit_peek().emit_label(id);
+    }
+
+    emit_peek() {
+        return this.emit_stack[this.emit_stack.length - 1];
     }
 
     next_label() {

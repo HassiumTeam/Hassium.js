@@ -9,6 +9,7 @@ class Token {
 const TokType = {
     ASSIGN: "assign",
     CBRACE: "cbrace",
+    CHAR: "char",
     COLON: "colon",
     COMMA: "comma",
     COMP: "comp",

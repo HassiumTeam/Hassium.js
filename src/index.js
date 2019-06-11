@@ -12,7 +12,8 @@ let toks = lexer.run();
 
 let parser = new Parser(toks);
 let ast = parser.parse();
-//console.log(util.inspect(ast, { showHidden: false, depth: null }));
 
 let emit = new Emit(ast);
-emit.compile();
+let mod = emit.compile();
+
+console.log(util.inspect(mod, { showHidden: false, depth: null }));
