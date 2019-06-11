@@ -1,6 +1,6 @@
 const { HassiumObject } = require('../hassiumObject');
 
-module.exports = class HassiumString extends HassiumObject {
+module.exports = class HassiumInt extends HassiumObject {
     constructor(val) {
         super();
         this.val = val;

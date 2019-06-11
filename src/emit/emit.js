@@ -1,5 +1,5 @@
 const { HassiumObject, InstType } = require('../runtime/hassiumObject');
-const { HassiumString } = require('../runtime/lib/lib');
+const { HassiumChar, HassiumInt, HassiumString } = require('../runtime/lib/lib');
 const { NodeType } = require('./../node');
 const SymbolTable = require('./symbolTable');
 
@@ -82,11 +82,13 @@ module.exports = class Emit {
     }
 
     accept_break(node) {
-
+        
     }
 
     accept_char(node) {
-
+        this.emit(InstType.LOAD_CONST, {
+            val: new HassiumChar(node.children.val)
+        }, node.src);
     }
 
     accept_class(node) {
@@ -149,6 +151,9 @@ module.exports = class Emit {
     }
 
     accept_int(node) {
+        this.emit(InstType.LOAD_CONST, {
+            val: new HassiumInt(node.children.val)
+        }, node.src);
     }
 
     accept_return(node) {
@@ -157,7 +162,9 @@ module.exports = class Emit {
     }
 
     accept_string(node) {
-
+        this.emit(InstType.LOAD_CONST, {
+            val: new HassiumString(node.children.val)
+        }, node.src);
     }
 
     accept_subscript(node) {

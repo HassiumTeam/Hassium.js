@@ -378,7 +378,12 @@ module.exports = class Parser {
 
     parse_term() {
         let src = this.current_src();
-        if (this.match_tok(TokType.INT)) {
+        if (this.match_tok(TokType.CHAR)) {
+            return new Node(NodeType.CHAR, {
+                val: this.expect_tok(TokType.CHAR).val
+            });
+        }
+        else if (this.match_tok(TokType.INT)) {
             return new Node(NodeType.INT, {
                 val: this.expect_tok(TokType.INT).val
             }, src);
@@ -398,7 +403,7 @@ module.exports = class Parser {
         }
         else if (this.match_tok(TokType.STRING)) {
             return new Node(NodeType.STRING, {
-                str: this.expect_tok(TokType.STRING).val
+                val: this.expect_tok(TokType.STRING).val
             }, src);
         }
         else {
