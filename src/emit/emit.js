@@ -1,5 +1,5 @@
-const { HassiumObject, InstType } = require('../runtime/hassiumObject');
-const { HassiumChar, HassiumInt, HassiumString } = require('../runtime/lib/lib');
+const { InstType } = require('../runtime/lib/hassiumObject');
+const lib = require('../runtime/lib/lib');
 const { NodeType } = require('./../node');
 const SymbolTable = require('./symbolTable');
 
@@ -7,7 +7,7 @@ module.exports = class Emit {
     constructor(ast) {
         this.ast = ast;
         this.label_id = 0;
-        this.module = new HassiumObject();
+        this.module = new lib.HassiumObject();
         this.emit_stack = [ this.module ];
         this.table = new SymbolTable();
     }
@@ -82,12 +82,12 @@ module.exports = class Emit {
     }
 
     accept_break(node) {
-        
+
     }
 
     accept_char(node) {
         this.emit(InstType.LOAD_CONST, {
-            val: new HassiumChar(node.children.val)
+            val: new lib.types.HassiumChar(node.children.val)
         }, node.src);
     }
 
@@ -128,7 +128,15 @@ module.exports = class Emit {
     }
 
     accept_func_decl(node) {
+        let func = new lib.HassiumFunc(
+            node.children.name,
+            node.children.args.map(x => x.id)
+        );
+        this.emit_peek().store_attrib(node.children.name, func);
 
+        this.emit_stack.push(func);
+        this.accept(node.children.body);
+        this.emit_stack.pop();
     }
 
     accept_id(node) {
@@ -152,7 +160,7 @@ module.exports = class Emit {
 
     accept_int(node) {
         this.emit(InstType.LOAD_CONST, {
-            val: new HassiumInt(node.children.val)
+            val: new lib.types.HassiumInt(node.children.val)
         }, node.src);
     }
 
@@ -163,7 +171,7 @@ module.exports = class Emit {
 
     accept_string(node) {
         this.emit(InstType.LOAD_CONST, {
-            val: new HassiumString(node.children.val)
+            val: new lib.types.HassiumString(node.children.val)
         }, node.src);
     }
 
@@ -196,11 +204,15 @@ module.exports = class Emit {
     }
 
     emit(type, args, src) {
-        this.emit_stack[this.emit_stack.length - 1].emit(type, args, src);
+        this.emit_peek().emit(type, args, src);
     }
 
     emit_label(id) {
-        this.emit_stack[this.emit_stack.length - 1].emit_label(id);
+        this.emit_peek().emit_label(id);
+    }
+
+    emit_peek() {
+        return this.emit_stack[this.emit_stack.length - 1];
     }
 
     next_label() {
