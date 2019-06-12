@@ -16,7 +16,7 @@ module.exports = class StackFrame {
     }
 
     get_var(index) {
-        
+         return this.peek_frame()[index];
     }
 
     set_var(index, val) {

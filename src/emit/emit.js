@@ -144,7 +144,9 @@ module.exports = class Emit {
         this.emit_peek().store_attrib(node.children.name, func);
 
         this.emit_stack.push(func);
+        this.symbolTable.enter_scope();
         this.accept(node.children.body);
+        this.symbolTable.leave_scope();
         this.emit_stack.pop();
     }
 
@@ -185,7 +187,7 @@ module.exports = class Emit {
     }
 
     accept_subscript(node) {
-
+        
     }
 
     accept_unary_op(node) {
