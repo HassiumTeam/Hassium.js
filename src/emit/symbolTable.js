@@ -5,14 +5,21 @@ module.exports = class SymbolTable {
         this.scopes = [ this.global_scope ];
     }
 
-    add_symbol(name) {
-        this.scopes.peek()[name] = this.index;
-        
-        return this.index++;
-    }
-
     enter_scope() {
         this.scopes.push({});
+    }
+
+    leave_scope() {
+        this.scopes.pop();
+        if (this.scopes.length == 2) {
+            this.index = 0;
+        }
+    }
+
+    add_symbol(name) {
+        this.scopes.peek()[name] = this.index;
+
+        return this.index++;
     }
 
     get_symbol(name) {
@@ -31,12 +38,5 @@ module.exports = class SymbolTable {
         }
 
         return -1;
-    }
-
-    leave_scope() {
-        this.scopes.pop();
-        if (this.scopes.length == 2) {
-            this.index = 0;
-        }
     }
 };
