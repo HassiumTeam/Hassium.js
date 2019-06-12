@@ -16,9 +16,12 @@ module.exports = class SymbolTable {
         }
     }
 
-    add_symbol(name) {
-        this.scopes.peek()[name] = this.index;
+    in_global_scope() {
+        return this.scopes[this.scopes.length - 1] == this.global_scope;
+    }
 
+    add_symbol(name) {
+        this.scopes[this.scopes.length - 1][name] = this.index;
         return this.index++;
     }
 
@@ -31,8 +34,9 @@ module.exports = class SymbolTable {
     }
 
     get_symbol_strict(name) {
-        for (var scope in this.scopes) {
-            if (name in scope) {
+        for (let i = 0; i < this.scopes.length; i++) {
+            let scope = this.scopes[i];
+            if (scope.hasOwnProperty(name)) {
                 return scope[name];
             }
         }

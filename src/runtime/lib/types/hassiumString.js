@@ -11,4 +11,4 @@ module.exports = class HassiumString extends HassiumObject {
     string_toString(vm, mod, args) {
         return this;
     }
-}
+};

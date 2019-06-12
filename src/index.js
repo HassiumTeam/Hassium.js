@@ -4,7 +4,7 @@ const Parser = require('./parser');
 const { Token, TokType } = require('./token');
 const util = require('util');
 
-let code = "if (2 < 3) { printf() } else { scanf() }";
+let code = "printf(x) func main () {if (2 < 3) { printf() } else { scanf() }}";
 
 let lexer = new Lexer(code);
 let toks = lexer.run();

@@ -64,7 +64,23 @@ module.exports = class Emit {
     }
 
     accept_assign(node) {
+        this.accept(node.children.right);
 
+        let left = node.children.left;
+        switch (left.type) {
+            case NodeType.ID:
+                if (this.table.in_global_scope()) {
+                    this.emit(InstType.STORE_GLOBAL, {
+                        index: this.table.get_symbol(left.id)
+                    }, left.src);
+                }
+                else {
+                    this.emit(InstType.STORE_LOCAL, {
+                        index: this.table.get_symbol(left.id)
+                    }, left.src);
+                }
+                break;
+        }
     }
 
     accept_attrib_access(node) {
@@ -144,14 +160,23 @@ module.exports = class Emit {
         this.emit_peek().store_attrib(node.children.name, func);
 
         this.emit_stack.push(func);
-        this.symbolTable.enter_scope();
+        this.table.enter_scope();
         this.accept(node.children.body);
-        this.symbolTable.leave_scope();
+        this.table.leave_scope();
         this.emit_stack.pop();
     }
 
     accept_id(node) {
-
+        if (this.table.in_global_scope()) {
+            this.emit(InstType.LOAD_GLOBAL, {
+                index: this.table.get_symbol(node.children.id)
+            }, node.src);
+        }
+        else {
+            this.emit(InstType.LOAD_LOCAL, {
+                index: this.table.get_symbol(node.children.id)
+            }, node.src);
+        }
     }
 
     accept_if(node) {
@@ -187,7 +212,9 @@ module.exports = class Emit {
     }
 
     accept_subscript(node) {
-        
+        this.accept(node.children.val);
+        this.accept(node.children.target);
+        this.emit(InstType.LOAD_SUBSCRIPT, {}, node.src);
     }
 
     accept_unary_op(node) {

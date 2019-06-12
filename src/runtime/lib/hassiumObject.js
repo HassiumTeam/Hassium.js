@@ -39,13 +39,15 @@ const InstType = {
     JUMP_IF_TRUE: "jump_if_true",
     LOAD_ATTRIB: "load_attrib",
     LOAD_CONST: "load_const",
+    LOAD_GLOBAL: "load_global",
     LOAD_LOCAL: "load_local",
     LOAD_SUBSCRIPT: "load_subscript",
     POP: "pop",
     PUSH: "push",
     RETURN: "return",
     STORE_ATTRIB: "store_attrib",
-    STORE_LOCAL_VAR: "store_local_var",
+    STORE_GLOBAL: "store_global",
+    STORE_LOCAL: "store_local_var",
     STORE_SUBSCRIPT: "store_subscript",
     UNARY_OP: "unary_op"
 };
