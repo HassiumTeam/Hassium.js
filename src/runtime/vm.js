@@ -10,7 +10,7 @@ module.exports = class VM {
 
     run(obj) {
         let pos = 0;
-        let inst, target, val;
+        let inst, target, val, args;
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
 
@@ -24,6 +24,12 @@ module.exports = class VM {
                     );
                     break;
                 case InstType.CALL:
+                    target = this.stack.pop();
+                    args = [];
+                    for (let i = 0; i < inst.args.arg_count; i++) {
+                        args.push(this.stack.pop());
+                    }
+                    target.get_attrib('_invoke')(this, null, args);
                     break;
                 case InstType.ITER:
                     break;

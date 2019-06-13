@@ -145,7 +145,7 @@ module.exports = class Emit {
 
     accept_func_call(node) {
         let self = this;
-        node.children.args.forEach(function(arg) {
+        node.children.args.reverse().forEach(function(arg) {
             self.accept(arg);
         });
         this.accept(node.children.target);

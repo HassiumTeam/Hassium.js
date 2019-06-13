@@ -5,6 +5,9 @@ class HassiumObject {
         this.labels = {};
     }
 
+    invoke(vm, mod, args) {
+    }
+
     emit(type, args, src) {
         this.instructions.push({ type, args, src });
     }
