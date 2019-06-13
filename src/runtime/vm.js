@@ -4,11 +4,10 @@ const lib = require('./lib/lib');
 const StackFrame = require('./stackFrame');
 
 module.exports = class VM {
-    constructor() {
-        this.stack = [];
-    }
-
     run(obj) {
+        this.stack = [];
+        this.stackFrame = new StackFrame();
+
         let pos = 0;
         let inst, target, val, args;
         while (pos < obj.instructions.length) {
@@ -54,12 +53,18 @@ module.exports = class VM {
                     target = this.stack.pop();
                     target.get_attrib(inst.args.attrib);
                     break;
-                case InstType.LOAD_CLASS_VAR:
-                    break;
                 case InstType.LOAD_CONST:
                     this.stack.push(inst.args.val);
                     break;
                 case InstType.LOAD_LOCAL_VAR:
+                    this.stack.push(
+                        this.stackFrame.set_var(inst.args.symbol)
+                    );
+                    break;
+                case InstType.LOAD_GLOBAL:
+                    this.stack.push(
+                        this.stackFrame.set_global(inst.args.symbol);
+                    );
                     break;
                 case InstType.POP:
                     break;
@@ -71,11 +76,15 @@ module.exports = class VM {
                 case InstType.STORE_ATTRIB:
                     target = this.stack.pop();
                     val = this.stack.pop();
-                    target.store_attrib(inst.args.attrib, val);
-                    break;
-                case InstType.STORE_CLASS_VAR:
+                    target.set_attrib(inst.args.attrib, val);
                     break;
                 case InstType.STORE_LOCAL_VAR:
+                    val = this.stack.pop();
+                    this.stackFrame.set_var(inst.args.symbol, val);
+                    break;
+                case InstType.STORE_GLOBAL:
+                    val = this.stack.pop();
+                    this.stackFrame.set_global(inst.args.symbol, val);
                     break;
                 case InsType.UNARY_OP:
                     this._handle_unary_op(inst.args.type, this.stack.pop());
@@ -112,7 +121,7 @@ LOAD_LOCAL_VAR: "load_local_var",
 POP: "pop",
 PUSH: "push",
 RETURN: "return",
-STORE_ATTRIB: "store_attrib",
+set_attrib: "set_attrib",
 STORE_CLASS_VAR: "store_class_var",
 STORE_LOCAL_VAR: "store_local_var",
 UNARY_OP: "unary_op"

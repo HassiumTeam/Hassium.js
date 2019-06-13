@@ -71,12 +71,12 @@ module.exports = class Emit {
             case NodeType.ID:
                 if (this.table.in_global_scope()) {
                     this.emit(InstType.STORE_GLOBAL, {
-                        index: this.table.get_symbol(left.id)
+                        symbol: this.table.handle_symbol(left.id)
                     }, left.src);
                 }
                 else {
                     this.emit(InstType.STORE_LOCAL, {
-                        index: this.table.get_symbol(left.id)
+                        symbol: this.table.handle_symbol(left.id)
                     }, left.src);
                 }
                 break;
@@ -113,7 +113,7 @@ module.exports = class Emit {
 
     accept_class(node) {
         let clazz = new lib.HassiumClass();
-        this.emit_peek().store_attrib(node.children.name, clazz);
+        this.emit_peek().set_attrib(node.children.name, clazz);
 
         this.emit_stack.push(clazz);
         node.children.contents.forEach(x => this.accept(x));
@@ -157,7 +157,7 @@ module.exports = class Emit {
             node.children.name,
             node.children.args.map(x => x.id)
         );
-        this.emit_peek().store_attrib(node.children.name, func);
+        this.emit_peek().set_attrib(node.children.name, func);
 
         this.emit_stack.push(func);
         this.table.enter_scope();
@@ -169,12 +169,12 @@ module.exports = class Emit {
     accept_id(node) {
         if (this.table.in_global_scope()) {
             this.emit(InstType.LOAD_GLOBAL, {
-                index: this.table.get_symbol(node.children.id)
+                symbol: this.table.handle_symbol(node.children.id)
             }, node.src);
         }
         else {
             this.emit(InstType.LOAD_LOCAL, {
-                index: this.table.get_symbol(node.children.id)
+                symbol: this.table.handle_symbol(node.children.id)
             }, node.src);
         }
     }

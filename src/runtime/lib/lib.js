@@ -1,5 +1,6 @@
 module.exports.HassiumFunc = require('./hassiumFunc')
 module.exports.HassiumInvokable = require('./hassiumInvokable');
+module.exports.HassiumModule = require('./hassiumModule');
 module.exports.HassiumObject = require('./hassiumObject').HassiumObject;
 
 module.exports.types = {};

@@ -1,33 +1,35 @@
 module.exports = class StackFrame {
     constructor() {
-        this._frames = [];
+        this._global_frame = {};
+        this._frames = [ _global_frame ];
     }
 
-    push_frame() {
-        this._frames.push({});
+    get_global(id) {
+        return this._global_frame[id];
     }
 
-    pop_frame() {
-        return this._frames.pop();
+    get_var(id) {
+        return this.peek_frame()[id];
     }
 
     peek_frame() {
         return this._frames[this._frames.length - 1];
     }
 
-    get_var(index) {
-         return this.peek_frame()[index];
+    pop_frame() {
+        return this._frames.pop();
     }
 
-    set_var(index, val) {
-        this.peek_frame()[index] = val;
+    push_frame() {
+        this._frames.push({});
     }
 
-    contains(index) {
-        for (var frame in this._frames) {
-            if (frame[index])
-                return true;
-        }
-        return false;
+    set_global(id, val) {
+        this._global_frame[id] = val;
+    }
+
+    set_var(id, val) {
+        this.peek_frame()[id] = val;
+        return val;
     }
 };

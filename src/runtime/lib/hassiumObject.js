@@ -24,8 +24,12 @@ class HassiumObject {
         return this.labels[id];
     }
 
-    store_attrib(key, val) {
+    set_attrib(key, val) {
         this._attributes[key] = val;
+    }
+
+    toString_(vm, mod, args) {
+        this.get_attrib('toString').get_attrib('_invoke')(vm, mod, args);
     }
 
 };

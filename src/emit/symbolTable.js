@@ -1,46 +1,37 @@
 module.exports = class SymbolTable {
     constructor() {
-        this.index = 0;
-        this.global_scope = {};
+        this.global_scope = [];
         this.scopes = [ this.global_scope ];
     }
 
+    add_symbol(id) {
+        this.peek_scope().push(id);
+    }
+
+    handle_symbol(id) {
+        if (!this.has_symbol()) {
+            this.add_symbol(id);
+        }
+        return id;
+    }
+
+    has_symbol(id) {
+        return this.peek_scope().includes(id);
+    }
+
     enter_scope() {
-        this.scopes.push({});
+        this.scopes.push([]);
+    }
+
+    in_global_scope() {
+        return this.peek_scope() === this.global_scope;
     }
 
     leave_scope() {
         this.scopes.pop();
-        if (this.scopes.length == 2) {
-            this.index = 0;
-        }
     }
 
-    in_global_scope() {
-        return this.scopes[this.scopes.length - 1] == this.global_scope;
-    }
-
-    add_symbol(name) {
-        this.scopes[this.scopes.length - 1][name] = this.index;
-        return this.index++;
-    }
-
-    get_symbol(name) {
-        if (this.get_symbol_strict(name) == -1) {
-            this.add_symbol(name);
-        }
-
-        return this.get_symbol_strict(name);
-    }
-
-    get_symbol_strict(name) {
-        for (let i = 0; i < this.scopes.length; i++) {
-            let scope = this.scopes[i];
-            if (scope.hasOwnProperty(name)) {
-                return scope[name];
-            }
-        }
-
-        return -1;
+    peek_scope() {
+        return this.scopes[this.scopes.length - 1];
     }
 };
