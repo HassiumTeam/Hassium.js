@@ -2,11 +2,13 @@ const { BinOpType, UnaryOpType } = require('../node');
 const { HassiumObject, InstType } = require('./lib/hassiumObject');
 const lib = require('./lib/lib');
 const StackFrame = require('./stackFrame');
+const util = require('util');
 
 module.exports = class VM {
     run(obj) {
         this.stack = [];
         this.stackFrame = new StackFrame();
+        this._import_defaults(obj);
 
         let pos = 0;
         let inst, target, val, args;
@@ -17,9 +19,10 @@ module.exports = class VM {
                 case InstType.ARRAY_DECL:
                     break;
                 case InstType.BIN_OP:
-                    this._handle_bin_op(inst.args.type,
-                                        this.stack.pop(),
-                                        this.stack.pop()
+                    this._handle_bin_op(
+                        inst.args.type,
+                        this.stack.pop(),
+                        this.stack.pop()
                     );
                     break;
                 case InstType.CALL:
@@ -28,7 +31,8 @@ module.exports = class VM {
                     for (let i = 0; i < inst.args.arg_count; i++) {
                         args.push(this.stack.pop());
                     }
-                    target.get_attrib('_invoke')(this, null, args);
+                    // console.log(util.inspect(target, { showHidden: true, depth: null }));
+                    target.invokable_invoke(this, obj, args);
                     break;
                 case InstType.ITER:
                     break;
@@ -63,7 +67,7 @@ module.exports = class VM {
                     break;
                 case InstType.LOAD_GLOBAL:
                     this.stack.push(
-                        this.stackFrame.set_global(inst.args.symbol);
+                        this.stackFrame.get_global(inst.args.symbol)
                     );
                     break;
                 case InstType.POP:
@@ -102,27 +106,12 @@ module.exports = class VM {
     _handle_unary_op(type, target) {
 
     }
-};
 
-/*
-ARRAY_DECL: "array_decl",
-BIN_OP: "bin_op",
-CALL: "call",
-ITER: "iter",
-ITER_FULL: "iter_full",
-ITER_NEXT: "iter_next",
-JUMP: "jump",
-JUMP_IF_FALSE: "jump_if_false",
-JUMP_IF_TRUE: "jump_if_true",
-LOAD_ATTRIB: "load_attrib",
-LOAD_CLASS_VAR: "load_class_var",
-LOAD_CONST: "load_const",
-LOAD_LOCAL_VAR: "load_local_var",
-POP: "pop",
-PUSH: "push",
-RETURN: "return",
-set_attrib: "set_attrib",
-STORE_CLASS_VAR: "store_class_var",
-STORE_LOCAL_VAR: "store_local_var",
-UNARY_OP: "unary_op"
-*/
+    _import_defaults() {
+        for (var key in lib.default._attributes) {
+            if (lib.default._attributes.hasOwnProperty(key)) {
+                this.stackFrame.set_global(key, lib.default._attributes[key]);
+            }
+        }
+    }
+};

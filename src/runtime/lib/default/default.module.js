@@ -1,14 +1,15 @@
-const Console = require('./console');
-const lib = require('../lib');
+const HassiumInvokable = require('../hassiumInvokable');
+const HassiumModule = require('../hassiumModule');
 
-
-module.exports = class DefaultModule extends lib.HassiumModule {
+class DefaultModule extends HassiumModule {
     constructor() {
         super('_default');
-        this.set_attrib('println', new lib.HassiumInvokable(this.default_println));
+        this.set_attrib('println', new HassiumInvokable(this.default_println));
     }
 
     default_println(vm, mod, args) {
         args.forEach(x => console.log(x.toString_(vm, mod, {}).val));
     }
-}
+};
+
+module.exports = new DefaultModule();

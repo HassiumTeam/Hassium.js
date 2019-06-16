@@ -17,7 +17,7 @@ class HassiumObject {
     }
 
     get_attrib(key) {
-        return this._attributes.key;
+        return this._attributes[key];
     }
 
     get_label(id) {

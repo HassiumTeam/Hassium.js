@@ -1,7 +1,7 @@
 module.exports = class StackFrame {
     constructor() {
         this._global_frame = {};
-        this._frames = [ _global_frame ];
+        this._frames = [ this._global_frame ];
     }
 
     get_global(id) {

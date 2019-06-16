@@ -3,6 +3,8 @@ module.exports.HassiumInvokable = require('./hassiumInvokable');
 module.exports.HassiumModule = require('./hassiumModule');
 module.exports.HassiumObject = require('./hassiumObject').HassiumObject;
 
+module.exports.default = require('./default/default.module');
+
 module.exports.types = {};
 module.exports.types.HassiumArray = require('./types/hassiumArray');
 module.exports.types.HassiumBool = require('./types/hassiumBool');
