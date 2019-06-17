@@ -32,7 +32,7 @@ module.exports = class VM {
                         args.push(this.stack.pop());
                     }
                     // console.log(util.inspect(target, { showHidden: true, depth: null }));
-                    target.invokable_invoke(this, obj, args);
+                    this.stack.push(target.invoke(this, obj, args));
                     break;
                 case InstType.ITER:
                     break;

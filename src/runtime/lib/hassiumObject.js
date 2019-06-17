@@ -29,7 +29,7 @@ class HassiumObject {
     }
 
     toString_(vm, mod, args) {
-        this.get_attrib('toString').get_attrib('_invoke')(vm, mod, args);
+        return this.get_attrib('toString').invoke(vm, mod, args);
     }
 
 };

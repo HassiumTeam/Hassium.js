@@ -2,13 +2,14 @@ const { HassiumObject } = require('./hassiumObject');
 const util = require('util');
 
 module.exports = class HassiumInvokable extends HassiumObject {
-    constructor(target) {
+    constructor(obj, attrib) {
         super();
-        this.target = target;
-        this.set_attrib('_invoke', this.invokable_invoke);
+        this.obj = obj;
+        this.attrib = attrib;
     }
 
-    invokable_invoke(vm, mod, args) {
-        this.target.default_println(vm, mod, args);
+    invoke(vm, mod, args) {
+        //console.log(util.inspect(this.obj, { showHidden: true, depth: null }));
+        return this.obj[this.attrib](vm, mod, args);
     }
 };
