@@ -5,7 +5,7 @@ const { Token, TokType } = require('./token');
 const util = require('util');
 const VM = require('./runtime/vm');
 
-let code = '{println("Hello, World!")}';
+let code = '{println(2 + 3)}';
 
 let lexer = new Lexer(code);
 let toks = lexer.run();

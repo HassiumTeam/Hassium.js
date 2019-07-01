@@ -196,7 +196,7 @@ module.exports = class Emit {
 
     accept_int(node) {
         this.emit(InstType.LOAD_CONST, {
-            val: new lib.types.HassiumInt(node.children.val)
+            val: new lib.types.HassiumInt(parseInt(node.children.val))
         }, node.src);
     }
 

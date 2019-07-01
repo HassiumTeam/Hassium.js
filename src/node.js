@@ -23,6 +23,7 @@ const NodeType = {
 };
 
 const BinOpType = {
+    ADD: "add",
     DIV: "div",
     EQUAL: "equal",
     GREATER: "greater",
@@ -34,6 +35,7 @@ const BinOpType = {
     MOD: "mod",
     MUL: "mul",
     NOT_EQUAL: "not_equal",
+    SUB: "sub",
 };
 
 const UnaryOpType = {

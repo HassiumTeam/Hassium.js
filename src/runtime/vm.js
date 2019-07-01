@@ -5,10 +5,14 @@ const StackFrame = require('./stackFrame');
 const util = require('util');
 
 module.exports = class VM {
+    constructor (mod) {
+        this._mod = mod;
+        this._stack_frame = new StackFrame();
+        this._import_module(lib.default);
+    }
+
     run(obj) {
-        this.stack = [];
-        this.stackFrame = new StackFrame();
-        this._import_defaults(obj);
+        let stack = [];
 
         let pos = 0;
         let inst, target, val, args;
@@ -20,19 +24,17 @@ module.exports = class VM {
                     break;
                 case InstType.BIN_OP:
                     this._handle_bin_op(
+                        stack,
                         inst.args.type,
-                        this.stack.pop(),
-                        this.stack.pop()
                     );
                     break;
                 case InstType.CALL:
-                    target = this.stack.pop();
+                    target = stack.pop();
                     args = [];
                     for (let i = 0; i < inst.args.arg_count; i++) {
-                        args.push(this.stack.pop());
+                        args.push(stack.pop());
                     }
-                    // console.log(util.inspect(target, { showHidden: true, depth: null }));
-                    this.stack.push(target.invoke(this, obj, args));
+                    stack.push(target.invoke(this, this.mod, args));
                     break;
                 case InstType.ITER:
                     break;
@@ -44,54 +46,54 @@ module.exports = class VM {
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (this.stack.pop() == lib.hassiumFalse) {
+                    if (this._stack.pop() == lib.hassiumFalse) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (this.stack.pop() == lib.hassiumTrue) {
+                    if (stack.pop() == lib.hassiumTrue) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.LOAD_ATTRIB:
-                    target = this.stack.pop();
+                    target = stack.pop();
                     target.get_attrib(inst.args.attrib);
                     break;
                 case InstType.LOAD_CONST:
-                    this.stack.push(inst.args.val);
+                    stack.push(inst.args.val);
                     break;
                 case InstType.LOAD_LOCAL_VAR:
-                    this.stack.push(
-                        this.stackFrame.set_var(inst.args.symbol)
+                    stack.push(
+                        this._stack_frame.set_var(inst.args.symbol)
                     );
                     break;
                 case InstType.LOAD_GLOBAL:
-                    this.stack.push(
-                        this.stackFrame.get_global(inst.args.symbol)
+                    stack.push(
+                        this._stack_frame.get_global(inst.args.symbol)
                     );
                     break;
                 case InstType.POP:
                     break;
                 case InstType.PUSH:
-                    this.stack.push(inst.args.obj);
+                    stack.push(inst.args.obj);
                     break;
                 case InstType.RETURN:
                     break;
                 case InstType.STORE_ATTRIB:
-                    target = this.stack.pop();
-                    val = this.stack.pop();
+                    target = stack.pop();
+                    val = stack.pop();
                     target.set_attrib(inst.args.attrib, val);
                     break;
                 case InstType.STORE_LOCAL_VAR:
-                    val = this.stack.pop();
-                    this.stackFrame.set_var(inst.args.symbol, val);
+                    val = stack.pop();
+                    this._stack_frame.set_var(inst.args.symbol, val);
                     break;
                 case InstType.STORE_GLOBAL:
-                    val = this.stack.pop();
-                    this.stackFrame.set_global(inst.args.symbol, val);
+                    val = stack.pop();
+                    this._stack_frame.set_global(inst.args.symbol, val);
                     break;
                 case InsType.UNARY_OP:
-                    this._handle_unary_op(inst.args.type, this.stack.pop());
+                    this._handle_unary_op(stack, inst.args.type);
                     break;
             }
 
@@ -99,18 +101,31 @@ module.exports = class VM {
         }
     }
 
-    _handle_bin_op(type, right, left) {
+    _handle_bin_op(stack, type) {
+        let right = stack.pop();
+        let left = stack.pop();
+
+        switch (type) {
+            case BinOpType.ADD:
+                stack.push(left.get_attrib('_add').invoke(this, this.mod, [ right ]));
+                break;
+            case BinOpType.DIV:
+                stack.push(left.divide(this, this.mod, right));
+                break;
+            case BinOpType.EQUAL:
+                stack.push(left.equal(this, this.mod, right));
+                break;
+        }
+    }
+
+    _handle_unary_op(stack, type) {
 
     }
 
-    _handle_unary_op(type, target) {
-
-    }
-
-    _import_defaults() {
-        for (var key in lib.default._attributes) {
-            if (lib.default._attributes.hasOwnProperty(key)) {
-                this.stackFrame.set_global(key, lib.default._attributes[key]);
+    _import_module(mod) {
+        for (var key in mod._attributes) {
+            if (mod._attributes.hasOwnProperty(key)) {
+                this._stack_frame.set_global(key, mod._attributes[key]);
             }
         }
     }
