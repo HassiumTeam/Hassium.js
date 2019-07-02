@@ -40,8 +40,8 @@ module.exports = class Emit {
                 return this.accept_id(node);
             case NodeType.IF:
                 return this.accept_if(node);
-            case NodeType.INT:
-                return this.accept_int(node);
+            case NodeType.NUMBER:
+                return this.accept_number(node);
             case NodeType.RETURN:
                 return this.accept_return(node);
             case NodeType.STRING:
@@ -194,9 +194,9 @@ module.exports = class Emit {
         this.emit_label(end_label);
     }
 
-    accept_int(node) {
+    accept_number(node) {
         this.emit(InstType.LOAD_CONST, {
-            val: new lib.types.HassiumInt(parseInt(node.children.val))
+            val: new lib.types.HassiumNumber(Number.parseFloat(node.children.val))
         }, node.src);
     }
 

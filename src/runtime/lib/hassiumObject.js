@@ -1,5 +1,6 @@
 class HassiumObject {
-    constructor() {
+    constructor(type) {
+        this.type = type;
         this._attributes = {};
         this.instructions = [];
         this.labels = {};
@@ -31,7 +32,6 @@ class HassiumObject {
     toString_(vm, mod, args) {
         return this.get_attrib('toString').invoke(vm, mod, args);
     }
-
 };
 
 const InstType = {

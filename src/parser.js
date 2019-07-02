@@ -383,9 +383,9 @@ module.exports = class Parser {
                 val: this.expect_tok(TokType.CHAR).val
             });
         }
-        else if (this.match_tok(TokType.INT)) {
-            return new Node(NodeType.INT, {
-                val: this.expect_tok(TokType.INT).val
+        else if (this.match_tok(TokType.NUMBER)) {
+            return new Node(NodeType.NUMBER, {
+                val: this.expect_tok(TokType.NUMBER).val
             }, src);
         }
         else if (this.match_tok(TokType.OPAREN)) { return this.parse_expr(); }

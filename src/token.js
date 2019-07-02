@@ -17,7 +17,7 @@ const TokType = {
     CSQUARE: "csquare",
     DOT: "dot",
     ID: "id",
-    INT: "int",
+    NUMBER: "number",
     OBRACE: "obrace",
     OP: "op",
     OPAREN: "oparen",

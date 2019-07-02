@@ -14,7 +14,7 @@ const NodeType = {
     FUNC_DECL: "func_dec",
     ID: "id",
     IF: "if",
-    INT: "int",
+    NUMBER: "number",
     RETURN: "return",
     STRING: "string",
     SUBSCRIPT: "subscript",

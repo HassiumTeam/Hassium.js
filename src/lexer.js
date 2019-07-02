@@ -30,7 +30,7 @@ class Lexer {
             return;
         }
         else if (/^[0-9]+$/.test(cur)) {
-            this.read_int();
+            this.read_number();
             return;
         }
 
@@ -124,12 +124,12 @@ class Lexer {
         this.push_tok(TokType.ID, str);
     }
 
-    read_int() {
+    read_number() {
         let str = "";
         while (this.peek_char() != -1 && /^[0-9]+$/.test(this.peek_char())) {
             str += this.read_char();
         }
-        this.push_tok(TokType.INT, str);
+        this.push_tok(TokType.NUMBER, str);
     }
 
     whitespace() {
