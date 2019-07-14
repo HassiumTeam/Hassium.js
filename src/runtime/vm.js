@@ -3,6 +3,7 @@ const { HassiumObject, InstType } = require('./lib/hassiumObject');
 const lib = require('./lib/lib');
 const StackFrame = require('./stackFrame');
 const util = require('util');
+const VMErrors = require('../errors/vmErrors');
 
 module.exports = class VM {
     constructor (mod) {
@@ -62,15 +63,23 @@ module.exports = class VM {
                 case InstType.LOAD_CONST:
                     stack.push(inst.args.val);
                     break;
-                case InstType.LOAD_LOCAL_VAR:
-                    stack.push(
-                        this._stack_frame.set_var(inst.args.symbol)
-                    );
-                    break;
-                case InstType.LOAD_GLOBAL:
-                    stack.push(
-                        this._stack_frame.get_global(inst.args.symbol)
-                    );
+                case InstType.LOAD_ID:
+                    val = this._stack_frame.get_var(inst.args.id);
+                    if (val !== undefined) {
+                        stack.push(val);
+                    } else {
+                        val = this._stack_frame.get_global(inst.args.id);
+                        if (val !== undefined) {
+                            stack.push(val);
+                        } else {
+                            val = obj.get_attrib(inst.args.id);
+                            if (val !== undefined) {
+                                stack.push(val);
+                            } else {
+                                throw new VMErrors.UnknownIDError(inst.args.id);
+                            }
+                        }
+                    }
                     break;
                 case InstType.POP:
                     break;

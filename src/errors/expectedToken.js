@@ -1,4 +1,4 @@
-class ExpectedTokenError {
+module.exports = class ExpectedTokenError {
     constructor(type, val, got) {
         this.type = type;
         this.val = val;
@@ -8,5 +8,3 @@ class ExpectedTokenError {
         }
     }
 };
-
-module.exports = ExpectedTokenError;

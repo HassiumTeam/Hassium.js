@@ -1,7 +1,7 @@
 module.exports = class SymbolTable {
     constructor() {
         this.global_scope = [];
-        this.scopes = [ this.global_scope ];
+        this.scopes = [];
     }
 
     add_symbol(id) {
@@ -22,11 +22,7 @@ module.exports = class SymbolTable {
     enter_scope() {
         this.scopes.push([]);
     }
-
-    in_global_scope() {
-        return this.peek_scope() === this.global_scope;
-    }
-
+    
     leave_scope() {
         this.scopes.pop();
     }

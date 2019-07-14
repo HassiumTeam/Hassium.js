@@ -8,7 +8,7 @@ module.exports = class Emit {
         this.ast = ast;
         this.label_id = 0;
         this.module = new lib.HassiumObject();
-        this.emit_stack = [ this.module ];
+        this._emit_stack = [ this.module ];
         this.table = new SymbolTable();
     }
 
@@ -95,10 +95,14 @@ module.exports = class Emit {
     }
 
     accept_block(node) {
+        this.table.enter_scope();
+
         let self = this;
         node.children.nodes.forEach(function(node) {
             self.accept(node);
         });
+
+        this.table.leave_scope();
     }
 
     accept_break(node) {
@@ -115,9 +119,9 @@ module.exports = class Emit {
         let clazz = new lib.HassiumClass();
         this.emit_peek().set_attrib(node.children.name, clazz);
 
-        this.emit_stack.push(clazz);
+        this._emit_stack.push(clazz);
         node.children.contents.forEach(x => this.accept(x));
-        this.emit_stack.pop();
+        this._emit_stack.pop();
     }
 
     accept_continue(node) {
@@ -159,24 +163,15 @@ module.exports = class Emit {
         );
         this.emit_peek().set_attrib(node.children.name, func);
 
-        this.emit_stack.push(func);
+        this._emit_stack.push(func);
         this.table.enter_scope();
         this.accept(node.children.body);
         this.table.leave_scope();
-        this.emit_stack.pop();
+        this._emit_stack.pop();
     }
 
     accept_id(node) {
-        if (this.table.in_global_scope()) {
-            this.emit(InstType.LOAD_GLOBAL, {
-                symbol: this.table.handle_symbol(node.children.id)
-            }, node.src);
-        }
-        else {
-            this.emit(InstType.LOAD_LOCAL, {
-                symbol: this.table.handle_symbol(node.children.id)
-            }, node.src);
-        }
+        this.emit(InstType.LOAD_ID, { id: node.children.id }, node.src);
     }
 
     accept_if(node) {
@@ -251,7 +246,7 @@ module.exports = class Emit {
     }
 
     emit_peek() {
-        return this.emit_stack[this.emit_stack.length - 1];
+        return this._emit_stack[this._emit_stack.length - 1];
     }
 
     next_label() {

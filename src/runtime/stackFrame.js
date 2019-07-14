@@ -1,5 +1,5 @@
 module.exports = class StackFrame {
-    constructor() {
+    constructor(mod) {
         this._global_frame = {};
         this._frames = [ this._global_frame ];
     }

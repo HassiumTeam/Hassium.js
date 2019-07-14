@@ -7,6 +7,7 @@ class HassiumObject {
     }
 
     invoke(vm, mod, args) {
+        vm.run(this);
     }
 
     emit(type, args, src) {
@@ -46,8 +47,7 @@ const InstType = {
     JUMP_IF_TRUE: "jump_if_true",
     LOAD_ATTRIB: "load_attrib",
     LOAD_CONST: "load_const",
-    LOAD_GLOBAL: "load_global",
-    LOAD_LOCAL: "load_local",
+    LOAD_ID: "load_id",
     LOAD_SUBSCRIPT: "load_subscript",
     POP: "pop",
     PUSH: "push",
@@ -56,7 +56,7 @@ const InstType = {
     STORE_GLOBAL: "store_global",
     STORE_LOCAL: "store_local_var",
     STORE_SUBSCRIPT: "store_subscript",
-    UNARY_OP: "unary_op"
+    UNARY_OP: "unary_op",
 };
 
-module.exports = { HassiumObject, InstType };
+module.exports = { HassiumObject, InstType, };
