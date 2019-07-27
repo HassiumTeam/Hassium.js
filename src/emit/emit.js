@@ -71,12 +71,12 @@ module.exports = class Emit {
             case NodeType.ID:
                 if (this.table.in_global_scope()) {
                     this.emit(InstType.STORE_GLOBAL, {
-                        symbol: this.table.handle_symbol(left.id)
+                        symbol: this.table.handle_symbol(left.children.id)
                     }, left.src);
                 }
                 else {
                     this.emit(InstType.STORE_LOCAL, {
-                        symbol: this.table.handle_symbol(left.id)
+                        symbol: this.table.handle_symbol(left.children.id)
                     }, left.src);
                 }
                 break;
@@ -171,7 +171,13 @@ module.exports = class Emit {
     }
 
     accept_id(node) {
-        this.emit(InstType.LOAD_ID, { id: node.children.id }, node.src);
+        let id = node.children.id;
+
+        if (this.table.has_symbol(id)) {
+            this.emit(InstType.LOAD_ID, { id: this.table.get_symbol(id) });
+        } else {
+            this.emit(InstType.LOAD_ID, { id: node.children.id }, node.src);
+        }
     }
 
     accept_if(node) {

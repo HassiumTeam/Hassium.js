@@ -93,7 +93,7 @@ module.exports = class VM {
                     val = stack.pop();
                     target.set_attrib(inst.args.attrib, val);
                     break;
-                case InstType.STORE_LOCAL_VAR:
+                case InstType.STORE_LOCAL:
                     val = stack.pop();
                     this._stack_frame.set_var(inst.args.symbol, val);
                     break;

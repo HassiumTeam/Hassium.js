@@ -54,7 +54,7 @@ const InstType = {
     RETURN: "return",
     STORE_ATTRIB: "store_attrib",
     STORE_GLOBAL: "store_global",
-    STORE_LOCAL: "store_local_var",
+    STORE_LOCAL: "store_local",
     STORE_SUBSCRIPT: "store_subscript",
     UNARY_OP: "unary_op",
 };
