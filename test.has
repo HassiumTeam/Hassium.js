@@ -1,15 +1,14 @@
 {
     func main () {
-        a = false
-        this.assert(a)
-        println("Back from assert");
+        a = true
+        this.assert(a, "Boolean is true");
     }
 
-    func assert(c) {
+    func assert (c, test) {
         if (c) {
-            println("True")
+            println ("Passed test: " + test)
         } else {
-            println("False")
+            println ("Failed test: " + test);
         }
     }
 
