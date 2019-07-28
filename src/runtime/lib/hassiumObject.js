@@ -18,6 +18,10 @@ class HassiumObject {
         this.labels[id] = this.instructions.length - 1;
     }
 
+    equal(vm, mod, arg) {
+        return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
+    }
+
     get_attrib(key) {
         return this._attributes[key];
     }

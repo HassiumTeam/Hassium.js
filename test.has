@@ -1,6 +1,6 @@
 {
     func main () {
-        a = true
+        a = false
         this.assert(a)
         println("Back from assert");
     }

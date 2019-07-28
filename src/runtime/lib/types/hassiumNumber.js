@@ -7,6 +7,8 @@ module.exports = class HassiumNumber extends HassiumObject {
         this.val = val;
 
         this.set_attrib('_add', new lib.HassiumInvokable(this, 'number_add'));
+        this.set_attrib('_divide', new lib.HassiumInvokable(this, 'number_divide'));
+        this.set_attrib('_equal', new lib.HassiumInvokable(this, 'number_equal'));
         this.set_attrib('toString', new lib.HassiumInvokable(this, 'number_toString'));
     }
 
@@ -16,6 +18,10 @@ module.exports = class HassiumNumber extends HassiumObject {
 
     number_div(vm, mod, args) {
         return new HassiumNumber(this.val / args[0].val);
+    }
+
+    number_equal(vm, mod, args) {
+        return new HassiumNumber(this.val === args[0].val);
     }
 
     number_toString(vm, mod, args) {
