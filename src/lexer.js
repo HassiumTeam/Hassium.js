@@ -14,8 +14,8 @@ class Lexer {
     run() {
         this.whitespace();
         while(this.peek_char() != -1) {
-            this.whitespace();
             this.read_tok();
+            this.whitespace();
         }
 
         return this.res;
@@ -92,6 +92,9 @@ class Lexer {
             case '.':
                 this.push_tok(TokType.DOT, this.read_char());
                 break;
+            case ',':
+                this.push_tok(TokType.COMMA, this.read_char());
+                break;
             case '"':
                 this.read_str();
                 break;
@@ -117,7 +120,7 @@ class Lexer {
 
      read_id() {
         let str = "";
-        while (this.peek_char() != -1 && /^[0-9a-zA-Z]+$/.test(this.peek_char())) {
+        while (this.peek_char() != -1 && /^[0-9a-zA-Z_]+$/.test(this.peek_char())) {
             str += this.read_char();
         }
 

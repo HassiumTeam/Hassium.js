@@ -21,7 +21,7 @@ module.exports = class HassiumNumber extends HassiumObject {
     }
 
     number_equal(vm, mod, args) {
-        return new HassiumNumber(this.val === args[0].val);
+        return new HassiumNumber(this.val === args[0].val ? 1 : 0);
     }
 
     number_toString(vm, mod, args) {

@@ -49,12 +49,12 @@ module.exports = class VM {
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (stack.pop().equal(this, this.mod, lib.types.hassiumFalse).val) {
+                    if (stack.pop().val === 0) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (stack.pop().equal(this, this.mod, lib.types.hassiumTrue).val) {
+                    if (stack.pop().val === 1) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
@@ -131,7 +131,7 @@ module.exports = class VM {
                 stack.push(left.get_attrib('_divide').invoke(this, this.mod, [ right ]));
                 break;
             case BinOpType.EQUAL:
-                stack.push(left.equal(this, this.mod, right));
+                stack.push(left.get_attrib('_equal').invoke(this, this.mod, [ right ]));
                 break;
         }
     }

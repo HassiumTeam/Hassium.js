@@ -417,6 +417,7 @@ module.exports = class Parser {
         this.expect_tok(TokType.OPAREN);
         while (!this.accept_tok(TokType.CPAREN)) {
             args.push(this.parse_expr());
+            this.accept_tok(TokType.COMMA);
         }
 
         return args;

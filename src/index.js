@@ -19,7 +19,7 @@ let ast = parser.parse();
 let emit = new Emit(ast);
 let mod = emit.compile();
 
-console.log(util.inspect(mod, { showHidden: false, depth: null }));
+//console.log(util.inspect(mod, { showHidden: false, depth: null }));
 
 let vm = new VM(mod);
 vm.run(mod);
