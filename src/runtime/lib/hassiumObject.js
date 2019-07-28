@@ -7,7 +7,7 @@ class HassiumObject {
     }
 
     invoke(vm, mod, args) {
-        vm.run(this);
+        vm.run(this, args);
     }
 
     emit(type, args, src) {
@@ -52,6 +52,7 @@ const InstType = {
     POP: "pop",
     PUSH: "push",
     RETURN: "return",
+    SELF_REFERENCE: "self_reference",
     STORE_ATTRIB: "store_attrib",
     STORE_GLOBAL: "store_global",
     STORE_LOCAL: "store_local",

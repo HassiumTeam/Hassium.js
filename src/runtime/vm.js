@@ -12,11 +12,13 @@ module.exports = class VM {
         this._import_module(lib.default);
     }
 
-    run(obj) {
+    run(obj, _args) {
         let stack = [];
 
         let pos = 0;
         let inst, target, val, args;
+
+        this._import_args(obj, _args);
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
 
@@ -47,18 +49,18 @@ module.exports = class VM {
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (this._stack.pop() == lib.hassiumFalse) {
+                    if (stack.pop() === lib.types.hassiumFalse) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (stack.pop() == lib.hassiumTrue) {
+                    if (stack.pop() === lib.types.hassiumTrue) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.LOAD_ATTRIB:
                     target = stack.pop();
-                    target.get_attrib(inst.args.attrib);
+                    stack.push(target.get_attrib(inst.args.attrib));
                     break;
                 case InstType.LOAD_CONST:
                     stack.push(inst.args.val);
@@ -87,6 +89,13 @@ module.exports = class VM {
                     stack.push(inst.args.obj);
                     break;
                 case InstType.RETURN:
+                    break;
+                case InstType.SELF_REFERENCE:
+                    if (obj.self !== undefined) {
+                        stack.push(obj.self);
+                    } else {
+                        throw new VMErrors.SelfReferenceError(obj);
+                    }
                     break;
                 case InstType.STORE_ATTRIB:
                     target = stack.pop();
@@ -129,6 +138,14 @@ module.exports = class VM {
 
     _handle_unary_op(stack, type) {
 
+    }
+
+    _import_args(obj, args) {
+        if (args !== undefined) {
+            for (let i = 0; i < args.length; i++) {
+                this._stack_frame.set_var(obj.params[i], args[i]);
+            }
+        }
     }
 
     _import_module(mod) {

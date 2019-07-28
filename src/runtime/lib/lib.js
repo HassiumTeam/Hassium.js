@@ -7,9 +7,8 @@ module.exports.default = require('./default/default.module');
 
 module.exports.types = {};
 module.exports.types.HassiumArray = require('./types/hassiumArray');
-module.exports.types.HassiumBool = require('./types/hassiumBool');
 module.exports.types.HassiumChar = require('./types/hassiumChar');
-module.exports.types.hassiumFalse = new module.exports.types.HassiumBool(false);
+module.exports.types.hassiumFalse = module.exports.default.get_attrib('false');
 module.exports.types.HassiumNumber = require('./types/hassiumNumber');
 module.exports.types.HassiumString = require('./types/hassiumString');
-module.exports.types.hassiumTrue = new module.exports.types.HassiumBool(true);
+module.exports.types.hassiumTrue = module.exports.default.get_attrib('true');

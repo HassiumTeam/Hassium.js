@@ -1,11 +1,13 @@
 const Emit = require('./emit/emit');
+const fs = require('fs');
 const Lexer = require('./lexer');
 const Parser = require('./parser');
 const { Token, TokType } = require('./token');
 const util = require('util');
 const VM = require('./runtime/vm');
 
-let code = '{ func main() { a = 3 println(a + 3) { b = 2 println (a + b) } } main() }';
+let filePath = process.argv[2];
+let code = fs.readFileSync(filePath, 'utf-8');
 
 let lexer = new Lexer(code);
 let toks = lexer.run();

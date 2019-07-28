@@ -1,2 +1,2 @@
-module.exports.ExpectedTokenError = require('./expectedToken');
-module.exports.UnexpectedTokenError = require('./unexpectedToken');
+module.exports.ExpectedTokenError = require('./parser/expectedTokenError');
+module.exports.UnexpectedTokenError = require('./parser/unexpectedTokenError');

@@ -1,0 +1,17 @@
+{
+    func main () {
+        a = true
+        this.assert(a)
+        println("Back from assert");
+    }
+
+    func assert(c) {
+        if (c) {
+            println("True")
+        } else {
+            println("False")
+        }
+    }
+
+    main ()
+}

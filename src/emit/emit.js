@@ -163,6 +163,9 @@ module.exports = class Emit {
         );
         this.emit_peek().set_attrib(node.children.name, func);
 
+        node.children.args.forEach(x => func.add_param(x.children.id));
+        func.self = this.emit_peek();
+
         this._emit_stack.push(func);
         this.table.enter_scope();
         this.accept(node.children.body);
@@ -173,7 +176,9 @@ module.exports = class Emit {
     accept_id(node) {
         let id = node.children.id;
 
-        if (this.table.has_symbol(id)) {
+        if (id === 'this') {
+            this.emit(InstType.SELF_REFERENCE, {}, node.src);
+        } else if (this.table.has_symbol(id)) {
             this.emit(InstType.LOAD_ID, { id: this.table.get_symbol(id) });
         } else {
             this.emit(InstType.LOAD_ID, { id: node.children.id }, node.src);
