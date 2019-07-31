@@ -17,6 +17,7 @@
         this.assert (d == 2, "d is 2")
 
         this.equality_tests (a, b, c, d)
+        this.arithmatic_tests (c, d)
     }
 
     func equality_tests (a, b, c, d) {
@@ -31,6 +32,10 @@
         } else {
             this.assert (true, "Number equality")
         }
+    }
+
+    func arithmatic_tests (c, d) {
+        this.assert ((c + d) == 18, "c + d == 18")
     }
 
     func assert (c, test) {

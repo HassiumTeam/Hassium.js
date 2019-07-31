@@ -7,7 +7,9 @@ class HassiumObject {
     }
 
     invoke(vm, mod, args) {
+        vm._stack_frame.push_frame();
         vm.run(this, args);
+        vm._stack_frame.pop_frame();
     }
 
     emit(type, args, src) {
@@ -16,10 +18,6 @@ class HassiumObject {
 
     emit_label(id) {
         this.labels[id] = this.instructions.length - 1;
-    }
-
-    equal(vm, mod, arg) {
-        return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
     }
 
     get_attrib(key) {
@@ -32,6 +30,18 @@ class HassiumObject {
 
     set_attrib(key, val) {
         this._attributes[key] = val;
+    }
+
+    add(vm, mod, arg) {
+        return this.get_attrib('_add').invoke(vm, mod, [ arg ]);
+    }
+
+    divide(vm, mod, arg) {
+        return this.get_attrib('_divide').invoke(vm, mod, [ arg ]);
+    }
+
+    equal(vm, mod, arg) {
+        return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
     }
 
     toString_(vm, mod, args) {

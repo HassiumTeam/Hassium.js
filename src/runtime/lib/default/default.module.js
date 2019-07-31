@@ -8,11 +8,15 @@ class DefaultModule extends HassiumModule {
         this.set_attrib('false', new HassiumNumber(0));
         this.set_attrib('true', new HassiumNumber(1));
         this.set_attrib('println', new HassiumInvokable(this, 'default_println'));
-
+        this.set_attrib('debug', new HassiumInvokable(this, 'debug'));
     }
 
     default_println(vm, mod, args) {
         args.forEach(x => console.log(x.toString_(vm, mod, {}).val));
+    }
+
+    debug(vm, mod, args) {
+        console.log(require('util').inspect(vm._stack_frame._frames, { depth: null }));
     }
 };
 

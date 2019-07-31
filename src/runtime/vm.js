@@ -123,15 +123,16 @@ module.exports = class VM {
         let left = stack.pop();
         let right = stack.pop();
 
+
         switch (type) {
             case BinOpType.ADD:
-                stack.push(left.get_attrib('_add').invoke(this, this.mod, [ right ]));
+                stack.push(left.add(this, this.mod, right));
                 break;
             case BinOpType.DIV:
-                stack.push(left.get_attrib('_divide').invoke(this, this.mod, [ right ]));
+                stack.push(left.divide(this, this.mod, right));
                 break;
             case BinOpType.EQUAL:
-                stack.push(left.get_attrib('_equal').invoke(this, this.mod, [ right ]));
+                stack.push(left.equal(this, this.mod, right));
                 break;
         }
     }
