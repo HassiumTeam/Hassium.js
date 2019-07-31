@@ -49,12 +49,12 @@ module.exports = class VM {
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (stack.pop().val === 0) {
+                    if (!stack.pop().equal(this, this.mod, lib.hassiumTrue)) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (stack.pop().val === 1) {
+                    if (stack.pop().equal(this, this.mod, lib.hassiumTrue)) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
@@ -122,7 +122,6 @@ module.exports = class VM {
     _handle_bin_op(stack, type) {
         let left = stack.pop();
         let right = stack.pop();
-
 
         switch (type) {
             case BinOpType.ADD:

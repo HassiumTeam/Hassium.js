@@ -36,13 +36,14 @@
 
     func arithmatic_tests (c, d) {
         this.assert ((c + d) == 18, "c + d == 18")
+        this.assert ((c / d) == 8, "c / d == 8");
     }
 
     func assert (c, test) {
         if (c) {
             println ("Passed test: " + test)
         } else {
-            println ("Failed test: " + test)
+            println ("Failed test: " + test + ". Got " + c);
         }
     }
 

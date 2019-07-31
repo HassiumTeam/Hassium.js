@@ -16,7 +16,7 @@ module.exports = class HassiumNumber extends HassiumObject {
         return new HassiumNumber(this.val + args[0].val);
     }
 
-    number_div(vm, mod, args) {
+    number_divide(vm, mod, args) {
         return new HassiumNumber(this.val / args[0].val);
     }
 
