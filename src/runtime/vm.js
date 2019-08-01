@@ -97,6 +97,13 @@ module.exports = class VM {
                         stack.push(target.index(this, this.mod, key));
                     }
                     break;
+                case InstType.OBJ_DECL:
+                    val = new HassiumObject();
+                    for (i = 0; i < inst.args.ids.length; i++) {
+                        val.set_attrib(inst.args.ids[i], stack.pop());
+                    }
+                    stack.push(val);
+                    break;
                 case InstType.POP:
                     break;
                 case InstType.PUSH:

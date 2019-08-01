@@ -28,6 +28,10 @@ class HassiumObject {
         return this.labels[id];
     }
 
+    has_attrib(key) {
+        return this._attributes[key] !== undefined;
+    }
+
     set_attrib(key, val) {
         this._attributes[key] = val;
     }
@@ -89,7 +93,11 @@ class HassiumObject {
     }
 
     toString_(vm, mod, args) {
-        return this.get_attrib('toString').invoke(vm, mod, args);
+        if (this.get_attrib('toString').invoke) {
+            return this.get_attrib('toString').invoke(vm, mod, args);
+        }
+
+        return object_toString(vm, mod, args, this);
     }
 };
 
@@ -119,3 +127,23 @@ const InstType = {
 };
 
 module.exports = { HassiumObject, InstType, };
+
+const lib = require('./lib');
+
+function object_toString(vm, mod, args, obj) {
+    let attrib;
+    let str = "{ ";
+    Object.keys(obj._attributes).forEach(function(x) {
+        attrib = obj.get_attrib(x);
+        str += `${x}: `;
+        if (attrib instanceof lib.types.HassiumString) {
+            str += `"${attrib.val}", `;
+        } else {
+            str += `${attrib.toString_(vm, mod, args).val}, `;
+        }
+    });
+
+    str += "}";
+
+    return new lib.types.HassiumString(str);
+}
