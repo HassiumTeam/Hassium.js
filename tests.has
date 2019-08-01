@@ -1,51 +1,51 @@
 {
     func main () {
-        this.assign_tests ()
+        this.assign_tests ();
     }
 
     func assign_tests () {
-        a = true
-        b = false
+        a = true;
+        b = false;
 
-        c = 16
-        d = 2
+        c = 16;
+        d = 2;
 
-        this.assert (a, "a is true")
-        this.assert (b == false, "b is false")
+        this.assert (a, "a is true");
+        this.assert (b == false, "b is false");
 
-        this.assert (c == 16, "c is 16")
-        this.assert (d == 2, "d is 2")
+        this.assert (c == 16, "c is 16");
+        this.assert (d == 2, "d is 2");
 
-        this.equality_tests (a, b, c, d)
-        this.arithmatic_tests (c, d)
+        this.equality_tests (a, b, c, d);
+        this.arithmatic_tests (c, d);
     }
 
     func equality_tests (a, b, c, d) {
         if (a == b) {
-            this.assert (false, "Boolean equality")
+            this.assert (false, "Boolean equality");
         } else {
-            this.assert (true, "Boolean equality")
+            this.assert (true, "Boolean equality");
         }
 
         if (c == d) {
-            this.assert (false, "Number equality")
+            this.assert (false, "Number equality");
         } else {
-            this.assert (true, "Number equality")
+            this.assert (true, "Number equality");
         }
     }
 
     func arithmatic_tests (c, d) {
-        this.assert ((c + d) == 18, "c + d == 18")
+        this.assert ((c + d) == 18, "c + d == 18");
         this.assert ((c / d) == 8, "c / d == 8");
     }
 
     func assert (c, test) {
         if (c) {
-            println ("Passed test: " + test)
+            println ("Passed test: " + test);
         } else {
-            println ("Failed test: " + test + ". Got " + c);
+            println ("Failed test: " + test);
         }
     }
 
-    main ()
+    main ();
 }

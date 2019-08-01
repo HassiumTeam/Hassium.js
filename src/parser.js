@@ -22,22 +22,28 @@ module.exports = class Parser {
     parse_stmt() {
         let src = this.current_src();
 
-        if (this.match_tok(TokType.OBRACE)) { return this.parse_block(); }
+        let stmt;
+
+        if (this.match_tok(TokType.OBRACE)) { stmt = this.parse_block(); }
         else if (this.accept_tok(TokType.ID, "break")) {
-            return new Node(NodeType.BREAK, {}, src);
+            stmt = new Node(NodeType.BREAK, {}, src);
         }
-        else if (this.match_tok(TokType.ID, "class")) { return this.parse_class(); }
+        else if (this.match_tok(TokType.ID, "class")) { stmt = this.parse_class(); }
         else if (this.accept_tok(TokType.ID, "continue")) {
-            return new Node(NodeType.CONTINUE, {}, src);
+            stmt = new Node(NodeType.CONTINUE, {}, src);
         }
-        else if (this.match_tok(TokType.ID, "for")) { return this.parse_for(); }
-        else if (this.match_tok(TokType.ID, "func")) { return this.parse_func(); }
-        else if (this.match_tok(TokType.ID, "if")) { return this.parse_if(); }
-        else if (this.match_tok(TokType.ID, "return")) { return this.parse_return(); }
-        else if (this.match_tok(TokType.ID, "while")) { return this.parse_while(); }
+        else if (this.match_tok(TokType.ID, "for")) { stmt = this.parse_for(); }
+        else if (this.match_tok(TokType.ID, "func")) { stmt = this.parse_func(); }
+        else if (this.match_tok(TokType.ID, "if")) { stmt = this.parse_if(); }
+        else if (this.match_tok(TokType.ID, "return")) { stmt = this.parse_return(); }
+        else if (this.match_tok(TokType.ID, "while")) { stmt = this.parse_while(); }
         else {
-            return this.parse_expr_stmt();
+            stmt = this.parse_expr_stmt();
         }
+
+        this.accept_tok(TokType.SEMICOLON);
+
+        return stmt;
     }
 
     parse_block() {
@@ -202,14 +208,17 @@ module.exports = class Parser {
                     return new Node(NodeType.BIN_OP, {
                         type: BinOpType.EQUAL,
                         left,
-                        right: this.parse_eq()
+                        right: this.parse_eq(),
                     }, src);
                 case '!=':
                     this.expect_tok(TokType.COMP);
-                    return new Node(NodeType.BIN_OP, {
-                        type: BinOpType.NOT_EQUAL,
-                        left,
-                        right: this.parse_eq()
+                    return new Node(NodeType.UNARY_OP, {
+                        type: UnaryOpType.LOGICAL_NOT,
+                        target: new Node(NodeType.BIN_OP, {
+                            type: BinOpType.EQUAL,
+                            left,
+                            right: this.parse_eq(),
+                        }, src)
                     }, src);
             }
         }

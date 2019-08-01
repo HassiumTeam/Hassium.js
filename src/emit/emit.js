@@ -225,7 +225,7 @@ module.exports = class Emit {
 
     accept_unary_op(node) {
         this.accept(node.children.target);
-        this.emit(InstType.UNARY_OP, {}, node.src);
+        this.emit(InstType.UNARY_OP, { type: node.children.type }, node.src);
     }
 
     accept_while(node) {

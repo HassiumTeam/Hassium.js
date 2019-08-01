@@ -47,7 +47,7 @@ class Lexer {
                 }
                 break;
             case '!':
-                if (next == '!') {
+                if (next == '!' || next == '=') {
                     this.push_tok(TokType.COMP, this.read_char() + '' + this.read_char());
                 }
                 else {
@@ -94,6 +94,12 @@ class Lexer {
                 break;
             case ',':
                 this.push_tok(TokType.COMMA, this.read_char());
+                break;
+            case ':':
+                this.push_tok(TokType.COLON, this.read_char());
+                break;
+            case ';':
+                this.push_tok(TokType.SEMICOLON, this.read_char());
                 break;
             case '"':
                 this.read_str();

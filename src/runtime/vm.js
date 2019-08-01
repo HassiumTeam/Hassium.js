@@ -49,12 +49,12 @@ module.exports = class VM {
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (!stack.pop().equal(this, this.mod, lib.hassiumTrue)) {
+                    if (!stack.pop().equal(this, this.mod, lib.hassiumTrue).val) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (stack.pop().equal(this, this.mod, lib.hassiumTrue)) {
+                    if (stack.pop().equal(this, this.mod, lib.hassiumTrue).val) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
@@ -110,7 +110,7 @@ module.exports = class VM {
                     val = stack.pop();
                     this._stack_frame.set_global(inst.args.symbol, val);
                     break;
-                case InsType.UNARY_OP:
+                case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);
                     break;
             }
@@ -137,7 +137,17 @@ module.exports = class VM {
     }
 
     _handle_unary_op(stack, type) {
+        let target = stack.pop();
 
+        switch(type) {
+            case UnaryOpType.LOGICAL_NOT:
+                if (target.equal(this, this.mod, lib.hassiumFalse)) {
+                    stack.push(lib.hassiumTrue);
+                } else {
+                    stack.push(lib.hassiumFalse);
+                }
+                break;
+        }
     }
 
     _import_args(obj, args) {

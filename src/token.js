@@ -22,6 +22,7 @@ const TokType = {
     OP: "op",
     OPAREN: "oparen",
     OSQUARE: "osquare",
+    SEMICOLON: "semicolon",
     STRING: "string",
 }
 
