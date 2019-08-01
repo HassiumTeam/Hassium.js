@@ -15,6 +15,7 @@ const NodeType = {
     ID: "id",
     IF: "if",
     NUMBER: "number",
+    OBJ_DECL: 'obj_decl',
     RETURN: "return",
     STRING: "string",
     SUBSCRIPT: "subscript",

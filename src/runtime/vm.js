@@ -16,7 +16,7 @@ module.exports = class VM {
         let stack = [];
 
         let pos = 0;
-        let inst, target, key, val, args;
+        let args, i, inst, key, target, val;
 
         this._import_args(obj, _args);
         while (pos < obj.instructions.length) {
@@ -24,6 +24,11 @@ module.exports = class VM {
 
             switch (inst.type) {
                 case InstType.ARRAY_DECL:
+                    args = [];
+                    for (i = 0; i < inst.args.count; i++) {
+                        args.push(stack.pop());
+                    }
+                    stack.push(new lib.types.HassiumArray(args));
                     break;
                 case InstType.BIN_OP:
                     this._handle_bin_op(
@@ -34,7 +39,7 @@ module.exports = class VM {
                 case InstType.CALL:
                     target = stack.pop();
                     args = [];
-                    for (let i = 0; i < inst.args.arg_count; i++) {
+                    for (i = 0; i < inst.args.arg_count; i++) {
                         args.push(stack.pop());
                     }
                     stack.push(target.invoke(this, this.mod, args));

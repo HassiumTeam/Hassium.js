@@ -1,7 +1,7 @@
 {
     func main () {
-        a = "Hello world";
-        println (a [3] == "l");
+        a = [ 1, "two", ];
+        println (a)
     }
 
     main ()

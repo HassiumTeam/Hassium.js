@@ -42,6 +42,8 @@ module.exports = class Emit {
                 return this.accept_if(node);
             case NodeType.NUMBER:
                 return this.accept_number(node);
+            case NodeType.OBJ_DECL:
+                return this.accept_obj_decl(node);
             case NodeType.RETURN:
                 return this.accept_return(node);
             case NodeType.STRING:
@@ -56,10 +58,10 @@ module.exports = class Emit {
     }
 
     accept_array_decl(node) {
-        let count = node.children.elements.count;
+        let count = node.children.elements.length;
 
         let self = this;
-        node.children.elements.reverse.forEach(x => self.accept(x));
+        node.children.elements.reverse().forEach(x => self.accept(x));
         this.emit(InstType.ARRAY_DECL, { count }, node.src);
     }
 
@@ -215,6 +217,12 @@ module.exports = class Emit {
         this.emit(InstType.LOAD_CONST, {
             val: new lib.types.HassiumNumber(Number.parseFloat(node.children.val))
         }, node.src);
+    }
+
+    accept_obj_decl(node) {
+        let self = this;
+        node.children.exprs.reverse().forEach(x => self.accept(x));
+        this.emit(InstType.OBJ_DECL, { ids: node.children.ids }, node.src);
     }
 
     accept_return(node) {

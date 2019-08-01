@@ -482,10 +482,14 @@ module.exports = class Parser {
                 id: this.expect_tok(TokType.ID).val
             }, src);
         }
+        else if (this.match_tok(TokType.OBRACE)) {
+            return this.parse_obj_decl();
+        }
         else if (this.accept_tok(TokType.OSQUARE)) {
             let elements = [];
             while (!this.accept_tok(TokType.CSQUARE)) {
                 elements.push(this.parse_expr());
+                this.expect_tok(TokType.COMMA);
             }
             return new Node(NodeType.ARRAY_DECL, { elements }, src);
         }
@@ -509,6 +513,35 @@ module.exports = class Parser {
         }
 
         return args;
+    }
+
+    parse_obj_decl() {
+        let src = this.current_src();
+
+        let exprs = [];
+        let ids = [];
+        let id;
+
+        this.expect_tok(TokType.OBRACE);
+        while (!this.accept_tok(TokType.CBRACE)) {
+            id = this.expect_tok(TokType.ID).val;
+            ids.push(id);
+
+            if (this.accept_tok(TokType.COLON)) {
+                exprs.push(this.parse_expr());
+            } else {
+                exprs.push(new Node(NodeType.ID, {
+                    id
+                }, src));
+            }
+
+            this.expect_tok(TokType.COMMA);
+        }
+
+        return new Node(NodeType.OBJ_DECL, {
+            ids,
+            exprs,
+        }, src);
     }
 
     current_src() {
