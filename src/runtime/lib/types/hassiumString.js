@@ -9,6 +9,7 @@ module.exports = class HassiumString extends HassiumObject {
         this.set_attrib('_add', new HassiumInvokable(this, 'string_add'));
         this.set_attrib('_equal', new HassiumInvokable(this, 'string_equal'));
         this.set_attrib('_index', new HassiumInvokable(this, 'string_index'));
+        this.set_attrib('length', new lib.types.HassiumNumber(this.val.length));
         this.set_attrib('toString', new HassiumInvokable(this, 'string_toString'));
     }
 

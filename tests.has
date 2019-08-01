@@ -80,6 +80,7 @@
     func string_tests(e, f) {
         this.assert ((e + f) == "Hello world!", "e + f == 'Hello world!'");
         this.assert (e [1] == "e", "e [1] == 'e'");
+        this.assert (f.length == 7, "f.length == 7");
     }
 
     func assert (c, test) {
