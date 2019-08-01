@@ -449,11 +449,11 @@ module.exports = class Parser {
             }, src));
         }
         else if (this.accept_tok(TokType.OSQUARE)) {
-            let val = this.parse_expr();
+            let key = this.parse_expr();
             this.expect_tok(TokType.CSQUARE);
             return new Node(NodeType.SUBSCRIPT, {
                 target: left,
-                val
+                key
             }, src);
         }
 

@@ -16,7 +16,7 @@ module.exports = class VM {
         let stack = [];
 
         let pos = 0;
-        let inst, target, val, args;
+        let inst, target, key, val, args;
 
         this._import_args(obj, _args);
         while (pos < obj.instructions.length) {
@@ -83,6 +83,15 @@ module.exports = class VM {
                         }
                     }
                     break;
+                case InstType.LOAD_SUBSCRIPT:
+                    target = stack.pop();
+                    key = stack.pop();
+                    if (key instanceof lib.types.HassiumString) {
+                        stack.push(target.get_attrib(key.val));
+                    } else {
+                        stack.push(target.index(this, this.mod, key));
+                    }
+                    break;
                 case InstType.POP:
                     break;
                 case InstType.PUSH:
@@ -101,14 +110,28 @@ module.exports = class VM {
                     target = stack.pop();
                     val = stack.pop();
                     target.set_attrib(inst.args.attrib, val);
+                    stack.push(val);
                     break;
                 case InstType.STORE_LOCAL:
                     val = stack.pop();
                     this._stack_frame.set_var(inst.args.symbol, val);
+                    stack.push(val);
                     break;
                 case InstType.STORE_GLOBAL:
                     val = stack.pop();
                     this._stack_frame.set_global(inst.args.symbol, val);
+                    stack.push(val);
+                    break;
+                case InstType.STORE_SUBSCRIPT:
+                    target = stack.pop();
+                    key = stack.pop();
+                    val = stack.pop();
+                    if (key instanceof lib.types.HassiumString) {
+                        target.set_attrib(key.val, val);
+                    } else {
+                        target.store_index(this, this.mod, key, val);
+                    }
+                    stack.push(val);
                     break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);

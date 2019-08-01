@@ -52,6 +52,10 @@ class HassiumObject {
         return this.get_attrib('_greater_or_equal').invoke(vm, mod, [ arg ]);
     }
 
+    index(vm, mod, arg) {
+        return this.get_attrib('_index').invoke(vm, mod, [ arg ]);
+    }
+
     lesser(vm, mod, arg) {
         return this.get_attrib('_lesser').invoke(vm, mod, [ arg ]);
     }
@@ -74,6 +78,10 @@ class HassiumObject {
 
     multiply(vm, mod, arg) {
         return this.get_attrib('_multiply').invoke(vm, mod, [ arg ]);
+    }
+
+    store_index(vm, mod, key, val) {
+        return this.get_attrib('_store_index').invoke(vm, mod, [ key, val ]);
     }
 
     subtract(vm, mod, arg) {

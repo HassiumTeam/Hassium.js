@@ -73,6 +73,11 @@ module.exports = class Emit {
                 this.emit(InstType.STORE_ATTRIB,
                     { attrib: left.children.attrib }, node.src);
                 break;
+            case NodeType.SUBSCRIPT:
+                this.accept(left.children.key);
+                this.accept(left.children.target);
+                this.emit(InstType.STORE_SUBSCRIPT, {}, node.src);
+                break;
             case NodeType.ID:
                 if (this.table.in_global_scope()) {
                     this.emit(InstType.STORE_GLOBAL, {
@@ -224,7 +229,7 @@ module.exports = class Emit {
     }
 
     accept_subscript(node) {
-        this.accept(node.children.val);
+        this.accept(node.children.key);
         this.accept(node.children.target);
         this.emit(InstType.LOAD_SUBSCRIPT, {}, node.src);
     }

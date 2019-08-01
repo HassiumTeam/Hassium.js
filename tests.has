@@ -21,24 +21,34 @@
         c = 16;
         d = 2;
 
+        e = "Hello"
+        f = " world!"
+
         this.assert (a, "a is true");
         this.assert (b == false, "b is false");
 
         this.assert (c == 16, "c is 16");
         this.assert (d == 2, "d is 2");
 
-        this.equality_tests (a, b, c, d);
+        this.assert (e == "Hello", "e is 'Hello'");
+        this.assert (f == " world!", "f is ' world!'");
+
+        this.equality_tests (a, b, c, d, e, f);
         this.comparison_tests (c, d);
         this.logic_tests(a, b);
         this.arithmatic_tests (c, d);
+        this.string_tests(e, f);
     }
 
-    func equality_tests (a, b, c, d) {
+    func equality_tests (a, b, c, d, e, f) {
         this.assert (a == a, "a == a");
         this.assert (a != b, "a != b");
 
         this.assert (c == c, "c == c");
         this.assert (c != d, "c != d");
+
+        this.assert (e == e, "e == e");
+        this.assert (e != f, "e != f");
     }
 
     func comparison_tests (c, d) {
@@ -65,6 +75,11 @@
         this.assert ((c % (d + 1)) == 1, "c % (d + 1) == 1");
         this.assert ((c * d) == 32, "c * d == 32");
         this.assert ((c - d) == 14, "d - c == 14");
+    }
+
+    func string_tests(e, f) {
+        this.assert ((e + f) == "Hello world!", "e + f == 'Hello world!'");
+        this.assert (e [1] == "e", "e [1] == 'e'");
     }
 
     func assert (c, test) {

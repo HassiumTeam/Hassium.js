@@ -1,5 +1,4 @@
 const { HassiumObject } = require('./hassiumObject');
-const HassiumArray = require('./types/hassiumArray');
 const HassiumString = require('./types/hassiumString');
 
 module.exports = class HassiumFunc extends HassiumObject {
@@ -7,9 +6,6 @@ module.exports = class HassiumFunc extends HassiumObject {
         super();
         this.args = args;
         this.params = [];
-        this.set_attrib('_arguments', new HassiumArray(args.forEach(
-            x => new HassiumString(x)
-        )));
         this.set_attrib('_name', new HassiumString(name));
     }
 

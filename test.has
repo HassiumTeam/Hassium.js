@@ -1,7 +1,7 @@
 {
     func main () {
-        this.test = 34;
-        println (this.test);
+        a = "Hello world";
+        println (a [3] == "l");
     }
 
     main ()
