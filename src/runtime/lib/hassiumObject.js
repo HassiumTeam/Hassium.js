@@ -45,7 +45,11 @@ class HassiumObject {
     }
 
     equal(vm, mod, arg) {
-        return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
+        if (this.has_attrib('_equal')) {
+            return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
+        }
+
+        return object_equal(vm, mod, arg, this);
     }
 
     greater(vm, mod, arg) {
@@ -130,11 +134,34 @@ module.exports = { HassiumObject, InstType, };
 
 const lib = require('./lib');
 
-function object_toString(vm, mod, args, obj) {
+function object_equal(vm, mod, arg, self) {
+    let self_keys = Object.keys(self._attributes);
+    let arg_keys = Object.keys(arg._attributes);
+
+    if (self_keys.length != arg_keys.length) {
+        return lib.hassiumFalse;
+    }
+
+    let arg_val;
+    for (let i = 0; i < self_keys.length; i++) {
+        arg_val = arg.get_attrib(arg_keys[i]);
+        if (arg_val === undefined) {
+            return lib.hassiumFalse;
+        }
+        
+        if (!self.get_attrib(self_keys[i]).equal(vm, mod, arg_val).val) {
+            return lib.hassiumFalse;
+        }
+    }
+
+    return lib.hassiumTrue;
+}
+
+function object_toString(vm, mod, args, self) {
     let attrib;
     let str = "{ ";
-    Object.keys(obj._attributes).forEach(function(x) {
-        attrib = obj.get_attrib(x);
+    Object.keys(self._attributes).forEach(function(x) {
+        attrib = self.get_attrib(x);
         str += `${x}: `;
         if (attrib instanceof lib.types.HassiumString) {
             str += `"${attrib.val}", `;

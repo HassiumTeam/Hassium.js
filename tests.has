@@ -21,8 +21,14 @@
         c = 16;
         d = 2;
 
-        e = "Hello"
-        f = " world!"
+        e = "Hello";
+        f = " world!";
+
+        g = [ 1, 2, "three", ];
+        h = [ 4, 5, "six", ];
+
+        i = { one: 1, two: "two", };
+        j = { three: 3, four: "four", };
 
         this.assert (a, "a is true");
         this.assert (b == false, "b is false");
@@ -33,11 +39,19 @@
         this.assert (e == "Hello", "e is 'Hello'");
         this.assert (f == " world!", "f is ' world!'");
 
+        this.assert (g == [ 1, 2, "three", ], "g is [ 1, 2, 'three', ]");
+        this.assert (h == [ 4, 5, "six", ], "h is [ 4, 5, 'six', ]");
+
+        this.assert (i == { one: 1, two: "two", }, "i is { one: 1, two: `two`}");
+        this.assert (j == { three: 3, four: "four", }, "j is { three: 3, four: `four` }");
+
         this.equality_tests (a, b, c, d, e, f);
         this.comparison_tests (c, d);
         this.logic_tests(a, b);
         this.arithmatic_tests (c, d);
         this.string_tests(e, f);
+        this.array_tests(g, h);
+        this.object_tests(i, j);
     }
 
     func equality_tests (a, b, c, d, e, f) {
@@ -81,6 +95,25 @@
         this.assert ((e + f) == "Hello world!", "e + f == 'Hello world!'");
         this.assert (e [1] == "e", "e [1] == 'e'");
         this.assert (f.length == 7, "f.length == 7");
+    }
+
+    func array_tests(g, h) {
+        this.assert ((g [0] + g [1]) == 3, "g [0] + g [1] == 3");
+        this.assert ((g [0] = 2) == 2, "g [0] = 2");
+        this.assert (g == [ 2, 2, "three", ], "g == [ 2, 2, 'three', ]");
+        this.assert (g + h == [ 2, 2, "three", 4, 5, "six", ],
+                    "g + h == [ 2, 2, 'three', 4, 5, 'six', ]");
+    }
+
+    func object_tests(i, j) {
+        this.assert ((i.one + j.three) == 4, "i.one + j.three == 4");
+        this.assert ((i.one = 2) == 2, "i.one = 2 == 2");
+        this.assert (i == { one: 2, two: "two", },
+                    "i == { one: 2, two: 'two', }");
+        this.assert (j ["three"] == 3, "j ['three'] == 3");
+        this.assert ((j ["three"] = 4) == 4, "j ['three'] = 4 == 4");
+        this.assert (j == { three: 4, four: "four", },
+                    "j == { three: 4, four: `four`, }");
     }
 
     func assert (c, test) {

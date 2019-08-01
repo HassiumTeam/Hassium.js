@@ -1,14 +1,7 @@
 {
     func main () {
-        obj = {
-            one: "one",
-            two: 2,
-        }
-
-        println (obj ["two"]);
-
-        println (obj.one);
-        println (obj.two);
+        o = { one: 1, two: "to", };
+        println (o ["one"]);
     }
 
     main ()
