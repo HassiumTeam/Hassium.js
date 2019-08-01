@@ -24,6 +24,8 @@ const NodeType = {
 
 const BinOpType = {
     ADD: "add",
+    BITWISE_AND: "bitwise_and",
+    BITWISE_OR: "bitwise_or",
     DIV: "div",
     EQUAL: "equal",
     GREATER: "greater",
@@ -35,6 +37,7 @@ const BinOpType = {
     MOD: "mod",
     MUL: "mul",
     SUB: "sub",
+    XOR: "xor",
 };
 
 const UnaryOpType = {

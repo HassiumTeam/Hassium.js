@@ -40,8 +40,11 @@ class Lexer {
             case '/':
             case '*':
             case '%':
+            case '^':
                 if (next == cur) {
                     this.push_tok(TokType.OP, this.read_char() + '' + this.read_char());
+                } else if (next == '=') {
+                    this.push_tok(TokType.ASSIGN, this.read_char() + '' + this.read_char());
                 } else {
                     this.push_tok(TokType.OP, this.read_char());
                 }
@@ -50,6 +53,8 @@ class Lexer {
             case '|':
                 if (next == cur) {
                     this.push_tok(TokType.OP, this.read_char() + '' + this.read_char());
+                } else if (next == '=') {
+                    this.push_tok(TokType.ASSIGN, this.read_char() + '' + this.read_char());
                 } else {
                     this.push_tok(TokType.OP, this.read_char());
                 }

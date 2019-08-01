@@ -70,10 +70,10 @@
     func assert (c, test) {
         if (c) {
             println ("Passed test: " + test);
-            this.tests_passed = this.tests_passed + 1;
+            this.tests_passed += 1;
         } else {
             println ("Failed test: " + test);
-            this.tests_failed = this.tests_failed + 1;
+            this.tests_failed += 1;
         }
     }
 

@@ -159,7 +159,82 @@ module.exports = class Parser {
                     this.expect_tok(TokType.ASSIGN);
                     return new Node(NodeType.ASSIGN, {
                         left,
-                        right: this.parse_assign()
+                        right: this.parse_assign(),
+                    }, src);
+                case '+=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            type: BinOpType.ADD,
+                            left,
+                            right: this.parse_assign(),
+                        }, src)
+                    }, src);
+                case '&=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            left,
+                            right: this.parse_assign(),
+                        }, src)
+                    }, src);
+                case '|=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            left,
+                            right: this.parse_assign(),
+                        }, src)
+                    }, src);
+                case '/=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            left,
+                            right: parse_assign(),
+                        }, src)
+                    }, src);
+                case '%=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            left,
+                            right: parse_assign(),
+                        }, src)
+                    }, src);
+                case '*=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            left,
+                            right: parse_assign(),
+                        }, src)
+                    }, src);
+                case '-=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            type: BinOpType.SUB,
+                            left,
+                            right: this.parse_assign(),
+                        }, src)
+                    }, src);
+                case '^=':
+                    this.expect_tok(TokType.ASSIGN);
+                    return new Node(NodeType.ASSIGN, {
+                        left,
+                        right: new Node(NodeType.BIN_OP, {
+                            type: BinOpType.XOR,
+                            left,
+                            right: this.parse_assign(),
+                        }, src)
                     }, src);
             }
         }
