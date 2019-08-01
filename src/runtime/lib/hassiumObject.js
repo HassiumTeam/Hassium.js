@@ -44,6 +44,42 @@ class HassiumObject {
         return this.get_attrib('_equal').invoke(vm, mod, [ arg ]);
     }
 
+    greater(vm, mod, arg) {
+        return this.get_attrib('_greater').invoke(vm, mod, [ arg ]);
+    }
+
+    greater_or_equal(vm, mod, arg) {
+        return this.get_attrib('_greater_or_equal').invoke(vm, mod, [ arg ]);
+    }
+
+    lesser(vm, mod, arg) {
+        return this.get_attrib('_lesser').invoke(vm, mod, [ arg ]);
+    }
+
+    lesser_or_equal(vm, mod, arg) {
+        return this.get_attrib('_lesser_or_equal').invoke(vm, mod, [ arg ]);
+    }
+
+    logical_and(vm, mod, arg) {
+        return this.get_attrib('_logical_and').invoke(vm, mod, [ arg ]);
+    }
+
+    logical_or(vm, mod, arg) {
+        return this.get_attrib('_logical_or').invoke(vm, mod, [ arg ]);
+    }
+
+    modulus(vm, mod, arg) {
+        return this.get_attrib('_modulus').invoke(vm, mod, [ arg ]);
+    }
+
+    multiply(vm, mod, arg) {
+        return this.get_attrib('_multiply').invoke(vm, mod, [ arg ]);
+    }
+
+    subtract(vm, mod, arg) {
+        return this.get_attrib('_subtract').invoke(vm, mod, [ arg ]);
+    }
+
     toString_(vm, mod, args) {
         return this.get_attrib('toString').invoke(vm, mod, args);
     }

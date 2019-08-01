@@ -133,6 +133,33 @@ module.exports = class VM {
             case BinOpType.EQUAL:
                 stack.push(left.equal(this, this.mod, right));
                 break;
+            case BinOpType.GREATER:
+                stack.push(left.greater(this, this.mod, right));
+                break;
+            case BinOpType.GREATER_OR_EQUAL:
+                stack.push(left.greater_or_equal(this, this.mod, right));
+                break;
+            case BinOpType.LESSER:
+                stack.push(left.lesser(this, this.mod, right));
+                break;
+            case BinOpType.LESSER_OR_EQUAL:
+                stack.push(left.lesser_or_equal(this, this.mod, right));
+                break;
+            case BinOpType.LOGICAL_AND:
+                stack.push(left.logical_and(this, this.mod, right));
+                break;
+            case BinOpType.LOGICAL_OR:
+                stack.push(left.logical_or(this, this.mod, right));
+                break;
+            case BinOpType.MOD:
+                stack.push(left.modulus(this, this.mod, right));
+                break;
+            case BinOpType.MUL:
+                stack.push(left.multiply(this, this.mod, right));
+                break;
+            case BinOpType.SUB:
+                stack.push(left.subtract(this, this.mod, right));
+                break;
         }
     }
 

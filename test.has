@@ -1,25 +1,7 @@
 {
     func main () {
-        c = 16
-        d = 2
-        this.two(c, d)
-    }
-
-    func two(c, d) {
-        println (c)
-        println (d)
-        println (c + d)
-        this.assert ((c + d), "test")
-        println (c)
-        println (d)
-    }
-
-    func assert (c, test) {
-        if (c) {
-            println ("Passed test: " + test)
-        } else {
-            println ("Failed test: " + test)
-        }
+        this.test = 34;
+        println (this.test);
     }
 
     main ()

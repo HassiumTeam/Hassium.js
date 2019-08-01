@@ -34,7 +34,6 @@ const BinOpType = {
     LOGICAL_OR: "logical_or",
     MOD: "mod",
     MUL: "mul",
-    NOT_EQUAL: "not_equal",
     SUB: "sub",
 };
 

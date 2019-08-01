@@ -68,6 +68,11 @@ module.exports = class Emit {
 
         let left = node.children.left;
         switch (left.type) {
+            case NodeType.ATTRIB_ACCESS:
+                this.accept(left.children.target);
+                this.emit(InstType.STORE_ATTRIB,
+                    { attrib: left.children.attrib }, node.src);
+                break;
             case NodeType.ID:
                 if (this.table.in_global_scope()) {
                     this.emit(InstType.STORE_GLOBAL, {
@@ -85,7 +90,8 @@ module.exports = class Emit {
 
     accept_attrib_access(node) {
         this.accept(node.children.target);
-        this.emit(InstType.LOAD_ATTRIB, { attrib: node.children.attrib }, node.src);
+        this.emit(InstType.LOAD_ATTRIB,
+            { attrib: node.children.attrib }, node.src);
     }
 
     accept_bin_op(node) {

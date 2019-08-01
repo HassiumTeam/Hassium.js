@@ -1,6 +1,17 @@
 {
     func main () {
+        this.tests_passed = 0;
+        this.tests_failed = 0;
+
         this.assign_tests ();
+
+        this.display_stats ();
+    }
+
+    func display_stats () {
+        println ("RESULTS:");
+        println ("\tTests passed: " + this.tests_passed);
+        println ("\tTests failed: " + this.tests_failed);
     }
 
     func assign_tests () {
@@ -17,33 +28,52 @@
         this.assert (d == 2, "d is 2");
 
         this.equality_tests (a, b, c, d);
+        this.comparison_tests (c, d);
+        this.logic_tests(a, b);
         this.arithmatic_tests (c, d);
     }
 
     func equality_tests (a, b, c, d) {
-        if (a == b) {
-            this.assert (false, "Boolean equality");
-        } else {
-            this.assert (true, "Boolean equality");
-        }
+        this.assert (a == a, "a == a");
+        this.assert (a != b, "a != b");
 
-        if (c == d) {
-            this.assert (false, "Number equality");
-        } else {
-            this.assert (true, "Number equality");
-        }
+        this.assert (c == c, "c == c");
+        this.assert (c != d, "c != d");
+    }
+
+    func comparison_tests (c, d) {
+        this.assert ((c > d), "c > d");
+        this.assert ((c > c) == false, "c > c == false");
+        this.assert ((c >= d), "c >= d");
+        this.assert ((c >= c), "c >= c");
+        this.assert ((d < c), "d < c");
+        this.assert ((d < d) == false, "d < d == false");
+        this.assert ((d <= c), "d <= c");
+        this.assert ((d <= d), "d <= d");
+    }
+
+    func logic_tests (a, b) {
+        this.assert (a && a, "a && a");
+        this.assert (a && b == false, "a && b == false");
+        this.assert (a || b, "a || b");
+        this.assert (b || b == false, "b || b == 0");
     }
 
     func arithmatic_tests (c, d) {
         this.assert ((c + d) == 18, "c + d == 18");
         this.assert ((c / d) == 8, "c / d == 8");
+        this.assert ((c % (d + 1)) == 1, "c % (d + 1) == 1");
+        this.assert ((c * d) == 32, "c * d == 32");
+        this.assert ((c - d) == 14, "d - c == 14");
     }
 
     func assert (c, test) {
         if (c) {
             println ("Passed test: " + test);
+            this.tests_passed = this.tests_passed + 1;
         } else {
             println ("Failed test: " + test);
+            this.tests_failed = this.tests_failed + 1;
         }
     }
 
