@@ -110,6 +110,7 @@ module.exports = class VM {
                     stack.push(inst.args.obj);
                     break;
                 case InstType.RETURN:
+                    return stack.pop();
                     break;
                 case InstType.SELF_REFERENCE:
                     if (obj.self !== undefined) {
@@ -152,6 +153,8 @@ module.exports = class VM {
 
             pos++;
         }
+
+        return lib.hassiumNull;
     }
 
     _handle_bin_op(stack, type) {

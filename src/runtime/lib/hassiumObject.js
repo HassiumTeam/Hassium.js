@@ -7,9 +7,13 @@ class HassiumObject {
     }
 
     invoke(vm, mod, args) {
+        let ret;
+
         vm._stack_frame.push_frame();
-        vm.run(this, args);
+        ret = vm.run(this, args);
         vm._stack_frame.pop_frame();
+
+        return ret;
     }
 
     emit(type, args, src) {
@@ -148,7 +152,7 @@ function object_equal(vm, mod, arg, self) {
         if (arg_val === undefined) {
             return lib.hassiumFalse;
         }
-        
+
         if (!self.get_attrib(self_keys[i]).equal(vm, mod, arg_val).val) {
             return lib.hassiumFalse;
         }

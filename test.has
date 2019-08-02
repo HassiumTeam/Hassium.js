@@ -1,8 +1,14 @@
 {
     func main () {
-        o = { one: 1, two: "to", };
+        o = { one: null, two: "to", };
         println (o ["one"]);
+        this.test (1, 2);
+        println (this.test (3, 4));
     }
 
-    main ()
+    func test (a, b) {
+        println ("a + b = " + (a + b));
+    }
+
+    main ();
 }
