@@ -33,6 +33,7 @@ module.exports = class Parser {
             stmt = new Node(NodeType.CONTINUE, {}, src);
         }
         else if (this.match_tok(TokType.ID, "for")) { stmt = this.parse_for(); }
+        else if (this.match_tok(TokType.ID, "foreach")) { stmt = this.parse_foreach(); }
         else if (this.match_tok(TokType.ID, "func")) { stmt = this.parse_func(); }
         else if (this.match_tok(TokType.ID, "if")) { stmt = this.parse_if(); }
         else if (this.match_tok(TokType.ID, "return")) { stmt = this.parse_return(); }
@@ -109,13 +110,31 @@ module.exports = class Parser {
         this.expect_tok(TokType.ID, "for");
         this.expect_tok(TokType.OPAREN);
         let init_stmt = this.parse_stmt();
+        this.accept_tok(TokType.SEMICOLON);
         let expr = this.parse_expr();
+        this.accept_tok(TokType.SEMICOLON);
         let rep_stmt = this.parse_stmt();
         this.expect_tok(TokType.CPAREN);
         let body = this.parse_stmt();
 
         return new Node(NodeType.FOR, {
             init_stmt, expr, rep_stmt, body
+        }, src);
+    }
+
+    parse_foreach() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "foreach");
+        this.expect_tok(TokType.OPAREN);
+        let id = this.expect_tok(TokType.ID).val;
+        this.expect_tok(TokType.ID, "in");
+        let expr = this.parse_expr();
+        this.expect_tok(TokType.CPAREN);
+        let body = this.parse_stmt();
+
+        return new Node(NodeType.FOREACH, {
+            id, expr, body,
         }, src);
     }
 

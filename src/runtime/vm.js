@@ -45,10 +45,16 @@ module.exports = class VM {
                     stack.push(target.invoke(this, this.mod, args));
                     break;
                 case InstType.ITER:
+                    target = stack.pop().iter(this, this.mod);
+                    stack.push(new lib.types.HassiumIter(target));
                     break;
                 case InstType.ITER_FULL:
+                    target = stack.pop();
+                    stack.push(target.iter_full(this, this.mod));
                     break;
                 case InstType.ITER_NEXT:
+                    target = stack.pop();
+                    stack.push(target.iter_next(this, this.mod));
                     break;
                 case InstType.JUMP:
                     pos = obj.get_label(inst.args.label);
@@ -111,7 +117,6 @@ module.exports = class VM {
                     break;
                 case InstType.RETURN:
                     return stack.pop();
-                    break;
                 case InstType.SELF_REFERENCE:
                     if (obj.self !== undefined) {
                         stack.push(obj.self);

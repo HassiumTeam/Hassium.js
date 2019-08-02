@@ -10,6 +10,7 @@ const NodeType = {
     CONTINUE: "continue",
     EXPR_STMT: "expr_stmt",
     FOR: "for",
+    FOREACH: "foreach",
     FUNC_CALL: "func_call",
     FUNC_DECL: "func_dec",
     ID: "id",

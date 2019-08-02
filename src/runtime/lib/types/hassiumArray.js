@@ -9,7 +9,9 @@ module.exports = class HassiumArray extends HassiumObject {
         this.set_attrib('_add', new lib.HassiumInvokable(this, 'array_add'));
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'array_equal'));
         this.set_attrib('_index', new lib.HassiumInvokable(this, 'array_index'));
+        this.set_attrib('_iter', new lib.HassiumInvokable(this, 'array_iter'));
         this.set_attrib('_store_index', new lib.HassiumInvokable(this, 'array_store_index'));
+        this.set_attrib('length', new lib.types.HassiumNumber(this.val.length));
         this.set_attrib('toString', new lib.HassiumInvokable(this, 'array_toString'));
     }
 
@@ -38,6 +40,10 @@ module.exports = class HassiumArray extends HassiumObject {
 
     array_index(vm, mod, args) {
         return this.val[args[0].val];
+    }
+
+    array_iter(vm, mod, args) {
+        return this;
     }
 
     array_store_index(vm, mod, args) {

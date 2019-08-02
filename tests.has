@@ -1,7 +1,6 @@
 {
     func main () {
-        this.tests_passed = 0;
-        this.tests_failed = 0;
+        this.stats = { passed: 0, failed: 0, };
 
         this.assign_tests ();
 
@@ -10,8 +9,8 @@
 
     func display_stats () {
         println ("RESULTS:");
-        println ("\tTests passed: " + this.tests_passed);
-        println ("\tTests failed: " + this.tests_failed);
+        println ("\tTests passed: " + this.stats.passed);
+        println ("\tTests failed: " + this.stats.failed);
     }
 
     func assign_tests () {
@@ -47,11 +46,13 @@
 
         this.equality_tests (a, b, c, d, e, f);
         this.comparison_tests (c, d);
-        this.logic_tests(a, b);
+        this.logic_tests (a, b);
         this.arithmatic_tests (c, d);
-        this.string_tests(e, f);
-        this.array_tests(g, h);
-        this.object_tests(i, j);
+        this.string_tests (e, f);
+        this.array_tests (g, h);
+        this.object_tests (i, j);
+        this.return_tests ();
+        this.loop_tests ();
     }
 
     func equality_tests (a, b, c, d, e, f) {
@@ -116,13 +117,52 @@
                     "j == { three: 4, four: `four`, }");
     }
 
+    func return_tests () {
+        this.assert (this.test_func_1 (2, 3, 4) == 9,
+                    "test_func_1 (2, 3, 4) == 9");
+        this.assert (this.test_func_2 () == null,
+                    "test_func_2 () == null");
+    }
+
+    func test_func_1 (a, b, c) {
+        return a + b + c;
+    }
+
+    func test_func_2 () {
+
+    }
+
+    func loop_tests() {
+        arr = [ 1, 1, 2, 3, 5, ];
+
+        total = 0;
+        foreach (a in arr) {
+            total += a;
+        }
+        this.assert (total == 12, "foreach loop totaled 12");
+
+        total = 0;
+        i = 0;
+        while (i < arr.length) {
+            total += arr[i];
+            i += 1;
+        }
+        this.assert (total == 12, "while loop totaled 12");
+
+        total = 0;
+        for (i = 0; i < arr.length; i += 1) {
+            total += arr [i];
+        }
+        this.assert (total == 12, "for loop totaled 12");
+    }
+
     func assert (c, test) {
         if (c) {
             println ("Passed test: " + test);
-            this.tests_passed += 1;
+            this.stats.passed += 1;
         } else {
             println ("Failed test: " + test);
-            this.tests_failed += 1;
+            this.stats.failed += 1;
         }
     }
 

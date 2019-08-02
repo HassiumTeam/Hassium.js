@@ -47,4 +47,8 @@ module.exports = class SymbolTable {
     in_global_scope() {
         return this._scopes.length == 1;
     }
+
+    tmp_symbol() {
+        return this._next_index++;
+    }
 };

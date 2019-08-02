@@ -32,6 +32,8 @@ module.exports = class Emit {
                 return this.accept_expr_stmt(node);
             case NodeType.FOR:
                 return this.accept_for(node);
+            case NodeType.FOREACH:
+                return this.accept_foreach(node);
             case NodeType.FUNC_CALL:
                 return this.accept_func_call(node);
             case NodeType.FUNC_DECL:
@@ -107,15 +109,19 @@ module.exports = class Emit {
         this.emit(InstType.BIN_OP, { type: node.children.type }, node.src);
     }
 
-    accept_block(node) {
-        this.table.enter_scope();
+    accept_block(node, ignore_scope) {
+        if (ignore_scope) {
+            this.table.enter_scope();
+        }
 
         let self = this;
         node.children.nodes.forEach(function(node) {
             self.accept(node);
         });
 
-        this.table.leave_scope();
+        if (ignore_scope) {
+            this.table.leave_scope();
+        }
     }
 
     accept_break(node) {
@@ -158,6 +164,38 @@ module.exports = class Emit {
         this.accept(node.children.rep_stmt);
         this.emit(InstType.JUMP, { label: body_label }, node.src);
         this.emit_label(end_label);
+    }
+
+    accept_foreach(node) {
+        this.table.enter_scope();
+
+        let body_label = this.next_label();
+        let end_label = this.next_label();
+        let tmp = this.table.tmp_symbol();
+
+        this.accept(node.children.expr);
+        this.emit(InstType.ITER, {}, node.children.expr.src);
+        this.emit(InstType.STORE_LOCAL, { symbol: tmp }, node.children.expr.src);
+        this.emit_label(body_label);
+        this.emit(InstType.LOAD_ID, { id: tmp }, node.children.body.src);
+        this.emit(InstType.ITER_FULL, {}, node.children.body.src);
+        this.emit(InstType.JUMP_IF_TRUE, { label: end_label }, node.children.body.src);
+        this.emit(InstType.LOAD_ID, { id: tmp }, node.children.body.src);
+        this.emit(InstType.ITER_NEXT, {}, node.children.body.src);
+        this.emit(
+            InstType.STORE_LOCAL,
+            { symbol: this.table.handle_symbol(node.children.id) },
+            node.children.body.src
+        );
+        if (node.children.body.type === NodeType.BLOCK) {
+            this.accept_block(node.children.body, true);
+        } else {
+            this.accept(node.children.body);
+        }
+        this.emit(InstType.JUMP, { label: body_label }, node.children.body.src);
+        this.emit_label(end_label);
+
+        this.table.leave_scope();
     }
 
     accept_func_call(node) {

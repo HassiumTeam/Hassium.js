@@ -68,6 +68,18 @@ class HassiumObject {
         return this.get_attrib('_index').invoke(vm, mod, [ arg ]);
     }
 
+    iter(vm, mod) {
+        return this.get_attrib('_iter').invoke(vm, mod, []);
+    }
+
+    iter_full(vm, mod) {
+        return this.get_attrib('_iter_full').invoke(vm, mod, []);
+    }
+
+    iter_next(vm, mod) {
+        return this.get_attrib('_iter_next').invoke(vm, mod, []);
+    }
+
     lesser(vm, mod, arg) {
         return this.get_attrib('_lesser').invoke(vm, mod, [ arg ]);
     }
