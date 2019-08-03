@@ -10,7 +10,9 @@ module.exports = class HassiumType extends HassiumObject {
     }
 
     type_equal(vm, mod, args) {
-        return args[0] === this;
+        return new lib.types.HassiumNumber(
+            args[0] == this || args[0].typedef == this ? 1 : 0
+        );
     }
 
     type_toString(vm, mod, args) {

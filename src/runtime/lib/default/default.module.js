@@ -7,9 +7,14 @@ class DefaultModule extends HassiumModule {
         super('_default');
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));
+        this.set_attrib('list', lib.types.HassiumList.getType());
         this.set_attrib('null', hassiumNull);
+        this.set_attrib('number', lib.types.HassiumNumber.getType());
+        this.set_attrib('object', new lib.HassiumType('object'));
         this.set_attrib('println', new lib.HassiumInvokable(this, 'default_println'));
+        this.set_attrib('string', lib.types.HassiumString.getType());
         this.set_attrib('true', new lib.types.HassiumNumber(1));
+        this.set_attrib('type', new lib.HassiumType('type'));
     }
 
     default_println(vm, mod, args) {

@@ -23,7 +23,7 @@ module.exports = class HassiumFunc extends HassiumObject {
 
         if (this._is_contructor()) {
             ret = this._instantiate();
-            vm.run(this, args);
+            vm.run(ret.get_attrib('new'), args);
         } else {
             ret = vm.run(this, args);
         }
@@ -42,7 +42,8 @@ module.exports = class HassiumFunc extends HassiumObject {
     }
 
     _instantiate() {
-        let clazz = new HassiumObject();
+        let clazz = new HassiumObject(this.self.typedef);
+
 
         let val;
         for (let key of Object.keys(this.self._attributes)) {
@@ -50,8 +51,6 @@ module.exports = class HassiumFunc extends HassiumObject {
             val.self = clazz;
             clazz.set_attrib(key, val);
         }
-
-        this.self = clazz;
 
         return clazz;
     }

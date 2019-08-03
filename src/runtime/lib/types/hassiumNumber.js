@@ -4,6 +4,10 @@ const lib = require('../lib');
 let type = new lib.HassiumType('number');
 
 module.exports = class HassiumNumber extends HassiumObject {
+    static getType() {
+        return type;
+    }
+
     constructor(val) {
         super(type);
         this.val = val;

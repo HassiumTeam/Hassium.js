@@ -2,8 +2,16 @@
     import io;
 
     func main () {
-        f = File("s");
-        println (typeof (f));
+        c = MyClass ();
+        d = MyClass ();
+        println ("wtf");
+        println (string == typeof ("s"));
+    }
+
+    class MyClass {
+        func new () {
+
+        }
     }
 
     main ();
