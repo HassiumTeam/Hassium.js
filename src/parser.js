@@ -510,7 +510,7 @@ module.exports = class Parser {
                 elements.push(this.parse_expr());
                 this.expect_tok(TokType.COMMA);
             }
-            return new Node(NodeType.ARRAY_DECL, { elements }, src);
+            return new Node(NodeType.LIST_DECL, { elements }, src);
         }
         else if (this.match_tok(TokType.STRING)) {
             return new Node(NodeType.STRING, {

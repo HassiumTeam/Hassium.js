@@ -23,12 +23,12 @@ module.exports = class VM {
             inst = obj.instructions[pos];
 
             switch (inst.type) {
-                case InstType.ARRAY_DECL:
+                case InstType.LIST_DECL:
                     args = [];
                     for (i = 0; i < inst.args.count; i++) {
                         args.push(stack.pop());
                     }
-                    stack.push(new lib.types.HassiumArray(args));
+                    stack.push(new lib.types.HassiumList(args));
                     break;
                 case InstType.BIN_OP:
                     this._handle_bin_op(

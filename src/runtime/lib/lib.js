@@ -4,8 +4,8 @@ module.exports.HassiumModule = require('./hassiumModule');
 module.exports.HassiumObject = require('./hassiumObject').HassiumObject;
 
 module.exports.types = {};
-module.exports.types.HassiumArray = require('./types/hassiumArray');
 module.exports.types.HassiumIter = require('./types/hassiumIter');
+module.exports.types.HassiumList = require('./types/hassiumList');
 module.exports.types.HassiumNumber = require('./types/hassiumNumber');
 module.exports.types.HassiumString = require('./types/hassiumString');
 

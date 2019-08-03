@@ -14,7 +14,7 @@ module.exports = class Emit {
 
     accept(node) {
         switch (node.type) {
-            case NodeType.ARRAY_DECL:
+            case NodeType.LIST_DECL:
                 return this.accept_array_decl(node);
             case NodeType.ASSIGN:
                 return this.accept_assign(node);
@@ -64,7 +64,7 @@ module.exports = class Emit {
 
         let self = this;
         node.children.elements.reverse().forEach(x => self.accept(x));
-        this.emit(InstType.ARRAY_DECL, { count }, node.src);
+        this.emit(InstType.LIST_DECL, { count }, node.src);
     }
 
     accept_assign(node) {

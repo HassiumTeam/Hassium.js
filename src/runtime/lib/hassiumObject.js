@@ -122,7 +122,7 @@ class HassiumObject {
 };
 
 const InstType = {
-    ARRAY_DECL: "array_decl",
+    LIST_DECL: "array_decl",
     BIN_OP: "bin_op",
     CALL: "call",
     ITER: "iter",

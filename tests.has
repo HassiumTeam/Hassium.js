@@ -104,6 +104,12 @@
         this.assert (g == [ 2, 2, "three", ], "g == [ 2, 2, 'three', ]");
         this.assert (g + h == [ 2, 2, "three", 4, 5, "six", ],
                     "g + h == [ 2, 2, 'three', 4, 5, 'six', ]");
+        this.assert (g.length == 3, "g.length == 3");
+        g.push(4);
+        this.assert (g [3] == 4, "g [3] == 4");
+        this.assert (g.length == 4, "g.length == 4");
+        this.assert (g.peek () == 4, "g.peek () == 4");
+        this.assert (g.pop () == 4, "g.pop () == 4");
     }
 
     func object_tests(i, j) {

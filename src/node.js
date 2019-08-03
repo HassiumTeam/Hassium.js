@@ -1,5 +1,5 @@
 const NodeType = {
-    ARRAY_DECL: "array_decl",
+    LIST_DECL: "array_decl",
     ASSIGN: "assign",
     ATTRIB_ACCESS: "attrib_access",
     BIN_OP: "bin_op",
