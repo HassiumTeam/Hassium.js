@@ -64,13 +64,17 @@ module.exports = class Parser {
 
         this.expect_tok(TokType.ID, "class");
         let name = this.expect_tok(TokType.ID).val;
+        let extends_;
+        if (this.accept_tok(TokType.ID, "extends")) {
+            extends_ = this.parse_expr();
+        }
         this.expect_tok(TokType.OBRACE);
         let contents = [];
         while (!this.accept_tok(TokType.CBRACE)) {
-            contents.push(this.parse_func());
+            contents.push(this.parse_stmt());
         }
 
-        return new Node(NodeType.CLASS, { name, contents }, src);
+        return new Node(NodeType.CLASS, { name, extends_, contents, }, src);
     }
 
     parse_func() {

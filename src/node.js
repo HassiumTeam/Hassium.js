@@ -1,5 +1,4 @@
 const NodeType = {
-    LIST_DECL: "array_decl",
     ASSIGN: "assign",
     ATTRIB_ACCESS: "attrib_access",
     BIN_OP: "bin_op",
@@ -15,6 +14,7 @@ const NodeType = {
     FUNC_DECL: "func_dec",
     ID: "id",
     IF: "if",
+    LIST_DECL: "array_decl",
     NUMBER: "number",
     OBJ_DECL: 'obj_decl',
     RETURN: "return",

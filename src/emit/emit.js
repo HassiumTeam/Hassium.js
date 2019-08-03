@@ -137,6 +137,7 @@ module.exports = class Emit {
     accept_class(node) {
         let clazz = new lib.HassiumClass();
         this.emit_peek().set_attrib(node.children.name, clazz);
+        clazz.self = this.emit_peek();
 
         this._emit_stack.push(clazz);
         node.children.contents.forEach(x => this.accept(x));

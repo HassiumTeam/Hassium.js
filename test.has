@@ -1,8 +1,12 @@
 {
-    func main (a) {
-        arr = [ 1, "two", 3, ];
-        println (mai);
+    func main () {
     }
 
-    main (2);
+    main ();
+
+    class MyClass {
+        func say_hello () {
+            println ("Hello!");
+        }
+    }
 }

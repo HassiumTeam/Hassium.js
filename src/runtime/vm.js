@@ -35,30 +35,30 @@ module.exports = class VM {
                     for (i = 0; i < inst.args.arg_count; i++) {
                         args.push(stack.pop());
                     }
-                    stack.push(target.invoke(this, this.mod, args));
+                    stack.push(target.invoke(this, this._mod, args));
                     break;
                 case InstType.ITER:
-                    target = stack.pop().iter(this, this.mod);
+                    target = stack.pop().iter(this, this._mod);
                     stack.push(new lib.types.HassiumIter(target));
                     break;
                 case InstType.ITER_FULL:
                     target = stack.pop();
-                    stack.push(target.iter_full(this, this.mod));
+                    stack.push(target.iter_full(this, this._mod));
                     break;
                 case InstType.ITER_NEXT:
                     target = stack.pop();
-                    stack.push(target.iter_next(this, this.mod));
+                    stack.push(target.iter_next(this, this._mod));
                     break;
                 case InstType.JUMP:
                     pos = obj.get_label(inst.args.label);
                     break;
                 case InstType.JUMP_IF_FALSE:
-                    if (!stack.pop().equal(this, this.mod, lib.hassiumTrue).val) {
+                    if (!stack.pop().equal(this, this._mod, lib.hassiumTrue).val) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
                 case InstType.JUMP_IF_TRUE:
-                    if (stack.pop().equal(this, this.mod, lib.hassiumTrue).val) {
+                    if (stack.pop().equal(this, this._mod, lib.hassiumTrue).val) {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
@@ -90,10 +90,15 @@ module.exports = class VM {
                             if (val !== undefined) {
                                 stack.push(val);
                             } else {
-                                throw new VMErrors.UnknownIDError(
-                                    inst.args.id,
-                                    inst.src,
-                                );
+                                val = this._mod.get_attrib(inst.args.id);
+                                if (val !== undefined) {
+                                    stack.push(val);
+                                } else {
+                                    throw new VMErrors.UnknownIDError(
+                                        inst.args.id,
+                                        inst.src,
+                                    );
+                                }
                             }
                         }
                     }
@@ -104,7 +109,7 @@ module.exports = class VM {
                     if (key instanceof lib.types.HassiumString) {
                         stack.push(target.get_attrib(key.val));
                     } else {
-                        stack.push(target.index(this, this.mod, key));
+                        stack.push(target.index(this, this._mod, key));
                     }
                     break;
                 case InstType.OBJ_DECL:
@@ -151,7 +156,7 @@ module.exports = class VM {
                     if (key instanceof lib.types.HassiumString) {
                         target.set_attrib(key.val, val);
                     } else {
-                        target.store_index(this, this.mod, key, val);
+                        target.store_index(this, this._mod, key, val);
                     }
                     stack.push(val);
                     break;
@@ -172,40 +177,40 @@ module.exports = class VM {
 
         switch (type) {
             case BinOpType.ADD:
-                stack.push(left.add(this, this.mod, right));
+                stack.push(left.add(this, this._mod, right));
                 break;
             case BinOpType.DIV:
-                stack.push(left.divide(this, this.mod, right));
+                stack.push(left.divide(this, this._mod, right));
                 break;
             case BinOpType.EQUAL:
-                stack.push(left.equal(this, this.mod, right));
+                stack.push(left.equal(this, this._mod, right));
                 break;
             case BinOpType.GREATER:
-                stack.push(left.greater(this, this.mod, right));
+                stack.push(left.greater(this, this._mod, right));
                 break;
             case BinOpType.GREATER_OR_EQUAL:
-                stack.push(left.greater_or_equal(this, this.mod, right));
+                stack.push(left.greater_or_equal(this, this._mod, right));
                 break;
             case BinOpType.LESSER:
-                stack.push(left.lesser(this, this.mod, right));
+                stack.push(left.lesser(this, this._mod, right));
                 break;
             case BinOpType.LESSER_OR_EQUAL:
-                stack.push(left.lesser_or_equal(this, this.mod, right));
+                stack.push(left.lesser_or_equal(this, this._mod, right));
                 break;
             case BinOpType.LOGICAL_AND:
-                stack.push(left.logical_and(this, this.mod, right));
+                stack.push(left.logical_and(this, this._mod, right));
                 break;
             case BinOpType.LOGICAL_OR:
-                stack.push(left.logical_or(this, this.mod, right));
+                stack.push(left.logical_or(this, this._mod, right));
                 break;
             case BinOpType.MOD:
-                stack.push(left.modulus(this, this.mod, right));
+                stack.push(left.modulus(this, this._mod, right));
                 break;
             case BinOpType.MUL:
-                stack.push(left.multiply(this, this.mod, right));
+                stack.push(left.multiply(this, this._mod, right));
                 break;
             case BinOpType.SUB:
-                stack.push(left.subtract(this, this.mod, right));
+                stack.push(left.subtract(this, this._mod, right));
                 break;
         }
     }
@@ -215,7 +220,7 @@ module.exports = class VM {
 
         switch(type) {
             case UnaryOpType.LOGICAL_NOT:
-                if (target.equal(this, this.mod, lib.hassiumFalse)) {
+                if (target.equal(this, this._mod, lib.hassiumFalse)) {
                     stack.push(lib.hassiumTrue);
                 } else {
                     stack.push(lib.hassiumFalse);
