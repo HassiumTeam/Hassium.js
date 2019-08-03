@@ -22,5 +22,14 @@ let mod = emit.compile();
 
 //console.log(util.inspect(mod, { showHidden: false, depth: null }));
 
-let vm = new VM(mod);
-vm.run(mod);
+try {
+    let vm = new VM(mod);
+    vm.run(mod);
+} catch (e) {
+    console.log(e.toString());
+    if (e.src) {
+        console.log(`Thrown at ${e.src.row}:${e.src.col}.`);
+    }
+} finally {
+
+}

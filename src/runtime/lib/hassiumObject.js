@@ -122,7 +122,6 @@ class HassiumObject {
 };
 
 const InstType = {
-    LIST_DECL: "array_decl",
     BIN_OP: "bin_op",
     CALL: "call",
     ITER: "iter",
@@ -131,6 +130,7 @@ const InstType = {
     JUMP: "jump",
     JUMP_IF_FALSE: "jump_if_false",
     JUMP_IF_TRUE: "jump_if_true",
+    LIST_DECL: "array_decl",
     LOAD_ATTRIB: "load_attrib",
     LOAD_CONST: "load_const",
     LOAD_ID: "load_id",

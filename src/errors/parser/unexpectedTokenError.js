@@ -1,9 +1,8 @@
 class UnexpectedTokenError {
-    constructor(tok) {
+    constructor(tok, src) {
         this.tok = tok;
         this.toString = function() {
-            return "Unexpected token with type " + tok.type + " and value \"" + tok.val
-                + "\" at [" + tok.src.row + ", " + tok.src.col + "]";
+            return `Unexpected token with type "${this.tok.type}" and value "${this.tok.val}".`;
         }
     }
 }

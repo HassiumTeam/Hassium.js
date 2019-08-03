@@ -518,7 +518,7 @@ module.exports = class Parser {
             }, src);
         }
         else {
-            throw new UnexpectedTokenError(this.toks[this.pos++]);
+            throw new UnexpectedTokenError(this.toks[this.pos++], src);
         }
     }
 
@@ -582,7 +582,12 @@ module.exports = class Parser {
     }
     expect_tok(type, val = null) {
         if (!this.match_tok(type, val)) {
-            throw new ExpectedTokenError(type, val, this.toks[this.pos]);
+            throw new ExpectedTokenError(
+                type,
+                val,
+                this.toks[this.pos],
+                this.current_src()
+            );
             return null;
         }
 

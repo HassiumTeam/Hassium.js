@@ -1,6 +1,7 @@
 module.exports = class UnkownIDError {
-    constructor(id) {
+    constructor(id, src) {
         this.id = id;
+        this.src = src;
         this.toString = function() {
             return `Unknown identifier "${this.id}"`;
         }

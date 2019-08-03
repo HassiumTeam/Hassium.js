@@ -3,10 +3,11 @@ const { Token, TokType } = require('./token');
 class Lexer {
     constructor(code) {
         this.code = code;
+        
         this.pos = 0;
         this.len = this.code.length;
         this.res = [];
-        this.src = {};
+
         this.row = 1;
         this.col = 1;
     }

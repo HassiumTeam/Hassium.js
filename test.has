@@ -1,8 +1,8 @@
 {
-    func main () {
+    func main (a) {
         arr = [ 1, "two", 3, ];
-        index = 0;
+        println (mai);
     }
 
-    main ();
+    main (2);
 }

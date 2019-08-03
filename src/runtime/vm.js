@@ -23,13 +23,6 @@ module.exports = class VM {
             inst = obj.instructions[pos];
 
             switch (inst.type) {
-                case InstType.LIST_DECL:
-                    args = [];
-                    for (i = 0; i < inst.args.count; i++) {
-                        args.push(stack.pop());
-                    }
-                    stack.push(new lib.types.HassiumList(args));
-                    break;
                 case InstType.BIN_OP:
                     this._handle_bin_op(
                         stack,
@@ -69,6 +62,14 @@ module.exports = class VM {
                         pos = obj.get_label(inst.args.label);
                     }
                     break;
+
+                case InstType.LIST_DECL:
+                    args = [];
+                    for (i = 0; i < inst.args.count; i++) {
+                        args.push(stack.pop());
+                    }
+                    stack.push(new lib.types.HassiumList(args));
+                    break;
                 case InstType.LOAD_ATTRIB:
                     target = stack.pop();
                     stack.push(target.get_attrib(inst.args.attrib));
@@ -89,7 +90,10 @@ module.exports = class VM {
                             if (val !== undefined) {
                                 stack.push(val);
                             } else {
-                                throw new VMErrors.UnknownIDError(inst.args.id);
+                                throw new VMErrors.UnknownIDError(
+                                    inst.args.id,
+                                    inst.src,
+                                );
                             }
                         }
                     }
@@ -121,7 +125,7 @@ module.exports = class VM {
                     if (obj.self !== undefined) {
                         stack.push(obj.self);
                     } else {
-                        throw new VMErrors.SelfReferenceError(obj);
+                        throw new VMErrors.SelfReferenceError(obj, inst.src);
                     }
                     break;
                 case InstType.STORE_ATTRIB:
