@@ -18,5 +18,6 @@ module.exports.hassiumFalse = module.exports.modules.default.get_attrib('false')
 module.exports.hassiumTrue = module.exports.modules.default.get_attrib('true');
 module.exports.hassiumNull = module.exports.modules.default.get_attrib('null');
 
+module.exports.classTypeDef = module.exports.modules.default.get_attrib('class');
 module.exports.objectTypeDef = module.exports.modules.default.get_attrib('object');
 module.exports.typeTypeDef = module.exports.modules.default.get_attrib('type');

@@ -4,6 +4,10 @@ const lib = require('./lib');
 let type = new lib.HassiumType('class');
 
 module.exports = class HassiumClass extends HassiumObject {
+    static getType() {
+        return type;
+    }
+
     constructor(name) {
         super(type);
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'equal'));

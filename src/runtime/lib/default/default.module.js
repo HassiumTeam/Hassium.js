@@ -5,6 +5,7 @@ const lib = require('../lib');
 class DefaultModule extends HassiumModule {
     constructor() {
         super('_default');
+        this.set_attrib('class', lib.HassiumClass.getType());
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));
         this.set_attrib('list', lib.types.HassiumList.getType());
