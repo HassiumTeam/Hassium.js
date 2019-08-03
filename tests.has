@@ -1,16 +1,12 @@
 {
+    import "./tests_stats.has";
+
     func main () {
-        this.stats = { passed: 0, failed: 0, };
+        this.stats = TestsStats ();
 
         this.assign_tests ();
 
-        this.display_stats ();
-    }
-
-    func display_stats () {
-        println ("RESULTS:");
-        println ("\tTests passed: " + this.stats.passed);
-        println ("\tTests failed: " + this.stats.failed);
+        println (this.stats);
     }
 
     func assign_tests () {
@@ -193,10 +189,10 @@
     func assert (c, test) {
         if (c) {
             println ("Passed test: " + test);
-            this.stats.passed += 1;
+            this.stats.pass ();
         } else {
             println ("Failed test: " + test);
-            this.stats.failed += 1;
+            this.stats.fail ();
         }
     }
 

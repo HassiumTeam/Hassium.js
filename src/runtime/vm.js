@@ -1,4 +1,5 @@
 const { BinOpType, UnaryOpType } = require('../node');
+const compile = require('../hassiumCompiler');
 const { HassiumObject, InstType } = require('./lib/hassiumObject');
 const lib = require('./lib/lib');
 const StackFrame = require('./stackFrame');
@@ -9,8 +10,7 @@ module.exports = class VM {
     constructor (mod) {
         this._mod = mod;
         this._stack_frame = new StackFrame();
-        this._import_module(lib.default);
-        this._import_module(lib.io);
+        this._import_module({ mod: lib.default });
     }
 
     run(obj, _args) {
@@ -36,6 +36,9 @@ module.exports = class VM {
                         args.push(stack.pop());
                     }
                     stack.push(target.invoke(this, this._mod, args));
+                    break;
+                case InstType.IMPORT:
+                    this._import_module({ path: inst.args.mod });
                     break;
                 case InstType.ITER:
                     target = stack.pop().iter(this, this._mod);
@@ -229,7 +232,11 @@ module.exports = class VM {
         }
     }
 
-    _import_module(mod) {
+    _import_module({ mod, path }) {
+        if (path) {
+            mod = compile({ file: path });
+        }
+
         for (var key in mod._attributes) {
             if (mod._attributes.hasOwnProperty(key)) {
                 this._stack_frame.set_global(key, mod._attributes[key]);

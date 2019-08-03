@@ -1,0 +1,21 @@
+{
+    class TestsStats {
+        func new () {
+            this.passed = 0;
+            this.failed = 0;
+        }
+
+        func pass () {
+            this.passed += 1;
+        }
+
+        func fail () {
+            this.failed += 1;
+        }
+
+        func toString () {
+            return "Passed: " + this.passed
+                 + " Failed: " + this.failed;
+        }
+    }
+}

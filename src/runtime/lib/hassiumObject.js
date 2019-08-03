@@ -118,6 +118,7 @@ class HassiumObject {
 const InstType = {
     BIN_OP: "bin_op",
     CALL: "call",
+    IMPORT: "import",
     ITER: "iter",
     ITER_FULL: "iter_full",
     ITER_NEXT: "iter_next",

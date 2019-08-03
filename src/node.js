@@ -14,6 +14,7 @@ const NodeType = {
     FUNC_DECL: "func_dec",
     ID: "id",
     IF: "if",
+    IMPORT: "import",
     LIST_DECL: "array_decl",
     NUMBER: "number",
     OBJ_DECL: 'obj_decl',
