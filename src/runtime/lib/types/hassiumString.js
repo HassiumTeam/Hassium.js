@@ -13,7 +13,7 @@ module.exports = class HassiumString extends HassiumObject {
     }
 
     string_add(vm, mod, args) {
-        return new HassiumString(this.val + args[0].val);
+        return new HassiumString(this.val + args[0].toString_(vm, mod, []).val);
     }
 
     string_equal(vm, mod, args) {
