@@ -254,7 +254,10 @@ module.exports = class Emit {
     }
 
     accept_import(node) {
-        this.emit(InstType.IMPORT, { mod: node.children.mod }, node.src);
+        this.emit(InstType.IMPORT, {
+            path: node.children.path,
+            name: node.children.name,
+        }, node.src);
     }
 
     accept_number(node) {

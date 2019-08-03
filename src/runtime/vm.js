@@ -38,7 +38,11 @@ module.exports = class VM {
                     stack.push(target.invoke(this, this._mod, args));
                     break;
                 case InstType.IMPORT:
-                    this._import_module(this._resolve_module(inst.args.mod));
+                    if (inst.args.path) {
+                        this._import_module(compile({ file: inst.args.path }));
+                    } else {
+                        this._import_module(lib.modules[inst.args.name]);
+                    }
                     break;
                 case InstType.ITER:
                     target = stack.pop().iter(this, this._mod);
@@ -230,18 +234,6 @@ module.exports = class VM {
                 }
                 break;
         }
-    }
-
-    _resolve_module(name) {
-        let mod;
-
-        if ("./".includes(name[0])) {
-            mod = compile({ file: name });
-        } else {
-            mod = lib.modules[name];
-        }
-
-        return mod;
     }
 
     _import_module(mod) {

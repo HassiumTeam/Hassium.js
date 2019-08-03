@@ -1,5 +1,5 @@
 {
-    import "io";
+    import io;
 
     func main () {
         f = File("testttt");

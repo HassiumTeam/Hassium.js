@@ -147,9 +147,14 @@ module.exports = class Parser {
         let src = this.current_src();
 
         this.expect_tok(TokType.ID, "import");
-        let mod = this.expect_tok(TokType.STRING).val;
+        let path, name;
+        if (this.match_tok(TokType.STRING)) {
+            path = this.expect_tok(TokType.STRING).val;
+        } else {
+            name = this.expect_tok(TokType.ID).val;
+        }
 
-        return new Node(NodeType.IMPORT, { mod }, src);
+        return new Node(NodeType.IMPORT, { path, name, }, src);
     }
 
     parse_return() {
