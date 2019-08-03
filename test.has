@@ -2,8 +2,8 @@
     import io;
 
     func main () {
-        f = File("testttt");
-        f.create ();
+        f = File("s");
+        println (typeof (f));
     }
 
     main ();

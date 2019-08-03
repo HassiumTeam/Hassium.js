@@ -1,9 +1,9 @@
 class HassiumObject {
     constructor(type) {
-        this.type = type;
         this._attributes = {};
         this.instructions = [];
         this.labels = {};
+        this.type = type;
     }
 
     emit(type, args, src) {
@@ -138,6 +138,7 @@ const InstType = {
     STORE_GLOBAL: "store_global",
     STORE_LOCAL: "store_local",
     STORE_SUBSCRIPT: "store_subscript",
+    TYPEOF: "typeof",
     UNARY_OP: "unary_op",
 };
 
@@ -177,6 +178,9 @@ function object_toString(vm, mod, args, self) {
         if (attrib instanceof lib.types.HassiumString) {
             str += `"${attrib.val}", `;
         } else {
+            if (attrib === undefined) {
+                console.log(self);
+            }
             str += `${attrib.toString_(vm, mod, args).val}, `;
         }
     });

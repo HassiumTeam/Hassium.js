@@ -515,6 +515,9 @@ module.exports = class Parser {
             this.expect_tok(TokType.CPAREN);
             return expr;
         }
+        else if (this.match_tok(TokType.ID, "typeof")) {
+            return this.parse_typeof();
+        }
         else if (this.match_tok(TokType.ID)) {
             return new Node(NodeType.ID, {
                 id: this.expect_tok(TokType.ID).val
@@ -579,6 +582,19 @@ module.exports = class Parser {
         return new Node(NodeType.OBJ_DECL, {
             ids,
             exprs,
+        }, src);
+    }
+
+    parse_typeof() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "typeof");
+        this.expect_tok(TokType.OPAREN);
+        let expr = this.parse_expr();
+        this.expect_tok(TokType.CPAREN);
+
+        return new Node(NodeType.TYPEOF, {
+            expr,
         }, src);
     }
 

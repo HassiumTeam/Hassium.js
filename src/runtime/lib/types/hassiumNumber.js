@@ -1,9 +1,11 @@
 const { HassiumObject } = require('../hassiumObject');
 const lib = require('../lib');
 
+let type = new lib.HassiumType('number');
+
 module.exports = class HassiumNumber extends HassiumObject {
     constructor(val) {
-        super();
+        super(type);
         this.val = val;
 
         this.set_attrib('_add', new lib.HassiumInvokable(this, 'number_add'));

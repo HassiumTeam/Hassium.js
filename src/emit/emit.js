@@ -54,6 +54,8 @@ module.exports = class Emit {
                 return this.accept_string(node);
             case NodeType.SUBSCRIPT:
                 return this.accept_subscript(node);
+            case NodeType.TYPEOF:
+                return this.accept_typeof(node);
             case NodeType.UNARY_OP:
                 return this.accept_unary_op(node);
             case NodeType.WHILE:
@@ -287,6 +289,11 @@ module.exports = class Emit {
         this.accept(node.children.key);
         this.accept(node.children.target);
         this.emit(InstType.LOAD_SUBSCRIPT, {}, node.src);
+    }
+
+    accept_typeof(node) {
+        this.accept(node.children.expr);
+        this.emit(InstType.TYPEOF, {}, node.src);
     }
 
     accept_unary_op(node) {

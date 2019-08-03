@@ -3,7 +3,7 @@ const { Token, TokType } = require('./token');
 class Lexer {
     constructor(code) {
         this.code = code;
-        
+
         this.pos = 0;
         this.len = this.code.length;
         this.res = [];
@@ -26,7 +26,7 @@ class Lexer {
         let cur = this.peek_char();
         let next = this.next_char();
 
-        if (/^[a-zA-Z]+$/.test(cur)) {
+        if (/^[a-zA-Z_]+$/.test(cur)) {
             this.read_id();
             return;
         }

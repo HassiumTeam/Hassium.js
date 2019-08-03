@@ -1,9 +1,11 @@
 const { HassiumObject } = require('../hassiumObject');
 const lib = require('../lib');
 
+let type = new lib.HassiumType('iter');
+
 module.exports = class HassiumIter extends HassiumObject {
     constructor(arr) {
-        super();
+        super(type);
         this.index = 0;
         this.arr = arr;
 

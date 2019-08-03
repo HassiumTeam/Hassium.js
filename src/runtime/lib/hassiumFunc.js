@@ -2,9 +2,11 @@ const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 var clone = require('clone');
 
+let type = new lib.HassiumType('func');
+
 module.exports = class HassiumFunc extends HassiumObject {
     constructor(name) {
-        super();
+        super(type);
         this.params = [];
         this.set_attrib('_name', new lib.types.HassiumString(name));
     }

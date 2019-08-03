@@ -1,9 +1,11 @@
 const { HassiumObject } = require('../hassiumObject');
 const lib = require('../lib');
 
+let type = new lib.HassiumType('null');
+
 class HassiumNull extends HassiumObject {
     constructor() {
-        super();
+        super(type);
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'null_equal'));
         this.set_attrib('toString', new lib.HassiumInvokable(this, 'null_toString'));
         this.str_val = new lib.types.HassiumString('null');

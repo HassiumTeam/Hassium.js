@@ -167,6 +167,9 @@ module.exports = class VM {
                     }
                     stack.push(val);
                     break;
+                case InstType.TYPEOF:
+                    stack.push(stack.pop().type);
+                    break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);
                     break;

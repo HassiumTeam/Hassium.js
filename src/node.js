@@ -21,6 +21,7 @@ const NodeType = {
     RETURN: "return",
     STRING: "string",
     SUBSCRIPT: "subscript",
+    TYPEOF: "typeof",
     UNARY_OP: "unary_op",
     WHILE: "while",
 };
