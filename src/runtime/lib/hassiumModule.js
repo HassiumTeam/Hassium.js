@@ -1,4 +1,5 @@
 const { HassiumObject } = require('./hassiumObject');
+const lib = require('./lib');
 
 modules = {};
 

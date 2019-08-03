@@ -166,7 +166,7 @@
         this.assert (fido.age == 4, "fido.age == 4");
         this.assert (cyrus.age == 6, "cyrus.age == 6");
         this.assert (fido.human_years () == 30, "fido.human_years () == 30");
-        this.assert (cyrus.human_years () == 41, "cyrus.human_years () == 40");
+        this.assert (cyrus.human_years () == 40, "cyrus.human_years () == 40");
         this.assert (fido.get_name () == "Fido", "fido.get_name () == 'Fido'");
         this.assert (cyrus.get_name () == "Cyrus", "cyrus.get_name () == 'Cyrus'");
     }

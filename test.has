@@ -1,8 +1,9 @@
 {
-    import "test2.has";
+    import "io";
 
     func main () {
-        MyClass.hi ();
+        f = File("testttt");
+        f.create ();
     }
 
     main ();
