@@ -36,6 +36,7 @@ module.exports = class Parser {
         else if (this.match_tok(TokType.ID, "foreach")) { stmt = this.parse_foreach(); }
         else if (this.match_tok(TokType.ID, "func")) { stmt = this.parse_func(); }
         else if (this.match_tok(TokType.ID, "if")) { stmt = this.parse_if(); }
+        else if (this.match_tok(TokType.ID, "import")) { stmt = this.parse_import(); }
         else if (this.match_tok(TokType.ID, "return")) { stmt = this.parse_return(); }
         else if (this.match_tok(TokType.ID, "while")) { stmt = this.parse_while(); }
         else {
@@ -140,6 +141,15 @@ module.exports = class Parser {
         let body = this.parse_stmt();
 
         return new Node(NodeType.FUNC_DECL, { name, args, body }, src);
+    }
+
+    parse_import() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "import");
+        let mod = this.expect_tok(TokType.STRING).val;
+
+        return new Node(NodeType.IMPORT, { mod }, src);
     }
 
     parse_return() {

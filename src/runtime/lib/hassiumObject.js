@@ -58,6 +58,10 @@ class HassiumObject {
         return this.get_attrib('_index').invoke(vm, mod, [ arg ]);
     }
 
+    invoke(vm, mod, args) {
+        return this.get_attrib('_invoke').invoke(vm, mod, args);
+    }
+
     iter(vm, mod) {
         return this.get_attrib('_iter').invoke(vm, mod, []);
     }

@@ -57,8 +57,4 @@ module.exports = class HassiumFunc extends HassiumObject {
     _is_contructor() {
         return this.get_attrib('_name').val === "new";
     }
-
-    _json_copy(obj) {
-        return JSON.parse(JSON.stringify(obj));
-    }
 };

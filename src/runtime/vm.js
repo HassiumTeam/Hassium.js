@@ -10,6 +10,7 @@ module.exports = class VM {
         this._mod = mod;
         this._stack_frame = new StackFrame();
         this._import_module(lib.default);
+        this._import_module(lib.io);
     }
 
     run(obj, _args) {

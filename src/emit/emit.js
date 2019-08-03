@@ -42,6 +42,8 @@ module.exports = class Emit {
                 return this.accept_id(node);
             case NodeType.IF:
                 return this.accept_if(node);
+            case NodeType.IMPORT:
+                return this.accept_import(node);
             case NodeType.NUMBER:
                 return this.accept_number(node);
             case NodeType.OBJ_DECL:
@@ -249,6 +251,10 @@ module.exports = class Emit {
             this.accept(node.children.else_body);
         }
         this.emit_label(end_label);
+    }
+
+    accept_import(node) {
+        
     }
 
     accept_number(node) {

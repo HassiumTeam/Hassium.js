@@ -1,23 +1,8 @@
 {
     func main () {
-        d = Dog ("Fido");
-        e = Dog ("Cyrus");
-        println (d.name);
-        println (e.name);
+        f = File ("testy.txt");
 
-        d.say_hello ();
-        e.say_hello ();
-
-    }
-
-    class Dog {
-        func new (name) {
-            this.name = name;
-        }
-
-        func say_hello () {
-            println ("My name is: " + this.name);
-        }
+        f.create ();
     }
 
     main ();
