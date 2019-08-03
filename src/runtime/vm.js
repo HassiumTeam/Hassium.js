@@ -6,6 +6,28 @@ const StackFrame = require('./stackFrame');
 const util = require('util');
 const VMErrors = require('../errors/vmErrors');
 
+class EnforcedStack {
+    constructor() {
+        this.stack = [];
+    }
+
+    push(obj) {
+        if (obj instanceof HassiumObject) {
+            this.stack.push(obj);
+        } else {
+            throw "Tried to push a non-HassiumObject: " + require('util').inspect(obj, { depth: null });
+        }
+    }
+
+    pop() {
+        return this.stack.pop();
+    }
+
+    peek() {
+        return this.stack[this.stack.length - 1];
+    }
+}
+
 module.exports = class VM {
     constructor (mod) {
         this._mod = mod;
@@ -14,7 +36,7 @@ module.exports = class VM {
     }
 
     run(obj, _args) {
-        let stack = [];
+        let stack = new EnforcedStack();
 
         let pos = 0;
         let args, i, inst, key, target, val;

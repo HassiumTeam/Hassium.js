@@ -20,10 +20,12 @@ class DefaultModule extends HassiumModule {
 
     default_println(vm, mod, args) {
         args.forEach(x => console.log(x.toString_(vm, mod, {}).val));
+        return lib.hassiumNull;
     }
 
     debug(vm, mod, args) {
         console.log(require('util').inspect(vm._stack_frame._frames, { depth: null }));
+        return lib.hassiumNull;
     }
 };
 
