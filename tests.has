@@ -53,6 +53,7 @@
         this.object_tests (i, j);
         this.return_tests ();
         this.loop_tests ();
+        this.oop_tests ();
     }
 
     func equality_tests (a, b, c, d, e, f) {
@@ -160,6 +161,34 @@
             total += arr [i];
         }
         this.assert (total == 12, "for loop totaled 12");
+    }
+
+    func oop_tests () {
+        fido = Dog ("Fido", 4);
+        cyrus = Dog ("Cyrus", 6);
+
+        this.assert (fido.age == 4, "fido.age == 4");
+        this.assert (cyrus.age == 6, "cyrus.age == 6");
+        println (fido.human_years ());
+        this.assert (fido.human_years () == 30, "fido.human_years () == 30");
+        this.assert (cyrus.human_years () == 40, "cyrus.human_years () == 40");
+        this.assert (fido.get_name () == "Fido", "fido.get_name () == 'Fido'");
+        this.assert (cyrus.get_name () == "Cyrus", "cyrus.get_name () == 'Cyrus'");
+    }
+
+    class Dog {
+        func new (name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        func human_years () {
+            return (this.age - 1) * 5 + 15;
+        }
+
+        func get_name () {
+            return this.name;
+        }
     }
 
     func assert (c, test) {

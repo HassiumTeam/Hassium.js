@@ -1,12 +1,24 @@
 {
     func main () {
+        d = Dog ("Fido");
+        e = Dog ("Cyrus");
+        println (d.name);
+        println (e.name);
+
+        d.say_hello ();
+        e.say_hello ();
+
+    }
+
+    class Dog {
+        func new (name) {
+            this.name = name;
+        }
+
+        func say_hello () {
+            println ("My name is: " + this.name);
+        }
     }
 
     main ();
-
-    class MyClass {
-        func say_hello () {
-            println ("Hello!");
-        }
-    }
 }

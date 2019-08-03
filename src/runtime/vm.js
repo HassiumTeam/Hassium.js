@@ -18,7 +18,6 @@ module.exports = class VM {
         let pos = 0;
         let args, i, inst, key, target, val;
 
-        this._import_args(obj, _args);
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
 
@@ -226,14 +225,6 @@ module.exports = class VM {
                     stack.push(lib.hassiumFalse);
                 }
                 break;
-        }
-    }
-
-    _import_args(obj, args) {
-        if (args !== undefined) {
-            for (let i = 0; i < args.length; i++) {
-                this._stack_frame.set_var(obj.params[i], args[i]);
-            }
         }
     }
 

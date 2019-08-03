@@ -77,17 +77,6 @@ module.exports = class Parser {
         return new Node(NodeType.CLASS, { name, extends_, contents, }, src);
     }
 
-    parse_func() {
-        let src = this.current_src();
-
-        this.expect_tok(TokType.ID, "func");
-        let name = this.expect_tok(TokType.ID).val;
-        let args = this.parse_arg_list();
-        let body = this.parse_stmt();
-
-        return new Node(NodeType.FUNC_DECL, { name, args, body }, src);
-    }
-
     parse_if() {
         let src = this.current_src();
 
@@ -140,6 +129,17 @@ module.exports = class Parser {
         return new Node(NodeType.FOREACH, {
             id, expr, body,
         }, src);
+    }
+
+    parse_func() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "func");
+        let name = this.expect_tok(TokType.ID).val;
+        let args = this.parse_arg_list();
+        let body = this.parse_stmt();
+
+        return new Node(NodeType.FUNC_DECL, { name, args, body }, src);
     }
 
     parse_return() {

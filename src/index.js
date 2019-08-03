@@ -30,6 +30,7 @@ try {
     if (e.src) {
         console.log(`Thrown at ${e.src.row}:${e.src.col}.`);
     }
+    throw e;
 } finally {
 
 }

@@ -6,16 +6,6 @@ class HassiumObject {
         this.labels = {};
     }
 
-    invoke(vm, mod, args) {
-        let ret;
-
-        vm._stack_frame.push_frame();
-        ret = vm.run(this, args);
-        vm._stack_frame.pop_frame();
-
-        return ret;
-    }
-
     emit(type, args, src) {
         this.instructions.push({ type, args, src });
     }

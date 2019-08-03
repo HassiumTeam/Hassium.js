@@ -230,7 +230,7 @@ module.exports = class Emit {
         if (id === 'this') {
             this.emit(InstType.SELF_REFERENCE, {}, node.src);
         } else if (this.table.has_symbol(id)) {
-            this.emit(InstType.LOAD_ID, { id: this.table.get_symbol(id) });
+            this.emit(InstType.LOAD_ID, { id: this.table.get_symbol(id) }, node.src);
         } else {
             this.emit(InstType.LOAD_ID, { id: node.children.id }, node.src);
         }

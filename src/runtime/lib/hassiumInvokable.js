@@ -9,7 +9,6 @@ module.exports = class HassiumInvokable extends HassiumObject {
     }
 
     invoke(vm, mod, args) {
-        //console.log(util.inspect(this.obj, { showHidden: true, depth: null }));
         return this.obj[this.attrib](vm, mod, args);
     }
 };
