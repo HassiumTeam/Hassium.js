@@ -4,8 +4,7 @@
     func main () {
         c = MyClass ();
         d = MyClass ();
-        println ("wtf");
-        println (string == typeof ("s"));
+        println (c instanceof string);
     }
 
     class MyClass {

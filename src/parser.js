@@ -312,7 +312,7 @@ module.exports = class Parser {
 
     parse_eq() {
         let src = this.current_src();
-        let left = this.parse_comp();
+        let left = this.parse_instanceof();
 
         if (this.match_tok(TokType.COMP)) {
             switch (this.toks[this.pos].val) {
@@ -334,6 +334,21 @@ module.exports = class Parser {
                         }, src)
                     }, src);
             }
+        }
+
+        return left;
+    }
+
+    parse_instanceof() {
+        let src = this.current_src();
+        let left = this.parse_comp();
+
+        if (this.accept_tok(TokType.ID, "instanceof")) {
+            return new Node(NodeType.BIN_OP, {
+                type: BinOpType.INSTANCEOF,
+                left,
+                right: this.parse_instanceof(),
+            }, src);
         }
 
         return left;

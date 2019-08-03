@@ -78,7 +78,7 @@
         this.assert (a && a, "a && a");
         this.assert (a && b == false, "a && b == false");
         this.assert (a || b, "a || b");
-        this.assert (b || b == false, "b || b == 0");
+        this.assert (b || b == false, "b || b == false");
     }
 
     func arithmatic_tests (c, d) {
@@ -169,9 +169,13 @@
         this.assert (cyrus.human_years () == 40, "cyrus.human_years () == 40");
         this.assert (fido.get_name () == "Fido", "fido.get_name () == 'Fido'");
         this.assert (cyrus.get_name () == "Cyrus", "cyrus.get_name () == 'Cyrus'");
+
         this.assert (typeof (fido) == typeof (cyrus), "typeof (fido) == typeof (cyrus)");
         this.assert (typeof (fido) == Dog, "typeof (fido) == Dog");
         this.assert (typeof (fido.name) == string, "typeof (fido.name) == string");
+
+        this.assert (fido instanceof Dog, "fido instanceof Dog");
+        this.assert ((fido instanceof string) == false, "fido instanceof string == false");
     }
 
     class Dog {

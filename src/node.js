@@ -34,6 +34,7 @@ const BinOpType = {
     EQUAL: "equal",
     GREATER: "greater",
     GREATER_OR_EQUAL: "greater_or_equal",
+    INSTANCEOF: "instanceof",
     LESSER: "lesser",
     LESSER_OR_EQUAL: "lesser_or_equal",
     LOGICAL_AND: "logical_and",

@@ -230,6 +230,19 @@ module.exports = class VM {
             case BinOpType.GREATER_OR_EQUAL:
                 stack.push(left.greater_or_equal(this, this._mod, right));
                 break;
+            case BinOpType.INSTANCEOF:
+                if (right == lib.objectTypeDef) {
+                    stack.push(lib.hassiumTrue);
+                } else if (right == lib.typeTypeDef) {
+                    stack.push(
+                        left instanceof lib.HassiumType ?
+                            lib.hassiumTrue :
+                            lib.hassiumFalse
+                    );
+                } else {
+                    stack.push(left.type.equal(this, this._mod, right));
+                }
+                break;
             case BinOpType.LESSER:
                 stack.push(left.lesser(this, this._mod, right));
                 break;
