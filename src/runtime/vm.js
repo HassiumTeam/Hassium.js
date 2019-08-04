@@ -72,11 +72,11 @@ module.exports = class VM {
                     break;
                 case InstType.ITER_FULL:
                     target = stack.pop();
-                    stack.push(target.iter_full(this, this._mod));
+                    stack.push(target.iter_full(this, this._mod, []));
                     break;
                 case InstType.ITER_NEXT:
                     target = stack.pop();
-                    stack.push(target.iter_next(this, this._mod));
+                    stack.push(target.iter_next(this, this._mod, []));
                     break;
                 case InstType.JUMP:
                     pos = obj.get_label(inst.args.label);

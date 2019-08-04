@@ -26,6 +26,11 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_add(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_add');
+        args[0].enforce_type(vm, mod, [
+            lib.types.listTypeDef,
+        ], 'list_add');
+
         let arr = [];
         this.val.forEach(x => arr.push(x));
         args[0].val.forEach(x => arr.push(x));
@@ -34,6 +39,11 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_equal(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_equal');
+        args[0].enforce_type(vm, mod, [
+            lib.types.listTypeDef,
+        ], 'list_equal');
+
         let arr = args[0].val;
         if (arr.length != this.val.length) {
             return lib.hassiumFalse;
@@ -49,34 +59,60 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_index(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_index');
+        args[0].enforce_type(vm, mod, [
+            lib.types.numberTypeDef,
+        ], 'list_index');
+
         return this.val[args[0].val];
     }
 
     list_iter(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_iter');
+
         return this;
     }
 
     list_peek(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_peek');
+
         return this.val[this.val.length - 1];
     }
 
     list_pop(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_pop');
+
         this._length.val--;
         return this.val.pop();
     }
 
     list_push(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_push');
+        args[0].enforce_type(vm, mod, [
+            lib.types.objectTypeDef,
+        ], 'list_push');
+
         this._length.val++;
         this.val.push(args[0]);
         return lib.hassiumNull;
     }
 
     list_store_index(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 2 ], 'list_store_index');
+        args[0].enforce_type(vm, mod, [
+            lib.types.numberTypeDef,
+        ], 'list_store_index');
+        args[1].enforce_type(vm, mod, [
+            lib.types.objectTypeDef,
+        ], 'list_store_index');
+
         this.val[args[0].val] = args[1];
         return args[1];
     }
 
     list_toString(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_toString');
+
         let str = "[ ";
 
         this.val.forEach(function(x) {

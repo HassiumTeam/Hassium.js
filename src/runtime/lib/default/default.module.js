@@ -20,7 +20,7 @@ class DefaultModule extends HassiumModule {
     }
 
     default_println(vm, mod, args) {
-        args.forEach(x => console.log(x.toString_(vm, mod, {}).val));
+        args.forEach(x => console.log(x.toString_(vm, mod, []).val));
         return lib.hassiumNull;
     }
 

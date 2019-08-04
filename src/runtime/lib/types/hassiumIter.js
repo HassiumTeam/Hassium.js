@@ -18,12 +18,14 @@ module.exports = class HassiumIter extends HassiumObject {
     }
 
     iter_full(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'iter_full');
         return new lib.types.HassiumNumber(
             this.index >= this.arr.val.length ? 1 : 0
         );
     }
 
     iter_next(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'iter_next');
         return this.arr.val[this.index++];
     }
 };

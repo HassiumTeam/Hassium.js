@@ -141,7 +141,7 @@ module.exports = class HassiumNumber extends HassiumObject {
     }
 
     number_toString(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'number_toString');
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'number_toString');
         return new lib.types.HassiumString(this.val.toString());
     }
 }

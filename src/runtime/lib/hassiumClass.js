@@ -10,12 +10,19 @@ module.exports = class HassiumClass extends HassiumObject {
 
     constructor(name) {
         super(type);
-        this.set_attrib('_equal', new lib.HassiumInvokable(this, 'equal'));
+        this.set_attrib('_equal', new lib.HassiumInvokable(this, 'class_equal'));
         this.set_attrib('_name', new lib.types.HassiumString(name));
         this.typedef = new lib.HassiumType(name);
     }
 
-    equal(vm, mod, args) {
+    class_equal(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'class_equal');
+
+        args[0].enforce_type(vm, mod, [
+            lib.types.classTypeDef,
+            lib.types.typeTypeDef,
+        ], 'class_equal');
+
         return new lib.types.HassiumNumber(
             this.typedef === args[0] || this === args[0] ? 1 : 0
         );

@@ -12,6 +12,12 @@ module.exports = class HassiumFile extends HassiumObject {
     }
 
     file_invoke(vm, mod, args) {
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'file_new');
+
+        args[0].enforce_type(vm, mod, [
+            lib.types.stringTypeDef,
+        ], 'file_new');
+
         let file = new HassiumObject(type);
 
         file.set_attrib('absolute_path', new lib.types.HassiumString(path.resolve(args[0].val)));
@@ -22,6 +28,8 @@ module.exports = class HassiumFile extends HassiumObject {
     }
 
     file_create(vm, mod, args, self) {
+        this.enforce_arg_count(vm, mod, args, [ 0 ], 'file_create');
+
         let path = self.get_attrib('file_path').val;
 
         fs.writeFileSync(path, '');
