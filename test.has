@@ -2,8 +2,7 @@
     import "tests_stats.has";
 
     func main () {
-        t = TestsStats ();
-        t.pass ();
+        3 + [ 1, ];
     }
 
     main ();

@@ -32,6 +32,12 @@ class HassiumObject {
         this._attributes[key] = val;
     }
 
+    enforce_arg_count(vm, mod, args, counts, name) {
+        if (!counts.includes(args.length)) {
+            throw new VMErrors.ArgCountEnforcementError(counts, args.length, name);
+        }
+    }
+
     enforce_type(vm, mod, types, name) {
         for (let type of types) {
             if (this.instanceof(vm, mod, type).val) {

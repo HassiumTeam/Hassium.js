@@ -6,7 +6,7 @@ module.exports = class HassiumType extends HassiumObject {
         super();
         this.name = name;
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'type_equal'));
-        this.set_attrib('toStrin', new lib.HassiumInvokable(this, 'type_toString'));
+        this.set_attrib('toString', new lib.HassiumInvokable(this, 'type_toString'));
     }
 
     type_equal(vm, mod, args) {
