@@ -1,2 +1,3 @@
 module.exports.SelfReferenceError = require('./vm/SelfReferenceError');
+module.exports.TypeEnforcementError = require('./vm/TypeEnforcementError');
 module.exports.UnknownIDError = require('./vm/unknownIDError');

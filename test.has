@@ -1,16 +1,9 @@
 {
-    import io;
+    import "tests_stats.has";
 
     func main () {
-        c = MyClass ();
-        d = MyClass ();
-        println (2 instanceof string);
-    }
-
-    class MyClass {
-        func new () {
-
-        }
+        t = TestsStats ();
+        t.pass ();
     }
 
     main ();

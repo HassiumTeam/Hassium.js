@@ -1,7 +1,0 @@
-{
-    class MyClass {
-        func hi () {
-            println ("Hello from another class");
-        }
-    }
-}

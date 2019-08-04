@@ -103,9 +103,6 @@ module.exports = class VM {
                     target = stack.pop();
                     stack.push(target.get_attrib(inst.args.attrib));
                     break;
-                case InstType.LOAD_CONST:
-                    stack.push(inst.args.val);
-                    break;
                 case InstType.LOAD_ID:
                     val = this._stack_frame.get_var(inst.args.id);
                     if (val !== undefined) {
@@ -131,6 +128,12 @@ module.exports = class VM {
                             }
                         }
                     }
+                    break;
+                case InstType.LOAD_NUMBER:
+                    stack.push(new lib.types.HassiumNumber(inst.args.val));
+                    break;
+                case InstType.LOAD_STRING:
+                    stack.push(new lib.types.HassiumString(inst.args.val));
                     break;
                 case InstType.LOAD_SUBSCRIPT:
                     target = stack.pop();

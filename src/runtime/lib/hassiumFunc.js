@@ -44,7 +44,6 @@ module.exports = class HassiumFunc extends HassiumObject {
     _instantiate() {
         let clazz = new HassiumObject(this.self.typedef);
 
-
         let val;
         for (let key of Object.keys(this.self._attributes)) {
             val = clone(this.self.get_attrib(key));

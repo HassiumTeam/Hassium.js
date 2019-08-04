@@ -28,6 +28,11 @@ module.exports = class HassiumNumber extends HassiumObject {
     }
 
     number_add(vm, mod, args) {
+        args[0].enforce_type(vm, mod, [
+            lib.types.numberTypeDef,
+            lib.types.stringTypeDef,
+        ], 'number_add');
+
         return new HassiumNumber(this.val + args[0].val);
     }
 

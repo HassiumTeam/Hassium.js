@@ -1,3 +1,5 @@
+const VMErrors = require('../../errors/vmErrors');
+
 class HassiumObject {
     constructor(type) {
         this._attributes = {};
@@ -28,6 +30,16 @@ class HassiumObject {
 
     set_attrib(key, val) {
         this._attributes[key] = val;
+    }
+
+    enforce_type(vm, mod, types, name) {
+        for (let type of types) {
+            if (this.instanceof(vm, mod, type).val) {
+                return;
+            }
+        }
+
+        throw new VMErrors.TypeEnforcementError(types, this.type, name);
     }
 
     add(vm, mod, arg) {
@@ -139,8 +151,9 @@ const InstType = {
     JUMP_IF_TRUE: "jump_if_true",
     LIST_DECL: "array_decl",
     LOAD_ATTRIB: "load_attrib",
-    LOAD_CONST: "load_const",
     LOAD_ID: "load_id",
+    LOAD_NUMBER: "load_number",
+    LOAD_STRING: "load_string",
     LOAD_SUBSCRIPT: "load_subscript",
     POP: "pop",
     PUSH: "push",

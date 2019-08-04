@@ -132,12 +132,6 @@ module.exports = class Emit {
 
     }
 
-    accept_char(node) {
-        this.emit(InstType.LOAD_CONST, {
-            val: new lib.types.HassiumChar(node.children.val)
-        }, node.src);
-    }
-
     accept_class(node) {
         let clazz = new lib.HassiumClass(node.children.name);
         this.emit_peek().set_attrib(node.children.name, clazz);
@@ -263,8 +257,8 @@ module.exports = class Emit {
     }
 
     accept_number(node) {
-        this.emit(InstType.LOAD_CONST, {
-            val: new lib.types.HassiumNumber(Number.parseFloat(node.children.val))
+        this.emit(InstType.LOAD_NUMBER, {
+            val: Number.parseFloat(node.children.val),
         }, node.src);
     }
 
@@ -280,8 +274,8 @@ module.exports = class Emit {
     }
 
     accept_string(node) {
-        this.emit(InstType.LOAD_CONST, {
-            val: new lib.types.HassiumString(node.children.val)
+        this.emit(InstType.LOAD_STRING, {
+            val: node.children.val,
         }, node.src);
     }
 
