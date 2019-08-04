@@ -5,17 +5,18 @@ const lib = require('../lib');
 class DefaultModule extends HassiumModule {
     constructor() {
         super('_default');
-        this.set_attrib('class', lib.HassiumClass.getType());
+        this.set_attrib('class', lib.types.classTypeDef);
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));
-        this.set_attrib('list', lib.types.HassiumList.getType());
+        this.set_attrib('iter', lib.types.iterTypeDef);
+        this.set_attrib('list', lib.types.listTypeDef);
         this.set_attrib('null', hassiumNull);
-        this.set_attrib('number', lib.types.HassiumNumber.getType());
-        this.set_attrib('object', new lib.HassiumType('object'));
+        this.set_attrib('number', lib.types.numberTypeDef);
+        this.set_attrib('object', lib.types.objectTypeDef);
         this.set_attrib('println', new lib.HassiumInvokable(this, 'default_println'));
-        this.set_attrib('string', lib.types.HassiumString.getType());
+        this.set_attrib('string', lib.types.stringTypeDef);
         this.set_attrib('true', new lib.types.HassiumNumber(1));
-        this.set_attrib('type', new lib.HassiumType('type'));
+        this.set_attrib('type', lib.types.typeTypeDef);
     }
 
     default_println(vm, mod, args) {

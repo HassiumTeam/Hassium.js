@@ -192,9 +192,9 @@ module.exports = class VM {
                 case InstType.TYPEOF:
                     target = stack.pop();
                     if (target instanceof lib.HassiumType) {
-                        stack.push(lib.typeTypeDef);
+                        stack.push(lib.types.typeTypeDef);
                     } else if (target.type === undefined ){
-                        stack.push(lib.objectTypeDef);
+                        stack.push(lib.types.objectTypeDef);
                     } else {
                         stack.push(target.type);
                     }
@@ -231,17 +231,7 @@ module.exports = class VM {
                 stack.push(left.greater_or_equal(this, this._mod, right));
                 break;
             case BinOpType.INSTANCEOF:
-                if (right == lib.objectTypeDef) {
-                    stack.push(lib.hassiumTrue);
-                } else if (right == lib.typeTypeDef) {
-                    stack.push(
-                        left instanceof lib.HassiumType ?
-                            lib.hassiumTrue :
-                            lib.hassiumFalse
-                    );
-                } else {
-                    stack.push(left.type.equal(this, this._mod, right));
-                }
+                stack.push(left.instanceof(this, this._mod, right));
                 break;
             case BinOpType.LESSER:
                 stack.push(left.lesser(this, this._mod, right));

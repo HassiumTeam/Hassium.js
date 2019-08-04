@@ -58,6 +58,18 @@ class HassiumObject {
         return this.get_attrib('_index').invoke(vm, mod, [ arg ]);
     }
 
+    instanceof(vm, mod, arg) {
+        if (arg == lib.types.objectTypeDef) {
+            return lib.hassiumTrue;
+        } else if (arg == lib.types.typeTypeDef) {
+            return arg instanceof lib.HassiumType
+                ? lib.hassiumTrue
+                : lib.hasisumFalse;
+        } else {
+            return this.type.equal(vm, mod, arg);
+        }
+    }
+
     invoke(vm, mod, args) {
         return this.get_attrib('_invoke').invoke(vm, mod, args);
     }

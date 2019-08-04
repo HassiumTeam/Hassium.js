@@ -4,7 +4,7 @@
     func main () {
         c = MyClass ();
         d = MyClass ();
-        println (c instanceof string);
+        println (2 instanceof string);
     }
 
     class MyClass {

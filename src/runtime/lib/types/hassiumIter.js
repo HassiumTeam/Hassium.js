@@ -4,6 +4,10 @@ const lib = require('../lib');
 let type = new lib.HassiumType('iter');
 
 module.exports = class HassiumIter extends HassiumObject {
+    static getType() {
+        return type;
+    }
+
     constructor(arr) {
         super(type);
         this.index = 0;
