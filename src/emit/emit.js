@@ -74,12 +74,33 @@ module.exports = class Emit {
     accept_assign(node) {
         this.accept(node.children.right);
 
+        let vars = [];
+        let self = this;
         let left = node.children.left;
         switch (left.type) {
             case NodeType.ATTRIB_ACCESS:
                 this.accept(left.children.target);
                 this.emit(InstType.STORE_ATTRIB,
                     { attrib: left.children.attrib }, node.src);
+                break;
+            case NodeType.LIST_DECL:
+                let vars = left.children.elements.map(function(x) {
+                    return x.children.id;
+                });
+                let indices = vars.map(function(x) {
+                    return self.table.handle_symbol(x);
+                })
+                if (this.table.in_global_scope()) {
+                    this.emit(InstType.OBJ_DESTRUCTURE_GLOBAL, {
+                        vars,
+                        indices,
+                    }, node.src);
+                } else {
+                    this.emit(InstType.OBJ_DESTRUCTURE_GLOBAL, {
+                        vars,
+                        indices,
+                    }, node.src);
+                }
                 break;
             case NodeType.SUBSCRIPT:
                 this.accept(left.children.key);

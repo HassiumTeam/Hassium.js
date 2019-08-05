@@ -49,10 +49,11 @@ module.exports = class Parser {
     }
 
     parse_block() {
+        this.expect_tok(TokType.OBRACE);
+
         let block = new Node(NodeType.BLOCK, {}, this.current_src());
         block.children.nodes = [];
 
-        this.expect_tok(TokType.OBRACE);
         while (!this.accept_tok(TokType.CBRACE)) {
             block.children.nodes.push(this.parse_stmt());
         }

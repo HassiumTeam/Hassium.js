@@ -31,7 +31,6 @@ module.exports = class HassiumFile extends HassiumObject {
         this.enforce_arg_count(vm, mod, args, [ 0 ], 'file_create');
 
         let path = self.get_attrib('file_path').val;
-
         fs.writeFileSync(path, '');
 
         return lib.hassiumNull;

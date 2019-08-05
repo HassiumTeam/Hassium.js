@@ -118,6 +118,10 @@
         this.assert ((j ["three"] = 4) == 4, "j ['three'] = 4 == 4");
         this.assert (j == { three: 4, four: "four", },
                     "j == { three: 4, four: `four`, }");
+
+        [ three, four, ] = j;
+        this.assert (three == 4, "three == 4");
+        this.assert (four == "four", "four == 'four'");
     }
 
     func return_tests () {

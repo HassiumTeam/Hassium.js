@@ -2,7 +2,11 @@
     import "tests_stats.has";
 
     func main () {
-        println (TestsStats == TestsStats)
+        o = { a: "A", b: 2, c: "C", };
+        [a, b, c, ] = o;
+        println (a);
+        println (b);
+        println (c);
     }
 
     main ();

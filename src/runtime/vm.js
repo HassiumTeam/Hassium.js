@@ -40,6 +40,7 @@ module.exports = class VM {
 
         let pos = 0;
         let args, i, inst, key, target, val;
+        let self = this;
 
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
@@ -150,6 +151,24 @@ module.exports = class VM {
                         val.set_attrib(inst.args.ids[i], stack.pop());
                     }
                     stack.push(val);
+                    break;
+                case InstType.OBJ_DESTRUCTURE_GLOBAL:
+                target = stack.pop();
+                for (i = 0; i < inst.args.vars.length; i++) {
+                    this._stack_frame.set_global(
+                        inst.args.indices[i],
+                        target.get_attrib(inst.args.vars[i])
+                    );
+                }
+                    break;
+                case InstType.OBJ_DESTRUCTURE_LOCAL:
+                    target = stack.pop();
+                    for (i = 0; i < inst.args.vars.length; i++) {
+                        this._stack_frame.set_var(
+                            inst.args.indices[i],
+                            target.get_attrib(inst.args.vars[i])
+                        );
+                    }
                     break;
                 case InstType.POP:
                     break;
