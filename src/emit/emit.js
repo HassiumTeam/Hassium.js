@@ -89,14 +89,15 @@ module.exports = class Emit {
                 });
                 let indices = vars.map(function(x) {
                     return self.table.handle_symbol(x);
-                })
+                });
+
                 if (this.table.in_global_scope()) {
                     this.emit(InstType.OBJ_DESTRUCTURE_GLOBAL, {
                         vars,
                         indices,
                     }, node.src);
                 } else {
-                    this.emit(InstType.OBJ_DESTRUCTURE_GLOBAL, {
+                    this.emit(InstType.OBJ_DESTRUCTURE_LOCAL, {
                         vars,
                         indices,
                     }, node.src);

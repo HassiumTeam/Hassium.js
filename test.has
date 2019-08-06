@@ -2,8 +2,7 @@
     import "tests_stats.has";
 
     func main () {
-        o = { a: "A", b: 2, c: "C", };
-        [a, b, c, ] = o;
+        [a, b, c, ] = [ "c", 2, "DDD", "a", ];
         println (a);
         println (b);
         println (c);

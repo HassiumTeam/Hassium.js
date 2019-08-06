@@ -44,7 +44,7 @@ module.exports = class VM {
 
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
-
+            
             switch (inst.type) {
                 case InstType.BIN_OP:
                     this._handle_bin_op(
@@ -153,21 +153,39 @@ module.exports = class VM {
                     stack.push(val);
                     break;
                 case InstType.OBJ_DESTRUCTURE_GLOBAL:
-                target = stack.pop();
-                for (i = 0; i < inst.args.vars.length; i++) {
-                    this._stack_frame.set_global(
-                        inst.args.indices[i],
-                        target.get_attrib(inst.args.vars[i])
-                    );
-                }
-                    break;
-                case InstType.OBJ_DESTRUCTURE_LOCAL:
                     target = stack.pop();
+                    if (target instanceof lib.types.HassiumList) {
+                        for (i = 0; i < inst.args.vars.length; i++) {
+                            this._stack_frame.set_global(
+                                inst.args.indices[i],
+                                target.val[i]
+                            );
+                        }
+                    }
                     for (i = 0; i < inst.args.vars.length; i++) {
-                        this._stack_frame.set_var(
+                        this._stack_frame.set_global(
                             inst.args.indices[i],
                             target.get_attrib(inst.args.vars[i])
                         );
+                    }
+                    break;
+                case InstType.OBJ_DESTRUCTURE_LOCAL:
+                    target = stack.pop();
+                    if (target instanceof lib.types.HassiumList) {
+                        for (i = 0; i < inst.args.vars.length; i++) {
+                            this._stack_frame.set_var(
+                                inst.args.indices[i],
+                                target.val[i]
+                            );
+                        }
+                    }
+                    else {
+                        for (i = 0; i < inst.args.vars.length; i++) {
+                            this._stack_frame.set_var(
+                                inst.args.indices[i],
+                                target.get_attrib(inst.args.vars[i])
+                            );
+                        }
                     }
                     break;
                 case InstType.POP:

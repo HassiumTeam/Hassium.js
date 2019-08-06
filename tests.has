@@ -102,6 +102,10 @@
         this.assert (g + h == [ 2, 2, "three", 4, 5, "six", ],
                     "g + h == [ 2, 2, 'three', 4, 5, 'six', ]");
         this.assert (g.length == 3, "g.length == 3");
+
+        [ a, b, c, ] = g;
+        this.assert (a == 2 && b == 2 && c == "three", "a == b == 2 && c == 'three'");
+
         g.push(4);
         this.assert (g [3] == 4, "g [3] == 4");
         this.assert (g.length == 4, "g.length == 4");
