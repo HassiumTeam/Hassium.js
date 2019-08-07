@@ -19,7 +19,7 @@ module.exports = class HassiumFunc extends HassiumObject {
         let ret;
 
         vm._stack_frame.push_frame();
-        this._import_args(vm, this, args);
+        this._import_args(vm, mod, args);
 
         if (this._is_contructor()) {
             ret = this._instantiate();
@@ -33,10 +33,12 @@ module.exports = class HassiumFunc extends HassiumObject {
         return ret;
     }
 
-    _import_args(vm, obj, args) {
+    _import_args(vm, mod, args) {
         if (args !== undefined) {
-            for (let i = 0; i < args.length; i++) {
-                vm._stack_frame.set_var(obj.params[i], args[i]);
+            let param;
+            for (let i = 0; i < this.params.length; i++) {
+                param = this.params[i];
+                vm._stack_frame.set_var(param, args[i] ? args[i] : lib.hassiumNull);
             }
         }
     }

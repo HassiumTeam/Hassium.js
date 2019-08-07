@@ -3,7 +3,7 @@ const lib = require('../lib');
 
 class HassiumNull extends HassiumObject {
     constructor() {
-        super();
+        super(new lib.HassiumType("null"));
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'null_equal'));
         this.set_attrib('toString', new lib.HassiumInvokable(this, 'null_toString'));
         this.str_val = new lib.types.HassiumString('null');

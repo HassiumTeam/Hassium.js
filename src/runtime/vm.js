@@ -269,8 +269,7 @@ module.exports = class VM {
             pos++;
         }
 
-        let ret = stack.pop();
-        return ret ? ret : lib.hassiumNull;
+        return lib.hassiumNull;
     }
 
     _handle_bin_op(stack, type) {
