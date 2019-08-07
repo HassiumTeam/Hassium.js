@@ -140,9 +140,15 @@ module.exports = class Parser {
         this.expect_tok(TokType.ID, "func");
         let name = this.expect_tok(TokType.ID).val;
         let args = this.parse_arg_list();
+
+        let enforced_ret;
+        if (this.accept_tok(TokType.COLON)) {
+            enforced_ret = this.parse_access_chain();
+        }
+
         let body = this.parse_stmt();
 
-        return new Node(NodeType.FUNC_DECL, { name, args, body }, src);
+        return new Node(NodeType.FUNC_DECL, { name, args, body , enforced_ret, }, src);
     }
 
     parse_import() {
@@ -196,6 +202,16 @@ module.exports = class Parser {
         let body = this.parse_stmt();
 
         return new Node(NodeType.WHILE, { expr, body }, src);
+    }
+
+    parse_access_chain() {
+        let access_chain = [];
+        
+        do {
+            access_chain.push(this.expect_tok(TokType.ID).val);
+        } while (this.accept_tok(TokType.DOT));
+
+        return access_chain;
     }
 
     parse_expr_stmt() {

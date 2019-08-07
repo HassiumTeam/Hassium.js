@@ -233,6 +233,7 @@ module.exports = class Emit {
     accept_func_decl(node) {
         let func = new lib.HassiumFunc(
             node.children.name,
+            node.children.enforced_ret,
         );
         this.emit_peek().set_attrib(node.children.name, func);
 

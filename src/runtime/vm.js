@@ -272,6 +272,34 @@ module.exports = class VM {
         return lib.hassiumNull;
     }
 
+    resolve_access_chain(access_chain) {
+        let top;
+        let link = access_chain[0];
+        top = this._stack_frame.get_var(link);
+        if (top === undefined) {
+            top = this._stack_frame.get_global(link);
+            if (top === undefined) {
+                top = this._mod.get_attrib(link);
+                if (top === undefined) {
+                    throw new VMErrors.UnknownIDError(
+                        link,
+                    );
+                }
+            }
+        }
+
+        for (link of access_chain.slice(1)) {
+            top = top.get_attrib(link);
+            if (top === undefined) {
+                throw new VMErrors.UnknownIDError(
+                    link,
+                )
+            }
+        }
+
+        return top;
+    }
+
     _handle_bin_op(stack, type) {
         let left = stack.pop();
         let right = stack.pop();

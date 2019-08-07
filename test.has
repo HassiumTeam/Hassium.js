@@ -2,12 +2,11 @@
     use TestsStats from "tests_stats.has";
 
     func main () {
+        test ();
+    }
 
-        [a, b, c, ] = [ "c", 2, "DDD", "a", ];
-        f = io.File("a");
-        println (f instanceof io.File);
-        println (f);
-        println (c);
+    func test () : null {
+        return "a";
     }
 
     main ();

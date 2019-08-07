@@ -135,11 +135,11 @@
                     "test_func_2 () == null");
     }
 
-    func test_func_1 (a, b, c) {
+    func test_func_1 (a, b, c) : number {
         return a + b + c;
     }
 
-    func test_func_2 (a) {
+    func test_func_2 (a) : null {
         this.assert (a == null, "a == null");
     }
 
