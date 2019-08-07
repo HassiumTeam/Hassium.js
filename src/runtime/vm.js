@@ -35,7 +35,7 @@ module.exports = class VM {
         this._import_module(lib.modules.default);
     }
 
-    run(obj, _args) {
+    run(obj) {
         let stack = new EnforcedStack();
 
         let pos = 0;
@@ -44,7 +44,8 @@ module.exports = class VM {
 
         while (pos < obj.instructions.length) {
             inst = obj.instructions[pos];
-            
+            //console.log(inst);
+
             switch (inst.type) {
                 case InstType.BIN_OP:
                     this._handle_bin_op(
@@ -268,7 +269,8 @@ module.exports = class VM {
             pos++;
         }
 
-        return lib.hassiumNull;
+        let ret = stack.pop();
+        return ret ? ret : lib.hassiumNull;
     }
 
     _handle_bin_op(stack, type) {
