@@ -10,7 +10,6 @@ module.exports.types.HassiumIter = require('./types/hassiumIter');
 module.exports.types.HassiumList = require('./types/hassiumList');
 module.exports.types.HassiumNumber = require('./types/hassiumNumber');
 module.exports.types.HassiumString = require('./types/hassiumString');
-module.exports.types.classTypeDef = module.exports.HassiumClass.getType();
 module.exports.types.iterTypeDef = module.exports.types.HassiumIter.getType();
 module.exports.types.listTypeDef = module.exports.types.HassiumList.getType();
 module.exports.types.numberTypeDef = module.exports.types.HassiumNumber.getType();

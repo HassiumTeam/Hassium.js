@@ -4,7 +4,8 @@
     func main () {
 
         [a, b, c, ] = [ "c", 2, "DDD", "a", ];
-        f = TestsStats ();
+        f = io.File("a");
+        println (f instanceof io.File);
         println (f);
         println (c);
     }

@@ -13,7 +13,7 @@ module.exports = class HassiumType extends HassiumObject {
         this.enforce_arg_count(vm, mod, args, [ 1 ], 'type_equal');
 
         return new lib.types.HassiumNumber(
-            args[0] == this || args[0].typedef == this ? 1 : 0
+            args[0] == this || args[0].type == this ? 1 : 0
         );
     }
 

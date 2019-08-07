@@ -83,8 +83,12 @@ class HassiumObject {
             return arg instanceof lib.HassiumType
                 ? lib.hassiumTrue
                 : lib.hasisumFalse;
+        } else if (this.type.equal(vm, mod, arg).val) {
+            return lib.hassiumTrue;
+        } else if (arg.type) {
+            return this.type.equal(vm, mod, arg.type);
         } else {
-            return this.type.equal(vm, mod, arg);
+            return lib.hassiumFalse;
         }
     }
 

@@ -7,7 +7,7 @@ let type = new lib.HassiumType('File');
 
 module.exports = class HassiumFile extends HassiumObject {
     constructor() {
-        super(lib.classTypeDef);
+        super(type);
         this.set_attrib('_invoke', new lib.HassiumInvokable(this, 'file_invoke'));
     }
 

@@ -1,18 +1,11 @@
 const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 
-let type = new lib.HassiumType('class');
-
 module.exports = class HassiumClass extends HassiumObject {
-    static getType() {
-        return type;
-    }
-
     constructor(name) {
-        super(type);
+        super(new lib.HassiumType(name));
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'class_equal'));
         this.set_attrib('_name', new lib.types.HassiumString(name));
-        this.typedef = new lib.HassiumType(name);
     }
 
     class_equal(vm, mod, args) {
@@ -24,7 +17,7 @@ module.exports = class HassiumClass extends HassiumObject {
         ], 'class_equal');
 
         return new lib.types.HassiumNumber(
-            this.typedef === args[0] || this === args[0] ? 1 : 0
+            this.type === args[0] || this === args[0] ? 1 : 0
         );
     }
 

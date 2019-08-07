@@ -42,7 +42,7 @@ module.exports = class HassiumFunc extends HassiumObject {
     }
 
     _instantiate() {
-        let clazz = new HassiumObject(this.self.typedef);
+        let clazz = new HassiumObject(this.self.type);
 
         let val;
         for (let key of Object.keys(this.self._attributes)) {
