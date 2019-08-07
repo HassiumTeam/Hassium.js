@@ -233,12 +233,12 @@ module.exports = class Emit {
     accept_func_decl(node) {
         let func = new lib.HassiumFunc(
             node.children.name,
+            node.children.args,
             node.children.enforced_ret,
         );
-        this.emit_peek().set_attrib(node.children.name, func);
-
-        node.children.args.forEach(x => func.add_param(x.children.id));
         func.self = this.emit_peek();
+
+        this.emit_peek().set_attrib(node.children.name, func);
 
         this._emit_stack.push(func);
         this.table.enter_scope();

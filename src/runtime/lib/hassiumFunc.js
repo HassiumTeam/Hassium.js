@@ -1,4 +1,5 @@
 var clone = require('clone');
+const { FuncParamType } = require('../../node');
 const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 const VMErrors = require('../../errors/vmErrors');
@@ -6,16 +7,12 @@ const VMErrors = require('../../errors/vmErrors');
 let type = new lib.HassiumType('func');
 
 module.exports = class HassiumFunc extends HassiumObject {
-    constructor(name, enforced_ret) {
+    constructor(name, params, enforced_ret) {
         super(type);
         this.enforced_ret = enforced_ret;
 
-        this.params = [];
+        this.params = params;
         this.set_attrib('_name', new lib.types.HassiumString(name));
-    }
-
-    add_param(param) {
-        this.params.push(param);
     }
 
     invoke(vm, mod, args) {
@@ -51,10 +48,32 @@ module.exports = class HassiumFunc extends HassiumObject {
 
     _import_args(vm, mod, args) {
         if (args !== undefined) {
-            let param;
+            let arg, param;
             for (let i = 0; i < this.params.length; i++) {
+                arg = args[i] ? args[i] : lib.hassiumNull;
                 param = this.params[i];
-                vm._stack_frame.set_var(param, args[i] ? args[i] : lib.hassiumNull);
+
+                switch (param.type) {
+                    case FuncParamType.ENFORCED:
+                        let arg_type = vm.resolve_access_chain(param.enforced_type);
+                        if (!arg.instanceof(vm, mod, arg_type).val) {
+                            throw new VMErrors.EnforcedParamTypeError(
+                                this,
+                                arg,
+                                arg_type instanceof lib.HassiumType
+                                    ? arg_type
+                                    : arg_type.type,
+                            );
+                        }
+                        vm._stack_frame.set_var(param.val, arg);
+                        break;
+                    case FuncParamType.OBJECT:
+
+                        break;
+                    case FuncParamType.REGULAR:
+                        vm._stack_frame.set_var(param.val, arg);
+                        break;
+                }
             }
         }
     }
@@ -65,8 +84,10 @@ module.exports = class HassiumFunc extends HassiumObject {
         let val;
         for (let key of Object.keys(this.self._attributes)) {
             val = clone(this.self.get_attrib(key));
-            val.self = clazz;
-            clazz.set_attrib(key, val);
+            if (val) {
+                val.self = clazz;
+                clazz.set_attrib(key, val);
+            }
         }
 
         return clazz;

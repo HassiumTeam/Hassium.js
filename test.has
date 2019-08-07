@@ -2,11 +2,12 @@
     use TestsStats from "tests_stats.has";
 
     func main () {
-        test ();
+        println (test (io.File ("a"), 5));
     }
 
-    func test () : null {
-        return "a";
+    func test (a: io.File, b): number {
+        println (a);
+        return b;
     }
 
     main ();

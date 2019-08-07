@@ -1,4 +1,4 @@
-const { BinOpType, UnaryOpType } = require('../node');
+const { BinOpType, FuncParamType, UnaryOpType } = require('../node');
 const compile = require('../hassiumCompiler');
 const { HassiumObject, InstType } = require('./lib/hassiumObject');
 const lib = require('./lib/lib');
@@ -15,7 +15,7 @@ class EnforcedStack {
         if (obj instanceof HassiumObject) {
             this.stack.push(obj);
         } else {
-            throw "Tried to push a non-HassiumObject: " + require('util').inspect(obj, { depth: null });
+            throw "Tried to push a non-HassiumObject: ";
         }
     }
 

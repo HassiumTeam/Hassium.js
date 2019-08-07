@@ -46,6 +46,12 @@ const BinOpType = {
     XOR: "xor",
 };
 
+const FuncParamType = {
+    ENFORCED: "enforced",
+    OBJECT: "object",
+    REGULAR: "regular",
+};
+
 const UnaryOpType = {
     LOGICAL_NOT: "logical_not",
     POST_DEC: "post_dec",
@@ -62,4 +68,4 @@ class Node {
     }
 };
 
-module.exports = { BinOpType, UnaryOpType, NodeType, Node };
+module.exports = { BinOpType, FuncParamType, Node, NodeType, UnaryOpType, };

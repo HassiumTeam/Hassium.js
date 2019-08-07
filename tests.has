@@ -135,7 +135,7 @@
                     "test_func_2 () == null");
     }
 
-    func test_func_1 (a, b, c) : number {
+    func test_func_1 (a: number, b: number, c: number) : number {
         return a + b + c;
     }
 

@@ -1,5 +1,5 @@
 const { ExpectedTokenError, UnexpectedTokenError } = require('./errors/parserErrors')
-const { BinOpType, UnaryOpType, Node, NodeType } = require('./node')
+const { BinOpType, FuncParamType, UnaryOpType, Node, NodeType } = require('./node')
 const { TokType } = require('./token');
 
 module.exports = class Parser {
@@ -139,7 +139,27 @@ module.exports = class Parser {
 
         this.expect_tok(TokType.ID, "func");
         let name = this.expect_tok(TokType.ID).val;
-        let args = this.parse_arg_list();
+
+        let args = [];
+        let param;
+        this.expect_tok(TokType.OPAREN);
+        while (!this.accept_tok(TokType.CPAREN)) {
+            param = {};
+            if (this.match_tok(TokType.OBRACE)) {
+                param.type = FuncParamType.OBJECT;
+                param.val = this.parse_expr();
+            } else {
+                param.val = this.expect_tok(TokType.ID).val;
+                if (this.accept_tok(TokType.COLON)) {
+                    param.type = FuncParamType.ENFORCED;
+                    param.enforced_type = this.parse_access_chain();
+                } else {
+                    param.type = FuncParamType.REGULAR;
+                }
+            }
+            args.push(param);
+            this.accept_tok(TokType.COMMA);
+        }
 
         let enforced_ret;
         if (this.accept_tok(TokType.COLON)) {
@@ -206,7 +226,7 @@ module.exports = class Parser {
 
     parse_access_chain() {
         let access_chain = [];
-        
+
         do {
             access_chain.push(this.expect_tok(TokType.ID).val);
         } while (this.accept_tok(TokType.DOT));
