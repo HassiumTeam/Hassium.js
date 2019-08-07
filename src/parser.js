@@ -147,7 +147,7 @@ module.exports = class Parser {
             param = {};
             if (this.match_tok(TokType.OBRACE)) {
                 param.type = FuncParamType.OBJECT;
-                param.val = this.parse_expr();
+                param.vals = this.parse_object_params();
             } else {
                 param.val = this.expect_tok(TokType.ID).val;
                 if (this.accept_tok(TokType.COLON)) {
@@ -232,6 +232,18 @@ module.exports = class Parser {
         } while (this.accept_tok(TokType.DOT));
 
         return access_chain;
+    }
+
+    parse_object_params() {
+        let ids = [];
+
+        this.expect_tok(TokType.OBRACE);
+        while (!this.accept_tok(TokType.CBRACE)) {
+            ids.push(this.expect_tok(TokType.ID).val);
+            this.accept_tok(TokType.COMMA);
+        }
+
+        return ids;
     }
 
     parse_expr_stmt() {

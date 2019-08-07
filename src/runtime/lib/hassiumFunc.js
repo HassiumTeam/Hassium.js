@@ -68,7 +68,15 @@ module.exports = class HassiumFunc extends HassiumObject {
                         vm._stack_frame.set_var(param.val, arg);
                         break;
                     case FuncParamType.OBJECT:
-
+                        let arg_;
+                        for (let id of param.vals) {
+                            arg_ = arg.get_attrib(id);
+                            vm._stack_frame.set_var(id,
+                                arg_
+                                ? arg_
+                                : lib.hassiumNull
+                            );
+                        }
                         break;
                     case FuncParamType.REGULAR:
                         vm._stack_frame.set_var(param.val, arg);

@@ -126,6 +126,14 @@
         [ three, four, ] = j;
         this.assert (three == 4, "three == 4");
         this.assert (four == "four", "four == 'four'");
+
+        test_func_0 (1, { b: "attrib 1", j, }, 3);
+    }
+
+    func test_func_0 (a, { b, j, }, d) {
+        this.assert (b == "attrib 1", "b == 'attrib 1'");
+        this.assert (j == { three: 4, four: "four", },
+            "j == { three: 4, four: 'four', }");
     }
 
     func return_tests () {
