@@ -60,6 +60,9 @@ module.exports = class VM {
                     }
                     stack.push(target.invoke(this, this._mod, args));
                     break;
+                case InstType.COMPILE_MODULE:
+                    stack.push(compile({ file: inst.args.file }));
+                    break;
                 case InstType.IMPORT:
                     if (inst.args.path) {
                         this._import_module(compile({ file: inst.args.path }));
@@ -241,6 +244,24 @@ module.exports = class VM {
                     break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);
+                    break;
+                case InstType.USE_GLOBAL:
+                    target = stack.pop();
+                    for (i = 0; i < inst.args.ids.length; i++) {
+                        this._stack_frame.set_global(
+                            inst.args.indices[i],
+                            target.get_attrib(inst.args.ids[i]),
+                        );
+                    }
+                    break;
+                case InstType.USE_LOCAL:
+                    target = stack.pop();
+                    for (i = 0; i < inst.args.ids.length; i++) {
+                        this._stack_frame.set_var(
+                            inst.args.indices[i],
+                            target.get_attrib(inst.args.ids[i]),
+                        );
+                    }
                     break;
             }
 

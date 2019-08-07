@@ -1,5 +1,5 @@
 {
-    import "./tests_stats.has";
+    use TestsStats from "tests_stats.has";
 
     func main () {
         this.stats = TestsStats ();

@@ -10,6 +10,7 @@ class DefaultModule extends HassiumModule {
         this.set_attrib('false', new lib.types.HassiumNumber(0));
         this.set_attrib('iter', lib.types.iterTypeDef);
         this.set_attrib('list', lib.types.listTypeDef);
+        this.set_attrib('io', require('../IO/io.module'));
         this.set_attrib('null', hassiumNull);
         this.set_attrib('number', lib.types.numberTypeDef);
         this.set_attrib('object', lib.types.objectTypeDef);

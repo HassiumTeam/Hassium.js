@@ -20,7 +20,7 @@ module.exports.types.typeTypeDef = new module.exports.HassiumType('type')
 
 module.exports.modules = {};
 module.exports.modules.default = require('./default/default.module');
-module.exports.modules.io = require('./io/io.module');
+module.exports.modules.io = module.exports.modules.default.get_attrib('io');
 
 module.exports.hassiumFalse = module.exports.modules.default.get_attrib('false');
 module.exports.hassiumTrue = module.exports.modules.default.get_attrib('true');

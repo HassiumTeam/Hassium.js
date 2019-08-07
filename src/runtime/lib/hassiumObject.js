@@ -148,6 +148,7 @@ class HassiumObject {
 const InstType = {
     BIN_OP: "bin_op",
     CALL: "call",
+    COMPILE_MODULE: "compile_module",
     IMPORT: "import",
     ITER: "iter",
     ITER_FULL: "iter_full",
@@ -174,6 +175,8 @@ const InstType = {
     STORE_SUBSCRIPT: "store_subscript",
     TYPEOF: "typeof",
     UNARY_OP: "unary_op",
+    USE_GLOBAL: "use_global",
+    USE_LOCAL: "use_local",
 };
 
 module.exports = { HassiumObject, InstType, };

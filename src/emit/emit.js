@@ -58,6 +58,8 @@ module.exports = class Emit {
                 return this.accept_typeof(node);
             case NodeType.UNARY_OP:
                 return this.accept_unary_op(node);
+            case NodeType.USE:
+                return this.accept_use(node);
             case NodeType.WHILE:
                 return this.accept_while(node);
         }
@@ -315,6 +317,29 @@ module.exports = class Emit {
     accept_unary_op(node) {
         this.accept(node.children.target);
         this.emit(InstType.UNARY_OP, { type: node.children.type }, node.src);
+    }
+
+    accept_use(node) {
+        if (node.children.expr.type === NodeType.STRING) {
+            this.emit(InstType.COMPILE_MODULE, { file: node.children.expr.children.val });
+        } else {
+            this.accept(node.children.expr);
+        }
+
+        let self = this;
+        let indices = node.children.ids.map(x => self.table.handle_symbol(x));
+
+        if (this.table.in_global_scope()) {
+            this.emit(InstType.USE_GLOBAL, {
+                ids: node.children.ids,
+                indices,
+            }, node.src);
+        } else {
+            this.emit(InstType.USE_LOCAL, {
+                ids: node.children.ids,
+                indices,
+            }, node.src);
+        }
     }
 
     accept_while(node) {

@@ -23,6 +23,7 @@ const NodeType = {
     SUBSCRIPT: "subscript",
     TYPEOF: "typeof",
     UNARY_OP: "unary_op",
+    USE: "use",
     WHILE: "while",
 };
 
