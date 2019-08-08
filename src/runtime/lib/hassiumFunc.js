@@ -4,9 +4,13 @@ const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 const VMErrors = require('../../errors/vmErrors');
 
-let type = new lib.HassiumType('func');
+let type = new lib.HassiumType('Func');
 
 module.exports = class HassiumFunc extends HassiumObject {
+    static getType() {
+        return type;
+    }
+
     constructor(name, params, enforced_ret) {
         super(type);
         this.enforced_ret = enforced_ret;
@@ -15,10 +19,13 @@ module.exports = class HassiumFunc extends HassiumObject {
         this.set_attrib('_name', new lib.types.HassiumString(name));
     }
 
-    invoke(vm, mod, args) {
+    invoke(vm, mod, args, isClosure) {
         let ret;
 
-        vm._stack_frame.push_frame();
+        if (isClosure !== true) {
+            vm._stack_frame.push_frame();
+        }
+
         this._import_args(vm, mod, args);
 
         if (this._is_contructor()) {
@@ -28,7 +35,9 @@ module.exports = class HassiumFunc extends HassiumObject {
             ret = vm.run(this, args);
         }
 
-        vm._stack_frame.pop_frame();
+        if (isClosure !== true) {
+            vm._stack_frame.pop_frame();
+        }
 
         if (this.enforced_ret) {
             let ret_type = vm.resolve_access_chain(this.enforced_ret);

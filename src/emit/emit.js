@@ -28,6 +28,8 @@ module.exports = class Emit {
                 return this.accept_char(node);
             case NodeType.CLASS:
                 return this.accept_class(node);
+            case NodeType.CLOSURE:
+                return this.accept_closure(node);
             case NodeType.EXPR_STMT:
                 return this.accept_expr_stmt(node);
             case NodeType.FOR:
@@ -166,6 +168,24 @@ module.exports = class Emit {
         this._emit_stack.pop();
     }
 
+    accept_closure(node) {
+        let func = new lib.HassiumFunc(
+            '_closure',
+            node.children.args,
+            node.children.enforced_ret,
+        );
+
+        this._emit_stack.push(func);
+        this.table.enter_scope();
+
+        this.accept(node.children.body);
+
+        this.table.leave_scope();
+        this._emit_stack.pop();
+
+        this.emit(InstType.BUILD_CLOSURE, { func, }, node.src);
+    }
+
     accept_continue(node) {
 
     }
@@ -242,7 +262,9 @@ module.exports = class Emit {
 
         this._emit_stack.push(func);
         this.table.enter_scope();
+
         this.accept(node.children.body);
+
         this.table.leave_scope();
         this._emit_stack.pop();
     }

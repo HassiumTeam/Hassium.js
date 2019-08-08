@@ -20,8 +20,8 @@ module.exports = class StackFrame {
         return this._frames.pop();
     }
 
-    push_frame() {
-        this._frames.push({});
+    push_frame(frame) {
+        this._frames.push(frame ? frame : {});
     }
 
     set_global(id, val) {

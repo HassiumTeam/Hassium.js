@@ -151,6 +151,7 @@ class HassiumObject {
 
 const InstType = {
     BIN_OP: "bin_op",
+    BUILD_CLOSURE: "build_closure",
     CALL: "call",
     COMPILE_MODULE: "compile_module",
     IMPORT: "import",

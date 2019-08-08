@@ -140,26 +140,7 @@ module.exports = class Parser {
         this.expect_tok(TokType.ID, "func");
         let name = this.expect_tok(TokType.ID).val;
 
-        let args = [];
-        let param;
-        this.expect_tok(TokType.OPAREN);
-        while (!this.accept_tok(TokType.CPAREN)) {
-            param = {};
-            if (this.match_tok(TokType.OBRACE)) {
-                param.type = FuncParamType.OBJECT;
-                param.vals = this.parse_object_params();
-            } else {
-                param.val = this.expect_tok(TokType.ID).val;
-                if (this.accept_tok(TokType.COLON)) {
-                    param.type = FuncParamType.ENFORCED;
-                    param.enforced_type = this.parse_access_chain();
-                } else {
-                    param.type = FuncParamType.REGULAR;
-                }
-            }
-            args.push(param);
-            this.accept_tok(TokType.COMMA);
-        }
+        let args = this.parse_func_args();
 
         let enforced_ret;
         if (this.accept_tok(TokType.COLON)) {
@@ -598,6 +579,9 @@ module.exports = class Parser {
             this.expect_tok(TokType.CPAREN);
             return expr;
         }
+        else if (this.match_tok(TokType.ID, "func")) {
+            return this.parse_closure();
+        }
         else if (this.match_tok(TokType.ID, "typeof")) {
             return this.parse_typeof();
         }
@@ -633,6 +617,43 @@ module.exports = class Parser {
         this.expect_tok(TokType.OPAREN);
         while (!this.accept_tok(TokType.CPAREN)) {
             args.push(this.parse_expr());
+            this.accept_tok(TokType.COMMA);
+        }
+
+        return args;
+    }
+
+    parse_closure() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "func");
+        let args = this.parse_func_args();
+        let body = this.parse_stmt();
+        return new Node(NodeType.CLOSURE, {
+            args,
+            body,
+        }, src);
+    }
+
+    parse_func_args() {
+        let args = [];
+        let param;
+        this.expect_tok(TokType.OPAREN);
+        while (!this.accept_tok(TokType.CPAREN)) {
+            param = {};
+            if (this.match_tok(TokType.OBRACE)) {
+                param.type = FuncParamType.OBJECT;
+                param.vals = this.parse_object_params();
+            } else {
+                param.val = this.expect_tok(TokType.ID).val;
+                if (this.accept_tok(TokType.COLON)) {
+                    param.type = FuncParamType.ENFORCED;
+                    param.enforced_type = this.parse_access_chain();
+                } else {
+                    param.type = FuncParamType.REGULAR;
+                }
+            }
+            args.push(param);
             this.accept_tok(TokType.COMMA);
         }
 

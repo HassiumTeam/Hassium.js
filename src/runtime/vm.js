@@ -53,6 +53,14 @@ module.exports = class VM {
                         inst.args.type,
                     );
                     break;
+                case InstType.BUILD_CLOSURE:
+                    stack.push(
+                        new lib.HassiumClosure(
+                            inst.args.func,
+                            this._stack_frame.peek_frame(),
+                        )
+                    );
+                    break;
                 case InstType.CALL:
                     target = stack.pop();
                     args = [];

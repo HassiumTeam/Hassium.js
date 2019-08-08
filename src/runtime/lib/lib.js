@@ -2,6 +2,7 @@ module.exports.HassiumInvokable = require('./hassiumInvokable');
 module.exports.HassiumType = require('./hassiumType');
 module.exports.HassiumClass = require('./hassiumClass');
 module.exports.HassiumFunc = require('./hassiumFunc')
+module.exports.HassiumClosure = require('./hassiumClosure');
 module.exports.HassiumModule = require('./hassiumModule');
 module.exports.HassiumObject = require('./hassiumObject').HassiumObject;
 

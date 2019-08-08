@@ -6,6 +6,7 @@ const NodeType = {
     BREAK: "break",
     CHAR: "char",
     CLASS: "class",
+    CLOSURE: "closure",
     CONTINUE: "continue",
     EXPR_STMT: "expr_stmt",
     FOR: "for",

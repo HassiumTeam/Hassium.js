@@ -1,20 +1,13 @@
 
-use TestsStats from "tests_stats.has";
-
 func main () {
-    println (test (io.File ("a"), 5, {
-        c: "C",
-        d: 5,
-        e: "B",
-    }));
+    y = "Result is: ";
+    test (2, 3, func (x) {
+        println (y + x);
+    });
 }
 
-func test (a: io.File, b, { c, d, e}): number {
-    println (a);
-    println (c);
-    println (d);
-    println (e);
-    return b;
+func test (a, b, fn) {
+    fn (a + b);
 }
 
 main ();
