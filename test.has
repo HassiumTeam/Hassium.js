@@ -1,21 +1,20 @@
-{
-    use TestsStats from "tests_stats.has";
 
-    func main () {
-        println (test (io.File ("a"), 5, {
-            c: "C",
-            d: 5,
-            e: "B",
-        }));
-    }
+use TestsStats from "tests_stats.has";
 
-    func test (a: io.File, b, { c, d, e}): number {
-        println (a);
-        println (c);
-        println (d);
-        println (e);
-        return b;
-    }
-
-    main ();
+func main () {
+    println (test (io.File ("a"), 5, {
+        c: "C",
+        d: 5,
+        e: "B",
+    }));
 }
+
+func test (a: io.File, b, { c, d, e}): number {
+    println (a);
+    println (c);
+    println (d);
+    println (e);
+    return b;
+}
+
+main ();
