@@ -2,9 +2,10 @@ const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 
 module.exports = class HassiumClosure extends HassiumObject {
-    constructor(func, frame) {
+    constructor(func, frame, self) {
         super(lib.HassiumFunc.getType());
         this.func = func;
+        this.func.self = self;
         this.frame = frame;
     }
 

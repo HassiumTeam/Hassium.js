@@ -1,6 +1,6 @@
 const { InstType } = require('../runtime/lib/hassiumObject');
 const lib = require('../runtime/lib/lib');
-const { NodeType } = require('./../node');
+const { FuncParamType, NodeType, } = require('./../node');
 const SymbolTable = require('./symbolTable');
 
 module.exports = class _emit {
@@ -54,12 +54,16 @@ module.exports = class _emit {
                 return this.accept_number(node);
             case NodeType.OBJ_DECL:
                 return this.accept_obj_decl(node);
+            case NodeType.RAISE:
+                return this.accept_raise(node);
             case NodeType.RETURN:
                 return this.accept_return(node);
             case NodeType.STRING:
                 return this.accept_string(node);
             case NodeType.SUBSCRIPT:
                 return this.accept_subscript(node);
+            case NodeType.TRY_CATCH:
+                return this.accept_try_catch(node);
             case NodeType.TYPEOF:
                 return this.accept_typeof(node);
             case NodeType.UNARY_OP:
@@ -337,6 +341,11 @@ module.exports = class _emit {
         this._emit(InstType.OBJ_DECL, { ids: node.children.ids }, node.src);
     }
 
+    accept_raise(node) {
+        this.accept(node.children.expr);
+        this._emit(InstType.RAISE, {}, node.src);
+    }
+
     accept_return(node) {
         this.accept(node.children.expr);
         this._emit(InstType.RETURN, {}, node.src);
@@ -352,6 +361,36 @@ module.exports = class _emit {
         this.accept(node.children.key);
         this.accept(node.children.target);
         this._emit(InstType.LOAD_SUBSCRIPT, {}, node.src);
+    }
+
+    accept_try_catch(node) {
+        let func = new lib.HassiumFunc(
+            '_closure',
+            [{
+                type: FuncParamType.REGULAR,
+                val: node.children.exception,
+            }],
+            node.children.enforced_ret,
+        );
+
+        this._emit_stack.push(func);
+        this.table.enter_scope();
+
+        this.accept(node.children.catch_stmt);
+
+        this.table.leave_scope();
+        this._emit_stack.pop();
+
+        let caught_label = this._next_label();
+
+        this._emit(InstType.BUILD_EXCEPTION_HANDLER, { func, caught_label, }, node.src);
+
+        this.table.enter_scope();
+        this.accept(node.children.try_stmt);
+        this.table.leave_scope();
+
+        this._emit(InstType.POP_EXCEPTION_HANDLER, {}, node.src);
+        this._emit_label(caught_label);
     }
 
     accept_typeof(node) {

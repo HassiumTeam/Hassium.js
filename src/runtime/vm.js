@@ -33,6 +33,8 @@ module.exports = class VM {
         this._mod = mod;
         this._stack_frame = new StackFrame();
         this._import_module(lib.modules.default);
+        this._exception_handlers = [];
+        this._exception_returns = [];
     }
 
     run(obj) {
@@ -42,8 +44,22 @@ module.exports = class VM {
         let args, i, inst, key, target, val;
         let self = this;
 
+        obj.exception_handlers = [];
+
         while (pos < obj.instructions.length) {
+
+            if (this._exception_returns.length != 0) {
+                let ret = this._exception_returns[this._exception_returns.length - 1];
+                if (ret.caller === obj) {
+                    pos = ret.label;
+                    this._exception_returns.pop();
+                } else {
+                    return lib.hassiumNull;
+                }
+            }
+
             inst = obj.instructions[pos];
+            this._src = inst.src;
             //console.log(inst);
 
             switch (inst.type) {
@@ -58,8 +74,22 @@ module.exports = class VM {
                         new lib.HassiumClosure(
                             inst.args.func,
                             this._stack_frame.peek_frame(),
+                            obj.self,
                         )
                     );
+                    break;
+                case InstType.BUILD_EXCEPTION_HANDLER:
+                    this._exception_handlers.push({
+                        callee:
+                            new lib.HassiumClosure(
+                                inst.args.func,
+                                this._stack_frame.peek_frame(),
+                                obj.self,
+                            )
+                        ,
+                        caller: obj,
+                        label: obj.get_label(inst.args.caught_label),
+                    });
                     break;
                 case InstType.CALL:
                     target = stack.pop();
@@ -201,9 +231,16 @@ module.exports = class VM {
                     }
                     break;
                 case InstType.POP:
+                    stack.pop();
+                    break;
+                case InstType.POP_EXCEPTION_HANDLER:
+                    this._exception_handlers.pop();
                     break;
                 case InstType.PUSH:
                     stack.push(inst.args.obj);
+                    break;
+                case InstType.RAISE:
+                    this.raise(stack.pop());
                     break;
                 case InstType.RETURN:
                     return stack.pop();
@@ -278,6 +315,17 @@ module.exports = class VM {
         }
 
         return lib.hassiumNull;
+    }
+
+    raise(e) {
+        if (this._exception_handlers.length === 0) {
+            throw new VMErrors.UnhandledException(this, this._src, e);
+        }
+
+        let handler = this._exception_handlers.pop();
+        handler.callee.invoke(this, this._mod, [ e ]);
+
+        this._exception_returns.push({ caller: handler.caller, label: handler.label });
     }
 
     resolve_access_chain(access_chain) {

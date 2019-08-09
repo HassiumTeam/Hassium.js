@@ -1,14 +1,6 @@
 func main () {
-    i = 0
-    while (i < 23) {
-        if (i == 15) {
-            i += 1;
-            continue;
-        }
-        println (i);
-        i += 1;
-    }
-
+    println ("Good");
+    raise 3;
 }
 
 main ();

@@ -37,7 +37,9 @@ module.exports = class Parser {
         else if (this.match_tok(TokType.ID, "func")) { stmt = this.parse_func(); }
         else if (this.match_tok(TokType.ID, "if")) { stmt = this.parse_if(); }
         else if (this.match_tok(TokType.ID, "import")) { stmt = this.parse_import(); }
+        else if (this.match_tok(TokType.ID, "raise")) { stmt = this.parse_raise(); }
         else if (this.match_tok(TokType.ID, "return")) { stmt = this.parse_return(); }
+        else if (this.match_tok(TokType.ID, "try")) { stmt = this.parse_try_catch(); }
         else if (this.match_tok(TokType.ID, "use")) { stmt = this.parse_use(); }
         else if (this.match_tok(TokType.ID, "while")) { stmt = this.parse_while(); }
         else {
@@ -166,6 +168,17 @@ module.exports = class Parser {
         return new Node(NodeType.IMPORT, { path, name, }, src);
     }
 
+    parse_raise() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "raise");
+        let expr = this.parse_expr();
+
+        return new Node(NodeType.RAISE, {
+            expr,
+        }, src);
+    }
+
     parse_return() {
         let src = this.current_src();
 
@@ -173,6 +186,25 @@ module.exports = class Parser {
         let expr = this.parse_expr();
 
         return new Node(NodeType.RETURN, { expr }, src);
+    }
+
+    parse_try_catch() {
+        let src = this.current_src();
+
+        this.expect_tok(TokType.ID, "try");
+        let try_stmt = this.parse_stmt();
+
+        this.expect_tok(TokType.ID, "catch");
+        this.expect_tok(TokType.OPAREN);
+        let exception = this.expect_tok(TokType.ID).val;
+        this.expect_tok(TokType.CPAREN);
+        let catch_stmt = this.parse_stmt();
+
+        return new Node(NodeType.TRY_CATCH, {
+            try_stmt,
+            catch_stmt,
+            exception,
+        }, src);
     }
 
     parse_use() {

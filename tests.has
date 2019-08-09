@@ -51,6 +51,7 @@ func assign_tests () {
     this.loop_tests ();
     this.oop_tests ();
     this.closure_tests ();
+    this.try_catch_tests ();
 }
 
 func equality_tests (a, b, c, d, e, f) {
@@ -223,6 +224,25 @@ func closure_tests () {
     this.assert (f (1, 2) == 8, "f (1, 2) == 8");
     c = 6;
     this.assert (f (1, 2) == 9, "f (1, 2) == 9");
+}
+
+func try_catch_tests () {
+    try {
+        this.test_func_3 ();
+        this.assert (false, "try catch from try_catch_tests");
+    } catch (e) {
+        this.assert (e == 4, "Caught e == 4");
+    }
+}
+
+func test_func_3 () {
+    this.test_func_4 ();
+    this.assert (false, "try catch from test_func_3");
+}
+
+func test_func_4 () {
+    raise 4;
+    this.assert (false, "try catch from test_func_4");
 }
 
 class Dog {

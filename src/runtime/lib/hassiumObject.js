@@ -154,6 +154,7 @@ class HassiumObject {
 const InstType = {
     BIN_OP: "bin_op",
     BUILD_CLOSURE: "build_closure",
+    BUILD_EXCEPTION_HANDLER: "build_exception_handler",
     CALL: "call",
     COMPILE_MODULE: "compile_module",
     IMPORT: "import",
@@ -173,7 +174,9 @@ const InstType = {
     OBJ_DESTRUCTURE_GLOBAL: "obj_destructure_global",
     OBJ_DESTRUCTURE_LOCAL: "obj_destructure_local",
     POP: "pop",
+    POP_EXCEPTION_HANDLER: "pop_exception_handler",
     PUSH: "push",
+    RAISE: "raise",
     RETURN: "return",
     SELF_REFERENCE: "self_reference",
     STORE_ATTRIB: "store_attrib",
