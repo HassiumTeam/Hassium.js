@@ -628,9 +628,17 @@ module.exports = class Parser {
 
         this.expect_tok(TokType.ID, "func");
         let args = this.parse_func_args();
+
+        let enforced_ret;
+        if (this.accept_tok(TokType.COLON)) {
+            enforced_ret = this.parse_access_chain();
+        }
+
         let body = this.parse_stmt();
+
         return new Node(NodeType.CLOSURE, {
             args,
+            enforced_ret,
             body,
         }, src);
     }

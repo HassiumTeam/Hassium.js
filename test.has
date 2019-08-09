@@ -1,8 +1,9 @@
 
 func main () {
     y = "Result is: ";
-    test (2, 3, func (x) {
+    test (2, 3, func (x) : string {
         println (y + x);
+        return ""
     });
 }
 

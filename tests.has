@@ -197,7 +197,7 @@ func oop_tests () {
 
 func closure_tests () {
     c = 5;
-    f = func (a, b) {
+    f = func (a, b) : number {
         return a + b + c;
     };
 
