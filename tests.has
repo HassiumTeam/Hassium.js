@@ -157,23 +157,42 @@ func loop_tests() {
 
     total = 0;
     foreach (a in arr) {
+        if (a == 1) {
+            continue;
+        }
+        if (a == 5) {
+            break;
+        }
         total += a;
     }
-    this.assert (total == 12, "foreach loop totaled 12");
+    this.assert (total == 5, "foreach loop totaled 12");
 
     total = 0;
     i = 0;
     while (i < arr.length) {
+        if (arr [i] == 1) {
+            i += 1;
+            continue;
+        }
+        if (arr [i] == 5) {
+            break;
+        }
         total += arr[i];
         i += 1;
     }
-    this.assert (total == 12, "while loop totaled 12");
+    this.assert (total == 5, "while loop totaled 12");
 
     total = 0;
     for (i = 0; i < arr.length; i += 1) {
+        if (arr [i] == 1) {
+            continue;
+        }
+        if (arr [i] == 5) {
+            break;
+        }
         total += arr [i];
     }
-    this.assert (total == 12, "for loop totaled 12");
+    this.assert (total == 5, "for loop totaled 12");
 }
 
 func oop_tests () {

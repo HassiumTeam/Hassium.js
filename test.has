@@ -1,14 +1,14 @@
-
 func main () {
-    y = "Result is: ";
-    test (2, 3, func (x) : string {
-        println (y + x);
-        return ""
-    });
-}
+    i = 0
+    while (i < 23) {
+        if (i == 15) {
+            i += 1;
+            continue;
+        }
+        println (i);
+        i += 1;
+    }
 
-func test (a, b, fn) {
-    fn (a + b);
 }
 
 main ();

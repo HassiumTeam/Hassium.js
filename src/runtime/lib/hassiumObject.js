@@ -5,14 +5,16 @@ class HassiumObject {
         this._attributes = {};
         this.instructions = [];
         this.labels = {};
+        this.break_labels = [];
+        this.cont_labels = [];
         this.type = type;
     }
 
-    emit(type, args, src) {
+    _emit(type, args, src) {
         this.instructions.push({ type, args, src });
     }
 
-    emit_label(id) {
+    _emit_label(id) {
         this.labels[id] = this.instructions.length - 1;
     }
 
