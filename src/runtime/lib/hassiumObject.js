@@ -34,9 +34,14 @@ class HassiumObject {
         this._attributes[key] = val;
     }
 
-    enforce_arg_count(vm, mod, args, counts, name) {
+    enforce_arg_count(vm, mod, args, counts) {
         if (!counts.includes(args.length)) {
-            throw new VMErrors.ArgCountEnforcementError(counts, args.length, name);
+            vm.raise(
+                lib.modules.default.get_attrib('ArgCountException').invoke(vm, mod, [
+                    new lib.types.HassiumList(counts.map(x => new lib.types.HassiumNumber(x))),
+                    new lib.types.HassiumNumber(args.length),
+                ])
+            );
         }
     }
 

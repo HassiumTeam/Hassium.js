@@ -2,9 +2,12 @@ const HassiumModule = require('../hassiumModule');
 const hassiumNull = require('../types/hassiumNull');
 const lib = require('../lib');
 
+const ArgCountException = require('./hassiumArgCountException');
+
 class DefaultModule extends HassiumModule {
     constructor() {
         super('_default');
+        this.set_attrib('ArgCountException', new ArgCountException());
         this.set_attrib('class', lib.types.classTypeDef);
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));

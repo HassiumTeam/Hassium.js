@@ -12,7 +12,7 @@ module.exports = class HassiumFile extends HassiumObject {
     }
 
     file_invoke(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'file_new');
+        this.enforce_arg_count(vm, mod, args, [ 1 ], 'File_new');
 
         args[0].enforce_type(vm, mod, [
             lib.types.stringTypeDef,

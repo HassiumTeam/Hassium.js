@@ -1,6 +1,5 @@
 func main () {
-    println ("Good");
-    raise 3;
+    println (io.File(1, 2))
 }
 
 main ();
