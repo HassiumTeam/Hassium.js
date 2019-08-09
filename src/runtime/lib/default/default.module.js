@@ -8,6 +8,7 @@ class DefaultModule extends HassiumModule {
         this.set_attrib('class', lib.types.classTypeDef);
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));
+        this.set_attrib('Func', lib.types.funcTypeDef);
         this.set_attrib('iter', lib.types.iterTypeDef);
         this.set_attrib('list', lib.types.listTypeDef);
         this.set_attrib('io', require('../IO/io.module'));
