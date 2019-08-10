@@ -16,6 +16,7 @@ module.exports = class HassiumFunc extends HassiumObject {
         this.enforced_ret = enforced_ret;
 
         this.params = params;
+        this.name = name;
         this.set_attrib('_name', new lib.types.HassiumString(name));
     }
 

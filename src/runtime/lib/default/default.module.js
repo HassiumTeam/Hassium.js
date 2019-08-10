@@ -4,6 +4,7 @@ const lib = require('../lib');
 
 const ArgCountException = require('./hassiumArgCountException');
 const IncorrectTypeException = require('./hassiumIncorrectTypeException');
+const NoSelfReferenceException = require('./hassiumNoSelfReferenceException');
 
 class DefaultModule extends HassiumModule {
     constructor() {
@@ -17,6 +18,7 @@ class DefaultModule extends HassiumModule {
         this.set_attrib('iter', lib.types.iterTypeDef);
         this.set_attrib('list', lib.types.listTypeDef);
         this.set_attrib('io', require('../IO/io.module'));
+        this.set_attrib('NoSelfReferenceException', new NoSelfReferenceException());
         this.set_attrib('null', hassiumNull);
         this.set_attrib('number', lib.types.numberTypeDef);
         this.set_attrib('object', lib.types.objectTypeDef);

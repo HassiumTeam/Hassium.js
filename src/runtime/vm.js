@@ -248,7 +248,8 @@ module.exports = class VM {
                     if (obj.self !== undefined) {
                         stack.push(obj.self);
                     } else {
-                        throw new VMErrors.SelfReferenceError(obj, inst.src);
+                        this.raise(lib.modules.default.get_attrib('NoSelfReferenceException')
+                                                        .invoke(this, this._mod, [ obj ]));
                     }
                     break;
                 case InstType.STORE_ATTRIB:
