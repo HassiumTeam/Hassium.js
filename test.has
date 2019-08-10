@@ -1,5 +1,5 @@
 func main () {
-    println (io.File(1, 2))
+    println (io.File(2));
 }
 
 main ();

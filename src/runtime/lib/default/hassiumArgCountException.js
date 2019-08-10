@@ -11,10 +11,10 @@ module.exports = class HassiumArgCountException extends HassiumObject {
     }
 
     arg_count_exception_invoke(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [2], 'ArgCountException_new');
+        this.enforce_arg_count(vm, mod, args, [2]);
 
-        args[0].enforce_type(vm, mod, [ lib.types.listTypeDef, ], 'ArgCountException_new');
-        args[1].enforce_type(vm, mod, [ lib.types.numberTypeDef, ], 'ArgCountException_new');
+        args[0].enforce_type(vm, mod, [ lib.types.listTypeDef, ]);
+        args[1].enforce_type(vm, mod, [ lib.types.numberTypeDef, ]);
 
         let arg_count_exception = new HassiumObject(type);
 

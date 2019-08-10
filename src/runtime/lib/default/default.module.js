@@ -3,6 +3,7 @@ const hassiumNull = require('../types/hassiumNull');
 const lib = require('../lib');
 
 const ArgCountException = require('./hassiumArgCountException');
+const IncorrectTypeException = require('./hassiumIncorrectTypeException');
 
 class DefaultModule extends HassiumModule {
     constructor() {
@@ -12,6 +13,7 @@ class DefaultModule extends HassiumModule {
         this.set_attrib('debug', new lib.HassiumInvokable(this, 'debug'));
         this.set_attrib('false', new lib.types.HassiumNumber(0));
         this.set_attrib('Func', lib.types.funcTypeDef);
+        this.set_attrib('IncorrectTypeException', new IncorrectTypeException());
         this.set_attrib('iter', lib.types.iterTypeDef);
         this.set_attrib('list', lib.types.listTypeDef);
         this.set_attrib('io', require('../IO/io.module'));

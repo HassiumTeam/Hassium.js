@@ -52,7 +52,11 @@ class HassiumObject {
             }
         }
 
-        throw new VMErrors.TypeEnforcementError(types, this.type, name);
+        vm.raise(
+            lib.modules.default.get_attrib('IncorrectTypeException').invoke(vm, mod, [
+                new lib.types.HassiumList(types),
+                this.type,
+            ]));
     }
 
     add(vm, mod, arg) {
