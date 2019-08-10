@@ -42,13 +42,15 @@ class HassiumObject {
                     new lib.types.HassiumNumber(args.length),
                 ])
             );
+            return false;
         }
+        return true;
     }
 
     enforce_type(vm, mod, types, name) {
         for (let type of types) {
             if (this.instanceof(vm, mod, type).val) {
-                return;
+                return true;
             }
         }
 
@@ -57,6 +59,7 @@ class HassiumObject {
                 new lib.types.HassiumList(types),
                 this.type,
             ]));
+        return false;
     }
 
     add(vm, mod, arg) {

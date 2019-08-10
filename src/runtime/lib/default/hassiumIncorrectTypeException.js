@@ -11,9 +11,12 @@ module.exports = class HassiumIncorrectTypeException extends HassiumObject {
     }
 
     incorrect_type_exception_invoke(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 2 ]);
-
-        args[0].enforce_type(vm, mod, [ lib.types.listTypeDef ]);
+        if (!this.enforce_arg_count(vm, mod, args, [ 2 ]) ||
+            !args[0].enforce_type(vm, mod, [
+                lib.types.listTypeDef,
+            ])) {
+            return lib.hassiumNull;
+        }
 
         let incorrect_type_exception = new HassiumObject(type);
 
@@ -30,6 +33,10 @@ module.exports = class HassiumIncorrectTypeException extends HassiumObject {
     }
 
     incorrect_type_exception_toString(vm, mod, args, self) {
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
+
         let expected = self.get_attrib('expected').toString_(vm, mod, []).val;
         let got = self.get_attrib('got').name;
 

@@ -1,5 +1,9 @@
 func main () {
-    println (io.File(2));
+    test ();
+}
+
+func test () : string {
+    return 1;
 }
 
 main ();

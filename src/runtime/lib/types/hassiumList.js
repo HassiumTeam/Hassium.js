@@ -26,10 +26,12 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_add(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_add');
-        args[0].enforce_type(vm, mod, [
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ]) ||
+            !args[0].enforce_type(vm, mod, [
             lib.types.listTypeDef,
-        ], 'list_add');
+        ])) {
+            return lib.hassiumNull;
+        }
 
         let arr = [];
         this.val.forEach(x => arr.push(x));
@@ -39,10 +41,12 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_equal(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_equal');
-        args[0].enforce_type(vm, mod, [
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ]) ||
+            !args[0].enforce_type(vm, mod, [
             lib.types.listTypeDef,
-        ], 'list_equal');
+        ])) {
+            return lib.hassiumNull;
+        }
 
         let arr = args[0].val;
         if (arr.length != this.val.length) {
@@ -59,38 +63,45 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_index(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_index');
-        args[0].enforce_type(vm, mod, [
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ]) ||
+            !args[0].enforce_type(vm, mod, [
             lib.types.numberTypeDef,
-        ], 'list_index');
+        ])) {
+            return lib.hassiumNull;
+        }
 
         return this.val[args[0].val];
     }
 
     list_iter(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_iter');
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
 
         return this;
     }
 
     list_peek(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_peek');
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
 
         return this.val[this.val.length - 1];
     }
 
     list_pop(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_pop');
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
 
         this._length.val--;
         return this.val.pop();
     }
 
     list_push(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'list_push');
-        args[0].enforce_type(vm, mod, [
-            lib.types.objectTypeDef,
-        ], 'list_push');
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ])) {
+            return lib.hassiumNull;
+        }
 
         this._length.val++;
         this.val.push(args[0]);
@@ -98,20 +109,21 @@ module.exports = class HassiumList extends HassiumObject {
     }
 
     list_store_index(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 2 ], 'list_store_index');
-        args[0].enforce_type(vm, mod, [
+        if (!this.enforce_arg_count(vm, mod, args, [ 2 ]) ||
+            !args[0].enforce_type(vm, mod, [
             lib.types.numberTypeDef,
-        ], 'list_store_index');
-        args[1].enforce_type(vm, mod, [
-            lib.types.objectTypeDef,
-        ], 'list_store_index');
+        ])) {
+            return lib.hassiumNull;
+        }
 
         this.val[args[0].val] = args[1];
         return args[1];
     }
 
     list_toString(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 0 ], 'list_toString');
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
 
         let str = "[ ";
 

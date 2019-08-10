@@ -10,7 +10,9 @@ module.exports = class HassiumType extends HassiumObject {
     }
 
     type_equal(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'type_equal');
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ])) {
+            return lib.hassiumNull;
+        }
 
         return new lib.types.HassiumNumber(
             args[0] == this || args[0].type == this ? 1 : 0
@@ -18,7 +20,9 @@ module.exports = class HassiumType extends HassiumObject {
     }
 
     type_toString(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 0 ], 'type_toString');
+        if (!this.enforce_arg_count(vm, mod, args, [ 0 ])) {
+            return lib.hassiumNull;
+        }
 
         return new lib.types.HassiumString(this.name);
     }

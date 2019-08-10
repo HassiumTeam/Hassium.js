@@ -42,13 +42,14 @@ module.exports = class HassiumFunc extends HassiumObject {
         if (this.enforced_ret) {
             let ret_type = vm.resolve_access_chain(this.enforced_ret);
             if (!ret.instanceof(vm, mod, ret_type).val) {
-                throw new VMErrors.EnforcedReturnTypeError(
-                    this,
-                    ret,
-                    ret_type instanceof lib.HassiumType
-                        ? ret_type
-                        : ret_type.type,
-                )
+                vm.raise(
+                    lib.modules.default.get_attrib('IncorrectTypeException').invoke(vm, mod, [
+                        new lib.types.HassiumList([ ret_type instanceof lib.HassiumType
+                                                    ? ret_type
+                                                    : ret_type.type, ]),
+                        ret.type,
+                    ]));
+                return lib.hassiumNull;
             }
         }
 

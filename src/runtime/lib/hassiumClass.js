@@ -9,12 +9,13 @@ module.exports = class HassiumClass extends HassiumObject {
     }
 
     class_equal(vm, mod, args) {
-        this.enforce_arg_count(vm, mod, args, [ 1 ], 'class_equal');
-
-        args[0].enforce_type(vm, mod, [
-            lib.types.classTypeDef,
-            lib.types.typeTypeDef,
-        ], 'class_equal');
+        if (!this.enforce_arg_count(vm, mod, args, [ 1 ]) ||
+            !args[0].enforce_type(vm, mod, [
+                lib.types.classTypeDef,
+                lib.types.typeTypeDef,
+            ])) {
+            return lib.hassiumNull;
+        }
 
         return new lib.types.HassiumNumber(
             this.type === args[0] || this === args[0] ? 1 : 0
