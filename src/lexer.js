@@ -117,7 +117,7 @@ class Lexer {
                 this.read_str();
                 break;
             default:
-                console.log('Error unknown char ' + this.read_char());
+                throw new LexerErrors.UnknownCharError(cur);
         }
     }
 
