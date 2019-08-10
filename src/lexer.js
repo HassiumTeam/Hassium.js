@@ -31,6 +31,12 @@ class Lexer {
             this.read_id();
             return;
         }
+        else if (cur == '-' && /^[0-9]+$/.test(next)) {
+            this.read_char();
+            this.read_number();
+            this.res[this.res.length - 1].val = '-' + this.res[this.res.length - 1].val;
+            return;
+        }
         else if (/^[0-9]+$/.test(cur)) {
             this.read_number();
             return;
@@ -178,7 +184,7 @@ class Lexer {
 
     read_number() {
         let str = "";
-        while (this.peek_char() != -1 && /^[0-9]+$/.test(this.peek_char())) {
+        while (this.peek_char() != -1 && (/^[0-9]+\.?[0-9]*$/.test(this.peek_char()) || this.peek_char() == '.')) {
             str += this.read_char();
         }
         this.push_tok(TokType.NUMBER, str);

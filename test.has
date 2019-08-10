@@ -1,5 +1,5 @@
 func main () {
-    test ();
+    println (-2.2);
 }
 
 main ();
