@@ -1,0 +1,9 @@
+func main () {
+    test ();
+}
+
+func test () : string {
+    return 1;
+}
+
+main ();

@@ -1,0 +1,273 @@
+
+use TestsStats from "tests_stats.has";
+
+func main () {
+    this.stats = TestsStats ();
+
+    this.assign_tests ();
+
+    println (this.stats);
+}
+
+func assign_tests () {
+    a = true;
+    b = false;
+
+    c = 16;
+    d = 2;
+
+    e = "Hello";
+    f = " world!";
+
+    g = [ 1, 2, "three", ];
+    h = [ 4, 5, "six", ];
+
+    i = { one: 1, two: "two", };
+    j = { three: 3, four: "four", };
+
+    this.assert (a, "a is true");
+    this.assert (b == false, "b is false");
+
+    this.assert (c == 16, "c is 16");
+    this.assert (d == 2, "d is 2");
+
+    this.assert (e == "Hello", "e is 'Hello'");
+    this.assert (f == " world!", "f is ' world!'");
+
+    this.assert (g == [ 1, 2, "three", ], "g is [ 1, 2, 'three', ]");
+    this.assert (h == [ 4, 5, "six", ], "h is [ 4, 5, 'six', ]");
+
+    this.assert (i == { one: 1, two: "two", }, "i is { one: 1, two: `two`}");
+    this.assert (j == { three: 3, four: "four", }, "j is { three: 3, four: `four` }");
+
+    this.equality_tests (a, b, c, d, e, f);
+    this.comparison_tests (c, d);
+    this.logic_tests (a, b);
+    this.arithmatic_tests (c, d);
+    this.string_tests (e, f);
+    this.array_tests (g, h);
+    this.object_tests (i, j);
+    this.return_tests ();
+    this.loop_tests ();
+    this.oop_tests ();
+    this.closure_tests ();
+    this.try_catch_tests ();
+}
+
+func equality_tests (a, b, c, d, e, f) {
+    this.assert (a == a, "a == a");
+    this.assert (a != b, "a != b");
+
+    this.assert (c == c, "c == c");
+    this.assert (c != d, "c != d");
+
+    this.assert (e == e, "e == e");
+    this.assert (e != f, "e != f");
+}
+
+func comparison_tests (c, d) {
+    this.assert ((c > d), "c > d");
+    this.assert ((c > c) == false, "c > c == false");
+    this.assert ((c >= d), "c >= d");
+    this.assert ((c >= c), "c >= c");
+    this.assert ((d < c), "d < c");
+    this.assert ((d < d) == false, "d < d == false");
+    this.assert ((d <= c), "d <= c");
+    this.assert ((d <= d), "d <= d");
+}
+
+func logic_tests (a, b) {
+    this.assert (a && a, "a && a");
+    this.assert (a && b == false, "a && b == false");
+    this.assert (a || b, "a || b");
+    this.assert (b || b == false, "b || b == false");
+}
+
+func arithmatic_tests (c, d) {
+    this.assert ((c + d) == 18, "c + d == 18");
+    this.assert ((c / d) == 8, "c / d == 8");
+    this.assert ((c % (d + 1)) == 1, "c % (d + 1) == 1");
+    this.assert ((c * d) == 32, "c * d == 32");
+    this.assert ((c - d) == 14, "d - c == 14");
+}
+
+func string_tests(e, f) {
+    this.assert ((e + f) == "Hello world!", "e + f == 'Hello world!'");
+    this.assert (e [1] == "e", "e [1] == 'e'");
+    this.assert (f.length == 7, "f.length == 7");
+}
+
+func array_tests(g, h) {
+    this.assert ((g [0] + g [1]) == 3, "g [0] + g [1] == 3");
+    this.assert ((g [0] = 2) == 2, "g [0] = 2");
+    this.assert (g == [ 2, 2, "three", ], "g == [ 2, 2, 'three', ]");
+    this.assert (g + h == [ 2, 2, "three", 4, 5, "six", ],
+                "g + h == [ 2, 2, 'three', 4, 5, 'six', ]");
+    this.assert (g.length == 3, "g.length == 3");
+
+    [ a, b, c, ] = g;
+    this.assert (a == 2 && b == 2 && c == "three", "a == b == 2 && c == 'three'");
+
+    g.push(4);
+    this.assert (g [3] == 4, "g [3] == 4");
+    this.assert (g.length == 4, "g.length == 4");
+    this.assert (g.peek () == 4, "g.peek () == 4");
+    this.assert (g.pop () == 4, "g.pop () == 4");
+}
+
+func object_tests(i, j) {
+    this.assert ((i.one + j.three) == 4, "i.one + j.three == 4");
+    this.assert ((i.one = 2) == 2, "i.one = 2 == 2");
+    this.assert (i == { one: 2, two: "two", },
+                "i == { one: 2, two: 'two', }");
+    this.assert (j ["three"] == 3, "j ['three'] == 3");
+    this.assert ((j ["three"] = 4) == 4, "j ['three'] = 4 == 4");
+    this.assert (j == { three: 4, four: "four", },
+                "j == { three: 4, four: `four`, }");
+
+    [ three, four, ] = j;
+    this.assert (three == 4, "three == 4");
+    this.assert (four == "four", "four == 'four'");
+
+    test_func_0 (1, { b: "attrib 1", j, }, 3);
+}
+
+func test_func_0 (a, { b, j, }, d) {
+    this.assert (b == "attrib 1", "b == 'attrib 1'");
+    this.assert (j == { three: 4, four: "four", },
+        "j == { three: 4, four: 'four', }");
+}
+
+func return_tests () {
+    this.assert (this.test_func_1 (2, 3, 4) == 9,
+                "test_func_1 (2, 3, 4) == 9");
+    this.assert (this.test_func_2 () == null,
+                "test_func_2 () == null");
+}
+
+func test_func_1 (a: number, b: number, c: number) : number {
+    return a + b + c;
+}
+
+func test_func_2 (a) : null {
+    this.assert (a == null, "a == null");
+}
+
+func loop_tests() {
+    arr = [ 1, 1, 2, 3, 5, ];
+
+    total = 0;
+    foreach (a in arr) {
+        if (a == 1) {
+            continue;
+        }
+        if (a == 5) {
+            break;
+        }
+        total += a;
+    }
+    this.assert (total == 5, "foreach loop totaled 12");
+
+    total = 0;
+    i = 0;
+    while (i < arr.length) {
+        if (arr [i] == 1) {
+            i += 1;
+            continue;
+        }
+        if (arr [i] == 5) {
+            break;
+        }
+        total += arr[i];
+        i += 1;
+    }
+    this.assert (total == 5, "while loop totaled 12");
+
+    total = 0;
+    for (i = 0; i < arr.length; i += 1) {
+        if (arr [i] == 1) {
+            continue;
+        }
+        if (arr [i] == 5) {
+            break;
+        }
+        total += arr [i];
+    }
+    this.assert (total == 5, "for loop totaled 12");
+}
+
+func oop_tests () {
+    fido = Dog ("Fido", 4);
+    cyrus = Dog ("Cyrus", 6);
+
+    this.assert (fido.age == 4, "fido.age == 4");
+    this.assert (cyrus.age == 6, "cyrus.age == 6");
+    this.assert (fido.human_years () == 30, "fido.human_years () == 30");
+    this.assert (cyrus.human_years () == 40, "cyrus.human_years () == 40");
+    this.assert (fido.get_name () == "Fido", "fido.get_name () == 'Fido'");
+    this.assert (cyrus.get_name () == "Cyrus", "cyrus.get_name () == 'Cyrus'");
+
+    this.assert (typeof (fido) == typeof (cyrus), "typeof (fido) == typeof (cyrus)");
+    this.assert (typeof (fido) == Dog, "typeof (fido) == Dog");
+    this.assert (typeof (fido.name) == string, "typeof (fido.name) == string");
+
+    this.assert (fido instanceof Dog, "fido instanceof Dog");
+    this.assert ((fido instanceof string) == false, "fido instanceof string == false");
+}
+
+func closure_tests () {
+    c = 5;
+    f = func (a, b) : number {
+        return a + b + c;
+    };
+
+    this.assert (f (1, 2) == 8, "f (1, 2) == 8");
+    c = 6;
+    this.assert (f (1, 2) == 9, "f (1, 2) == 9");
+}
+
+func try_catch_tests () {
+    try {
+        this.test_func_3 ();
+        this.assert (false, "try catch from try_catch_tests");
+    } catch (e) {
+        this.assert (e == 4, "Caught e == 4");
+    }
+}
+
+func test_func_3 () {
+    this.test_func_4 ();
+    this.assert (false, "try catch from test_func_3");
+}
+
+func test_func_4 () {
+    raise 4;
+    this.assert (false, "try catch from test_func_4");
+}
+
+class Dog {
+    func new (name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    func human_years () {
+        return (this.age - 1) * 5 + 15;
+    }
+
+    func get_name () {
+        return this.name;
+    }
+}
+
+func assert (c, test) {
+    if (c) {
+        println ("Passed test: " + test);
+        this.stats.pass ();
+    } else {
+        println ("Failed test: " + test);
+        this.stats.fail (test);
+    }
+}
+
+main ();
