@@ -1,6 +1,6 @@
 {
   "name": "hassium.js",
-  "version": "1.0.1.1",
+  "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
   "scripts": {
