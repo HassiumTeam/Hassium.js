@@ -17,8 +17,8 @@
 
         func toString () {
             return "Passed: " + this.passed
-                 + " Failed: " + this.failed
-                 + " Tests Failed: " + this.tests_failed;
+                 + "\nFailed: " + this.failed
+                 + "\nTests Failed: " + this.tests_failed;
         }
     }
 }

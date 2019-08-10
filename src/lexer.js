@@ -1,3 +1,4 @@
+const LexerErrors = require('./errors/lexerErrors');
 const { Token, TokType } = require('./token');
 
 class Lexer {
@@ -127,8 +128,39 @@ class Lexer {
     read_str() {
         this.read_char(); // "
         let str = "";
+        let c;
         while (this.peek_char() != -1 && this.peek_char() != '"') {
-            str += this.read_char();
+            c = this.read_char();
+            if (c == "\\") {
+                c = this.read_char();
+                switch (c) {
+                    case 'b':
+                        str += "\b";
+                        break;
+                    case 'f':
+                        str += "\f";
+                        break;
+                    case 'n':
+                        str += "\n";
+                        break;
+                    case 'r':
+                        str += "\r";
+                        break;
+                    case 't':
+                        str += "\t";
+                        break;
+                    case '\\':
+                        str += "\\";
+                        break;
+                    case '"':
+                        str += '"';
+                        break;
+                    default:
+                        throw new LexerErrors.UnknownEscapeSequenceError(c, { row: this.row, col: this.col });
+                }
+            } else {
+                str += c;
+            }
         }
         this.read_char(); // "
 
