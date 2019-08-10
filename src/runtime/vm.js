@@ -163,9 +163,12 @@ module.exports = class VM {
                                 if (val !== undefined) {
                                     stack.push(val);
                                 } else {
-                                    throw new VMErrors.UnknownIDError(
-                                        inst.args.id,
-                                        inst.src,
+                                    this.raise(
+                                        lib.modules.default.get_attrib('UnknownIDException')
+                                        .invoke(
+                                            this, this._mod, [
+                                            new lib.types.HassiumString(inst.args.id)
+                                        ])
                                     );
                                 }
                             }
@@ -338,8 +341,12 @@ module.exports = class VM {
             if (top === undefined) {
                 top = this._mod.get_attrib(link);
                 if (top === undefined) {
-                    throw new VMErrors.UnknownIDError(
-                        link,
+                    this.raise(
+                        lib.modules.default.get_attrib('UnknownIDException')
+                        .invoke(
+                            this, this._mod, [
+                            new lib.types.HassiumString(link)
+                        ])
                     );
                 }
             }
@@ -348,9 +355,13 @@ module.exports = class VM {
         for (link of access_chain.slice(1)) {
             top = top.get_attrib(link);
             if (top === undefined) {
-                throw new VMErrors.UnknownIDError(
-                    link,
-                )
+                this.raise(
+                    lib.modules.default.get_attrib('UnknownIDException')
+                    .invoke(
+                        this, this._mod, [
+                        new lib.types.HassiumString(link)
+                    ])
+                );
             }
         }
 
