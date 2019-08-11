@@ -1,4 +1,4 @@
-const { ExpectedTokenError, UnexpectedTokenError } = require('./errors/parserErrors')
+const { ExpectedNodeError, ExpectedTokenError, UnexpectedTokenError } = require('./errors/parserErrors')
 const { BinOpType, FuncParamType, UnaryOpType, Node, NodeType } = require('./node')
 const { TokType } = require('./token');
 
@@ -71,7 +71,7 @@ module.exports = class Parser {
         let name = this.expect_tok(TokType.ID).val;
         let extends_;
         if (this.accept_tok(TokType.ID, "extends")) {
-            extends_ = this.parse_expr();
+            extends_ = this.parse_access_chain();
         }
         this.expect_tok(TokType.OBRACE);
         let contents = [];
@@ -744,6 +744,14 @@ module.exports = class Parser {
 
     current_src() {
         return this.toks[this.pos].src;
+    }
+
+    enforce_node_type(node, type) {
+        if (node.type === type) {
+            return node;
+        }
+
+        throw new ExpectedNodeError(type, node.type, this.current_src());
     }
 
     match_tok(type, val = null) {
