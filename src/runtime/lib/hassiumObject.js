@@ -78,6 +78,16 @@ class HassiumObject {
         return object_equal(vm, mod, arg, this);
     }
 
+    get_type() {
+        if (this instanceof lib.HassiumType) {
+            return lib.types.typeTypeDef;
+        } else if (this.type === undefined) {
+            return lib.types.objectTypeDef;
+        } else {
+            return this.type;
+        }
+    }
+
     greater(vm, mod, arg) {
         return this.get_attrib('_greater').invoke(vm, mod, [ arg ]);
     }
@@ -91,6 +101,7 @@ class HassiumObject {
     }
 
     instanceof(vm, mod, arg) {
+        let type = arg.get_type();
         if (arg == lib.types.objectTypeDef) {
             return lib.hassiumTrue;
         } else if (arg == lib.types.typeTypeDef) {

@@ -284,13 +284,7 @@ module.exports = class VM {
                     break;
                 case InstType.TYPEOF:
                     target = stack.pop();
-                    if (target instanceof lib.HassiumType) {
-                        stack.push(lib.types.typeTypeDef);
-                    } else if (target.type === undefined ){
-                        stack.push(lib.types.objectTypeDef);
-                    } else {
-                        stack.push(target.type);
-                    }
+                    stack.push(target.get_type());
                     break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);
