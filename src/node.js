@@ -23,6 +23,7 @@ const NodeType = {
     RETURN: "return",
     STRING: "string",
     SUBSCRIPT: "subscript",
+    SUPER: "super",
     TRY_CATCH: "try_catch",
     TYPEOF: "typeof",
     UNARY_OP: "unary_op",

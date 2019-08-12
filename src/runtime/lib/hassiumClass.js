@@ -2,8 +2,11 @@ const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
 
 module.exports = class HassiumClass extends HassiumObject {
-    constructor(name) {
+    constructor(name, extends_) {
         super(new lib.HassiumType(name));
+
+        this.extends_ = extends_;
+
         this.set_attrib('_equal', new lib.HassiumInvokable(this, 'class_equal'));
         this.set_attrib('_name', new lib.types.HassiumString(name));
     }

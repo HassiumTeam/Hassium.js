@@ -1,5 +1,8 @@
+use TestsStats from "tests_stats.has";
+
 func main () {
-    println (-2.2);
+    t = TestsStats ();
+    println (t.passed);
 }
 
 main ();

@@ -15,6 +15,7 @@ class EnforcedStack {
         if (obj instanceof HassiumObject) {
             this.stack.push(obj);
         } else {
+            console.log(require('util').inspect(obj, { depth: null }));
             throw "Tried to push a non-HassiumObject: ";
         }
     }
@@ -37,7 +38,7 @@ module.exports = class VM {
         this._exception_returns = [];
     }
 
-    run(obj) {
+    run(obj, self_ref) {
         let stack = new EnforcedStack();
 
         let pos = 0;
@@ -248,8 +249,8 @@ module.exports = class VM {
                 case InstType.RETURN:
                     return stack.pop();
                 case InstType.SELF_REFERENCE:
-                    if (obj.self !== undefined) {
-                        stack.push(obj.self);
+                    if (self !== undefined) {
+                        stack.push(self_ref);
                     } else {
                         this.raise(lib.modules.default.get_attrib('NoSelfReferenceException')
                                                         .invoke(this, this._mod, [ obj ]));
@@ -285,6 +286,13 @@ module.exports = class VM {
                 case InstType.TYPEOF:
                     target = stack.pop();
                     stack.push(target.get_type());
+                    break;
+                case InstType.SUPER:
+                    args = [];
+                    for (i = 0; i < inst.args.arg_count; i++) {
+                        args.push(stack.pop());
+                    }
+                    obj.super_(this, this._mod, args);
                     break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);

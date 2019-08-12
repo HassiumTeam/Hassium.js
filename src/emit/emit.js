@@ -62,6 +62,8 @@ module.exports = class _emit {
                 return this.accept_string(node);
             case NodeType.SUBSCRIPT:
                 return this.accept_subscript(node);
+            case NodeType.SUPER:
+                return this.accept_super(node);
             case NodeType.TRY_CATCH:
                 return this.accept_try_catch(node);
             case NodeType.TYPEOF:
@@ -169,7 +171,7 @@ module.exports = class _emit {
     }
 
     accept_class(node) {
-        let clazz = new lib.HassiumClass(node.children.name);
+        let clazz = new lib.HassiumClass(node.children.name, node.children.extends_);
         this._emit_peek().set_attrib(node.children.name, clazz);
         clazz.self = this._emit_peek();
 
@@ -361,6 +363,14 @@ module.exports = class _emit {
         this.accept(node.children.key);
         this.accept(node.children.target);
         this._emit(InstType.LOAD_SUBSCRIPT, {}, node.src);
+    }
+
+    accept_super(node) {
+        let self = this;
+        node.children.args.reverse().forEach(function(arg) {
+            self.accept(arg);
+        });
+        this._emit(InstType.SUPER, { arg_count: node.children.args.length }, node.src);
     }
 
     accept_try_catch(node) {

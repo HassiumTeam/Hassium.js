@@ -206,6 +206,7 @@ const InstType = {
     STORE_GLOBAL: "store_global",
     STORE_LOCAL: "store_local",
     STORE_SUBSCRIPT: "store_subscript",
+    SUPER: "super",
     TYPEOF: "typeof",
     UNARY_OP: "unary_op",
     USE_GLOBAL: "use_global",
