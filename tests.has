@@ -50,6 +50,7 @@ func assign_tests () {
     return_tests ();
     loop_tests ();
     oop_tests ();
+    extends_tests ();
     closure_tests ();
     try_catch_tests ();
 }
@@ -215,6 +216,14 @@ func oop_tests () {
     assert ((fido instanceof string) == false, "fido instanceof string == false");
 }
 
+func extends_tests () {
+    cyrus = Terrier ("Cyrus", 6, "Boston");
+
+    assert (cyrus.age == 6, "cyrus.age == 6");
+    assert (cyrus.get_type () == "Boston", "cyrus.get_type () == 'Boston'");
+    assert (cyrus.human_years () == 30, "cyrus.human_years () == 30");
+}
+
 func closure_tests () {
     c = 5;
     f = func (a, b) : number {
@@ -257,6 +266,21 @@ class Dog {
 
     func get_name () {
         return this.name;
+    }
+}
+
+class Terrier extends Dog {
+    func new (name, age, type) {
+        super (name, age);
+        this.type = type;
+    }
+
+    func human_years () {
+        return this._super.human_years () - 10;
+    }
+
+    func get_type () {
+        return this.type;
     }
 }
 

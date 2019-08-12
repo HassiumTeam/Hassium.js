@@ -1,38 +1,18 @@
 use TestsStats from "tests_stats.has";
 
 func main () {
-    t = Teacher ("John", 35, 23);
-    println (t.get_name ());
-    println (t.get_class_size ());
+    sf = SpecialFile ("a.txt");
+    sf.create ();
 }
 
-class Person {
-    func new (name, age) {
-        this.name = name;
-        this.age = age;
+class SpecialFile extends io.File {
+    func new (path) {
+        super (path);
     }
 
-    func get_name () {
-        return this.name;
-    }
-
-    func get_age () {
-        return this.age;
-    }
-}
-
-class Teacher extends Person {
-    func new (name, age, class_size) {
-        super (name, age);
-        this.class_size = class_size;
-    }
-
-    func get_name () {
-        return "Mr. " + this._super.get_name ();
-    }
-
-    func get_class_size () {
-        return this.class_size;
+    func create () {
+        println ("Calling create");
+        this._super.create ();
     }
 }
 
