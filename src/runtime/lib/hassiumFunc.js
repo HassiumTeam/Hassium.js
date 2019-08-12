@@ -1,4 +1,3 @@
-var clone = require('clone');
 const { FuncParamType } = require('../../node');
 const { HassiumObject } = require('./hassiumObject');
 const lib = require('./lib');
@@ -28,13 +27,7 @@ module.exports = class HassiumFunc extends HassiumObject {
         }
 
         this._import_args(vm, mod, args);
-
-        if (this._is_contructor()) {
-            ret = this._instantiate();
-            vm.run(ret.get_attrib('new').func, ret.get_attrib('new').self);
-        } else {
-            ret = vm.run(this, self);
-        }
+        ret = vm.run(this, self);
 
         if (isClosure !== true) {
             vm._stack_frame.pop_frame();
@@ -55,27 +48,6 @@ module.exports = class HassiumFunc extends HassiumObject {
         }
 
         return ret;
-    }
-
-    super_(vm, mod, args) {
-        let instance = vm.resolve_access_chain(
-            this.proto.extends_
-        ).invoke(vm, mod, args);
-
-        let val;
-        for (let key of Object.keys(instance._attributes)) {
-            val = clone(instance.get_attrib(key));
-            if (val) {
-                val.self = this.self;
-                console.log(key);
-                if (!this.self.has_attrib(key)) {
-                    console.log(`Set ${key} to ${val}`)
-                    this.self.set_attrib(key, val);
-                }
-            }
-        }
-
-        this.self.set_attrib('_super', instance);
     }
 
     _import_args(vm, mod, args) {
@@ -116,26 +88,6 @@ module.exports = class HassiumFunc extends HassiumObject {
                 }
             }
         }
-    }
-
-    _clone(obj) {
-        let ret = clone(obj);
-    }
-
-    _instantiate() {
-        let clazz = new HassiumObject(this.self.type);
-
-        let keys = Object.keys(this.self._attributes);
-        for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            let val = this.self.get_attrib(key);
-            if (val instanceof lib.HassiumFunc) {
-                val = new lib.HassiumBoundFunc(val, clazz);
-            }
-            clazz.set_attrib(key, val);
-        }
-
-        return clazz;
     }
 
     _is_contructor() {

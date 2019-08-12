@@ -25,7 +25,28 @@ module.exports = class HassiumClass extends HassiumObject {
         );
     }
 
+
+    instantiate() {
+        let clazz = new HassiumObject(this.type);
+        clazz.proto = this;
+
+        let keys = Object.keys(this._attributes);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let val = this.get_attrib(key);
+            if (val instanceof lib.HassiumFunc) {
+                val = new lib.HassiumBoundFunc(val, clazz);
+            }
+            clazz.set_attrib(key, val);
+        }
+
+        return clazz;
+    }
+
     invoke(vm, mod, args) {
-        return this.get_attrib('new').invoke(vm, mod, args);
+        let ret = this.instantiate();
+        ret.get_attrib('new').invoke(vm, mod, args);
+
+        return ret;
     }
 };

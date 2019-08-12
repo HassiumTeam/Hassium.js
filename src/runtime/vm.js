@@ -292,7 +292,7 @@ module.exports = class VM {
                     for (i = 0; i < inst.args.arg_count; i++) {
                         args.push(stack.pop());
                     }
-                    obj.super_(this, this._mod, args);
+                    this.super_(self_ref, args);
                     break;
                 case InstType.UNARY_OP:
                     this._handle_unary_op(stack, inst.args.type);
@@ -368,6 +368,24 @@ module.exports = class VM {
         }
 
         return top;
+    }
+
+    super_(self, args) {
+        let parent = this.resolve_access_chain(
+            self.proto.extends_
+        ).invoke(this, this._mod, args);
+
+        let keys = Object.keys(parent._attributes);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let val = parent.get_attrib(key);
+
+            if (!self.has_attrib(key)) {
+                self.set_attrib(key, val);
+            }
+        }
+
+        self.set_attrib('_super', parent);
     }
 
     _handle_bin_op(stack, type) {
